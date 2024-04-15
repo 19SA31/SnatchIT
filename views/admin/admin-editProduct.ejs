@@ -1,0 +1,442 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-products-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:00 GMT -->
+
+<head>
+    <meta charset="utf-8">
+    <title>Admin-Products</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/public/admin-assets/images/SnatchIt_logo-removebg-preview.png">
+    <!-- Template CSS -->
+    <link href="/public/admin-assets/css/main.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="index.html" class="brand-wrap">
+                <img src="/public/admin-assets/images/SnatchIt_removeb.png" class="logo" alt="Evara Dashboard">
+            </a>
+
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-people""></i>
+                        <span class=" text">User Control</span>
+                    </a>
+                </li>
+                <li class="menu-item has-submenu active">
+                    <a class="menu-link" href="#"><i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="#" class="active">Product List</a>
+                        <a href="#">Categories</a>
+                    </div>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Add product</span>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Order List</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="admin-coupon"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Coupons</span>
+                    </a>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="admin-products"><i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Offer Management</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="admin-productOffer"">Category Offer</a>
+                        <a href="admin-categoryOffer">Product Offer</a>
+                    </div>
+                </li>
+            </ul>
+            <hr>
+            
+            <br>
+            <br>
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        <header class="main-header navbar">
+            <div class="col-search">
+                <form class="searchform">
+                    <div class="input-group">
+                        <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                        <button class="btn btn-light bg" type="button"> <i
+                                class="material-icons md-search"></i></button>
+                    </div>
+                    <datalist id="search_terms">
+                        <option value="Products">
+                        <option value="New orders">
+                        <option value="Apple iphone">
+                        <option value="Ahmed Hassan">
+                    </datalist>
+                </form>
+            </div>
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i
+                        class="material-icons md-apps"></i> </button>
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon" href="#">
+                            <i class="material-icons md-notifications"></i>
+                            <span class="badge rounded-pill">3</span>
+                        </a>
+                    </li>
+
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage"
+                            aria-expanded="false"><i class="material-icons md-public"></i></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownLanguage">
+                            <a class="dropdown-item text-brand" href="#"><img
+                                    src="/public/admin-assets/imgs/theme/flag-us.png" alt="English">English</a>
+                            <a class="dropdown-item" href="#"><img src="/public/admin-assets/imgs/theme/flag-fr.png"
+                                    alt="Français">Français</a>
+                            <a class="dropdown-item" href="#"><img src="/public/admin-assets/imgs/theme/flag-jp.png"
+                                    alt="Français">日本語</a>
+                            <a class="dropdown-item" href="#"><img src="/public/admin-assets/imgs/theme/flag-cn.png"
+                                    alt="Français">中国人</a>
+                        </div>
+                    </li>
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount"
+                            aria-expanded="false"> <img class="img-xs rounded-circle"
+                                src="/public/admin-assets/imgs/people/avatar2.jpg" alt="User"></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                            <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit
+                                Profile</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account
+                                Settings</a>
+                            <a class="dropdown-item" href="#"><i
+                                    class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help
+                                center</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" href="#"><i
+                                    class="material-icons md-exit_to_app"></i>Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <section class="content-main">
+            <div class="row">
+                <div class="col-9">
+                    <div class="content-header">
+                        <h2 class="content-title">Edit Product</h2>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+    
+                        <div class="card-body">
+                            <form action="/editProduct/<%= product._id %>?_method=PUT" method="post"
+                                enctype="multipart/form-data" id="editForm">
+                                <div class="mb-4">
+                                    <input type="hidden" value="PUT" name="_method" >
+                                    <label for="product_name" class="form-label">Product Name</label>
+                                    <input type="text" name="productName" value="<%= product.productName %>"
+                                        placeholder="Type here" class="form-control" id="productName">
+                                        <span id="productNameError" class="text-danger">
+                                        </span>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">Product description</label>
+                                    <textarea placeholder="Type here" id="productDescription" name="productDescription"
+                                        class="form-control" rows="4" ><%= product.productDescription %></textarea>
+                                </div>
+                                <div class="row">
+                                    <div class="mb-4 col-lg-6">
+                                        <label class="form-label" for="product_price">Price</label>
+                                        <input type="text" value="<%= product.productPrice %>" placeholder="price"
+                                            name="productPrice" class="form-control" id="productPrice">
+                                            <span id="productPriceError" class="text-danger">
+                                            </span>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-4">
+                                            <label for="product_discount" class="form-label">Discount</label>
+                                            <input type="text" name="productDiscount"
+                                                value="<%= product.productDiscount %>" placeholder="%" class="form-control"
+                                                id="productDiscount">
+                                                <span id="productDiscountError" class="text-danger">
+                                                </span>
+                                        </div>
+                                    </div>
+                                </div>
+    
+    
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="mb-4">
+                                            <label for="product_quantity" class="form-label">Small Quantity</label>
+                                            <input type="text" name="smallQuantity" placeholder="nos" class="form-control"
+                                                id="productQuantity" value="<%= product.productQuantity[0].quantity %>">
+                                            <span id="productQuantityError" class="text-danger mt-1"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-4">
+                                            <label for="product_quantity" class="form-label">Medium Quantity</label>
+                                            <input type="text" name="mediumQuantity" placeholder="nos" class="form-control"
+                                                id="productQuantity" value="<%= product.productQuantity[1].quantity %>">
+                                            <span id="productQuantityError" class="text-danger mt-1"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-4">
+                                            <label for="product_quantity" class="form-label">Large Quantity</label>
+                                            <input type="text" name="largeQuantity" placeholder="nos" class="form-control"
+                                                id="productQuantity" value="<%= product.productQuantity[2].quantity %>">
+                                            <span id="productQuantityError" class="text-danger mt-1"></span>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+    
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h4>Media</h4>
+                            </div>
+                        <div class="card-body">
+                            <div class="input-upload">
+                                <label class="form-label">Image</label>
+                                <% if(typeof product.productImage==='string' ) { %>
+                                    <img src="/public/uploads/<%= product.productImage %>"
+                                        style="width: 100px; height: 72px;" alt="">
+                                <% } else if(Array.isArray(product.productImage) && product.productImage.length> 0) { %>
+                                        <img src="/public/uploads/<%= product.productImage[0] %>"
+                                            style="width: 100px; height: 72px;" alt="">
+                                <% } %>
+                                <input class="form-control" type="file" name="images" multiple>
+                                <input type="hidden" value="<%= product.productImage %> " name="oldImage">
+                                <% if(Array.isArray(product.productImage)) { %>
+                                <p> 
+                                    <%= product.productImage.length %> out of <%= product.productImage.length %> images available
+                                </p>
+                                    <% for(var i=0; i<product.productImage.length; i++) { %>
+                                        <img src="/public/uploads/<%= product.productImage[i] %>" alt="Product Image <%= i+1 %>">
+                                    <% } %>
+                                <% } %>
+                            </div>
+    
+                        </div>
+                        <div class="card mb-4">
+                            <!-- Add the following code to display the preview of all images within the image editing div -->
+                            <div class="card-body">
+                                <div class="row">
+                                    <% if(Array.isArray(product.productImage) && product.productImage.length > 0) { %>
+                                        <% for(let i=0; i<product.productImage.length; i++) { %>
+                                            <div class="col-6 mb-3">
+                                                <div class="image-container">
+                                                    <img src="/public/uploads/<%= product.productImage[i] %>"
+                                                        style="width: 100px; height: 72px;" alt="">
+                                                        <a 
+                                                        onclick="deleteImage('<%= product._id %>', '<%= product.productImage[i] %>')">❌</a>
+                                                </div>
+                                            </div>
+                                        <% } %>
+                                    <% } %>
+                                </div>
+                            </div>
+                            
+                        </div> <!-- card end// -->
+                    </div> <!-- card end// -->
+    
+                        <div class="card mb-4">
+    
+                            <div class="card-body">
+                                <div class="row gx-2">
+                                    <div class="col-sm-6 mb-3">
+                                        <label class="form-label">Category</label>
+                                        <select class="form-select" style="width: auto;" name="productCategory">
+                                            <% for (let i=0; i < category.length; i++) { %>
+                                                <% if (category[i]._id.equals(product.productCategory._id)) { %>
+                                                    <option value="<%= category[i]._id %>" selected>
+                                                        <%= category[i].name %>
+                                                    </option>
+                                                <% } else { %>
+                                                    <option value="<%= category[i]._id %>">
+                                                        <%= category[i].name %>
+                                                    </option>
+                                                <% } %>
+                                            <% } %>
+                                        </select>
+                                    </div>
+        
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-primary d-block btn-md rounded font-sm hover-up">Save Product</button>
+                        </div>
+                    </div>
+    
+    
+    
+                    
+                </div>
+                </form>
+            </div>
+        </section> <!-- content-main end// -->
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script>
+                        document.write(new Date().getFullYear())
+                    </script> ©, Evara - HTML Ecommerce Template .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+
+    <script>
+
+
+    function validateForm(e) {
+        console.log("entered validation");
+        let productName = document.getElementById('productName').value;
+        let productPrice = document.getElementById('productPrice').value;
+        let productQuantity = document.getElementById('productQuantity').value;
+        let discount = document.getElementById('productDiscount').value;
+
+        //for clearing previous errors
+
+        document.getElementById('productNameError').innerHTML = "";
+        document.getElementById('productPriceError').innerHTML = "";
+        document.getElementById('productQuantityError').innerHTML = "";
+        document.getElementById('productDiscountError').innerHTML = "";
+        let isValid = true;
+        
+
+        // Product Name validation
+        if (productName.trim() === "") {
+            document.getElementById('productNameError').innerText = "Product Name is required.";
+            isValid = false;
+        } else if (/^\d+$/.test(productName) || /^-\d+$/.test(productName)) {
+            document.getElementById('productNameError').innerText = "Product Name cannot contain numbers.";
+            isValid = false;
+        }
+
+        // Product Price validation
+        if (productPrice.trim() === "") {
+            document.getElementById('productPriceError').innerText = "Product Price is required.";
+            isValid = false;
+        }
+        else if (isNaN(productPrice) || parseFloat(productPrice) <= 0) {
+            document.getElementById('productPriceError').innerHTML = "Product Price must be a valid number greater than 0.";
+            isValid = false;
+        }
+
+        // Product Quantity validation
+
+        if (isNaN(productQuantity) || parseInt(productQuantity) < 0) {
+            document.getElementById('productQuantityError').innerHTML = "Product Quantity must be a valid non-negative integer.";
+            isValid = false;
+        } else if (productQuantity.trim() === "") {
+            document.getElementById('productQuantityError').innerText = "Product Quantity is required.";
+            isValid = false;
+        }
+
+        // Discount validation
+        if (discount.trim() === "") {
+            document.getElementById('productDiscountError').innerText = "Discount is required.";
+            isValid = false;
+        }
+        else if (isNaN(discount) || parseFloat(discount) < 0 || parseFloat(discount) > 100) {
+            document.getElementById('productDiscountError').innerHTML = "Discount must be a valid percentage between 0 and 100.";
+            isValid = false;
+        }
+
+        return isValid;
+    }
+    const form = document.getElementById("editForm");
+    form.addEventListener("submit", (e) => {
+        const isValid = validateForm(e);
+        console.log(isValid);
+        if (!isValid) {
+            e.preventDefault();
+        }
+    })  
+
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="/public/admin-assets"></script>
+<script src="/public/admin-assets/js/vendors/bootstrap.bundle.min.js"></script>
+<script src="/public/admin-assets/js/vendors/select2.min.js"></script>
+<script src="/public/admin-assets/js/vendors/perfect-scrollbar.js"></script>
+<script src="/public/admin-assets/js/vendors/jquery.fullscreen.min.js"></script>
+<!-- Main Script -->
+<script src="/public/admin-assets/js/main.js" type="text/javascript"></script>
+
+    <script>
+           
+        function deleteImage(productId,image){
+            console.log("clicked",productId);
+            swal("Are you sure you want to do this?",{
+                buttons:["NO","YES"]
+            }).then((res) =>{
+                if(res){
+                    $.ajax({
+                        url:`/deleteImage/${productId}/${image}`,
+                        type:'patch'
+                    }).done((res)=>{
+                        swal("successful",`${res.message}`,"success").then(() =>{
+                            location.reload();
+                        })
+                    })
+                    .fail((res) =>{
+                        swal("successful",`${res.message}`,"success").then(() =>{
+                            location.reload();
+                        })
+                    })
+                }
+            })
+        }
+    </script>
+
+</body>
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-products-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:12 GMT -->
+
+</html>

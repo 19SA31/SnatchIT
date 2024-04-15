@@ -1,0 +1,26 @@
+.btn:hover {
+    background-color: #d42e2e; 
+    color: #ffffff; 
+}
+
+.align-items-center{
+    text-align: center;
+}
+
+.image{
+    height:130px;
+    width:300px;
+}
+
+.btn-google,.btn-fb{
+    height:45px;
+    width:350px;
+    background-color: #2B1754; 
+    color:#ffffff
+}
+
+.btn-google:hover,.btn-fb:hover{
+    background-color: #b7aae4; 
+    color: #ffffff; 
+}
+

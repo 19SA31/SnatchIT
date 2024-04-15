@@ -1,0 +1,325 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-products-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:00 GMT -->
+
+<head>
+    <meta charset="utf-8">
+    <title>Admin-Products</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/public/admin-assets/images/SnatchIt_logo-removebg-preview.png">
+    <!-- Template CSS -->
+    <link href="/public/admin-assets/css/main.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="index.html" class="brand-wrap">
+                <img src="/public/admin-assets/images/SnatchIt_removeb.png" class="logo" alt="Evara Dashboard">
+            </a>
+
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item">
+                    <a class="menu-link" href="admin-dashboard"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="admin-userEdit"> <i class="icon material-icons md-people""></i>
+                        <span class=" text">User Control</span>
+                    </a>
+                </li>
+                <li class="menu-item has-submenu active">
+                    <a class="menu-link" href="admin-products"><i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="admin-products" class="active">Product List</a>
+                        <a href="admin-category">Categories</a>
+                    </div>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="admin-addproduct"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Add product</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="admin-orderPage"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Order List</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="admin-coupon"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Coupons</span>
+                    </a>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="admin-products"><i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Offer Management</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="admin-productOffer">Product Offer</a>
+                        <a href="admin-categoryOffer">Category Offer</a>
+                    </div>
+                </li>
+            </ul>
+            <hr>
+            
+            <br>
+            <br>
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        <header class="main-header navbar">
+            <div class="col-search">
+                <form class="searchform">
+                    <div class="input-group">
+                        <input list="search_terms" type="text" class="form-control" placeholder="Search term">
+                        <button class="btn btn-light bg" type="button"> <i
+                                class="material-icons md-search"></i></button>
+                    </div>
+                    <datalist id="search_terms">
+                        <option value="Products">
+                        <option value="New orders">
+                        <option value="Apple iphone">
+                        <option value="Ahmed Hassan">
+                    </datalist>
+                </form>
+            </div>
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i
+                        class="material-icons md-apps"></i> </button>
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon" href="#">
+                            <i class="material-icons md-notifications"></i>
+                            <span class="badge rounded-pill">3</span>
+                        </a>
+                    </li>
+
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage"
+                            aria-expanded="false"><i class="material-icons md-public"></i></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownLanguage">
+                            <a class="dropdown-item text-brand" href="#"><img
+                                    src="/public/admin-assets/imgs/theme/flag-us.png" alt="English">English</a>
+                            <a class="dropdown-item" href="#"><img src="/public/admin-assets/imgs/theme/flag-fr.png"
+                                    alt="Français">Français</a>
+                            <a class="dropdown-item" href="#"><img src="/public/admin-assets/imgs/theme/flag-jp.png"
+                                    alt="Français">日本語</a>
+                            <a class="dropdown-item" href="#"><img src="/public/admin-assets/imgs/theme/flag-cn.png"
+                                    alt="Français">中国人</a>
+                        </div>
+                    </li>
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount"
+                            aria-expanded="false"> <img class="img-xs rounded-circle"
+                                src="/public/admin-assets/imgs/people/avatar2.jpg" alt="User"></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                            <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit
+                                Profile</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account
+                                Settings</a>
+                            <a class="dropdown-item" href="#"><i
+                                    class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help
+                                center</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" href="#"><i
+                                    class="material-icons md-exit_to_app"></i>Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Products List</h2>
+                </div>
+
+            </div>
+            <div class="card mb-4">
+                <div class="table-responsive">
+                    <table class="table table-hover" id="prodTable">
+                        <thead>
+                            <tr class="text-left">
+                                <th style="padding-left: 1.5rem;">Image</th>
+                                <th style="padding-left: 2rem;">Name</th>
+                                <th style="padding-left: 1.5rem;">Category</th>
+                                <th style="padding-left: 1.5rem;">Price</th>
+                                <th style="padding-left: 1.5rem;">Quantity</th>
+                                <th style="padding-left: 1.5rem;">Discount</th>
+                                <th style="padding-left: 1.5rem;">Update</th>
+                                <th style="padding-left: 1.5rem;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <% for( let i=0; i < products.length; i++ ) { %>
+
+                                <tr>
+                                    <td style="vertical-align: middle; " width="10%">
+                                        <% if (Array.isArray(products[i].productImage) &&
+                                            products[i].productImage.length> 0) { %>
+                                            <img class="img-thumbnail" width="80"
+                                                src="/public/uploads/<%= products[i].productImage[0] %>"
+                                                alt="no image available">
+                                            <% } else if (products[i].productImage) { %>
+                                                <img class="img-thumbnail" width="80"
+                                                    src="/public/uploads/<%= products[i].productImage[0] %>"
+                                                    alt="no image available">
+                                                <% } else { %>
+                                                    <span>No image available</span>
+                                                    <% } %>
+                                    </td>
+
+                                    <td style="vertical-align: middle; padding-left: 1.5rem;" width="17%">
+                                        <%= products[i].productName %>
+                                    </td>
+
+                                    <td style="vertical-align: middle; padding-left: 1.5rem;" class="text" width="15%">
+                                        <%= products[i].productCategory.name %>
+                                    </td>
+
+
+
+                                    <td style="vertical-align: middle; padding-left: 2rem;" width="12%">
+                                        ₹<%=products[i].productPrice %>
+                                    </td>
+                                    <td style="vertical-align: middle; padding-left: 2.5rem;" width="12%">
+                                        <%= products[i].totalQuantity %>
+                                    </td>
+                                    <td style="vertical-align: middle; padding-left: 2rem;" width="12%">
+                                        <%= products[i].productDiscount %> %
+                                    </td>
+
+                                    <td style="vertical-align: middle; padding-left: 1.5rem;" width="10%"><a
+                                            href="/admin-editProduct/<%= products[i]._id %>"
+                                            class="btn btn-sm btn-dark rounded font-sm mt-15">Edit</a>
+                                    </td>
+
+                                    <% if (products[i].productStatus) { %>
+                                        <td style="vertical-align: middle; padding-left: 1.5rem;"> <button
+                                                onclick="changeProductStatus('<%= products[i]._id %>')"
+                                                class="btn btn-sm btn-danger rounded font-sm mt-15">Unlist</button>
+                                        </td>
+
+                                        <% } else {%>
+                                            <td style="vertical-align: middle; padding-left: 1.5rem;">
+                                                <button onclick="changeProductStatus('<%= products[i]._id %>')"
+                                                    class="btn btn-sm btn-success rounded font-sm mt-15">List</button>
+                                            </td>
+
+                                            <% } %>
+
+                                </tr>
+
+
+                                <% } %>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div> <!-- card end// -->
+            <div class="pagination-area mt-30 mb-50">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-start">
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                        <li class="page-item"><a class="page-link" href="#">6</a></li>
+                        <li class="page-item"><a class="page-link" href="#">
+                        <li class="material-icons md-chevron_right"></i></a></li>
+                    </ul>
+                </nav>
+            </div>
+        </section> <!-- content-main end// -->
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script>
+                        document.write(new Date().getFullYear())
+                    </script> ©, Evara - HTML Ecommerce Template .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <!-- sweetalert -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+
+    <script>
+
+        const changeProductStatus = (productId) => {
+            console.log("clicked", productId);
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Do you want to do this?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes !',
+                cancelButtonText: 'Cancel',
+                reverseButtons: true,
+            }).then((response) => {
+                console.log(response);
+                if (response.isConfirmed) {
+                    $.ajax({
+                        url: "/deleteProduct/" + productId,
+                        type: 'PATCH'
+                    }).done(response => {
+                        Swal.fire("Successfull", `Status Updated`, "success").then(() => {
+                            location.reload();
+                        })
+                    }).fail((error) => {
+                        Swal.fire("Successfull", `${error.message}`, "success").then(() => {
+                            location.reload()
+                        })
+                    })
+                }
+            })
+
+
+
+        }
+    </script>
+    <script src="/public/admin-assets"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.js"></script>
+    <script src="/public/admin-assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/public/admin-assets/js/vendors/select2.min.js"></script>
+    <script src="/public/admin-assets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/public/admin-assets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Script -->
+    <script src="/public/admin-assets/js/main.js" type="text/javascript"></script>
+</body>
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-products-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:12 GMT -->
+
+</html>

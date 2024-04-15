@@ -1,0 +1,411 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-form-product-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:31 GMT -->
+<head>
+    <meta charset="utf-8">
+    <title>Admin-Add Product</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/public/admin-assets/images/SnatchIt_logo-removebg-preview.png">
+    <!-- Template CSS -->
+    <link href="/public/admin-assets/css/main.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="index.html" class="brand-wrap">
+                <img src="/public/admin-assets/images/SnatchIt_removeb.png" class="logo" alt="Evara Dashboard">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item">
+                    <a class="menu-link" href="admin-dashboard"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="admin-userEdit"> <i class="icon material-icons md-people""></i>
+                        <span class="text">User Control</span>
+                    </a>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="admin-products"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="admin-products">Product List</a>
+                        <a href="admin-category">Categories</a>
+                    </div>
+                </li>
+                <li class="menu-item active">
+                    <a class="menu-link" href="admin-addproduct"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Add product</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="admin-orderPage"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Order List</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="admin-coupon"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Coupons</span>
+                    </a>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="admin-products"><i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Offer Management</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="admin-productOffer">Product Offer</a>
+                        <a href="admin-categoryOffer">Category Offer</a>
+                    </div>
+                </li>
+            </ul>
+            <hr>
+            
+            <br>
+            <br>
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        <header class="main-header navbar">
+            <div class="col-search">
+                <form class="searchform">
+                    
+                </form>
+            </div>
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon" href="#">
+                            <i class="material-icons md-notifications"></i>
+                            <span class="badge rounded-pill">3</span>
+                        </a>
+                    </li>
+                    
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage" aria-expanded="false"><i class="material-icons md-public"></i></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownLanguage">
+                            <a class="dropdown-item text-brand" href="#"><img src="/public/admin-assets/imgs/theme/flag-us.png" alt="English">English</a>
+                            <a class="dropdown-item" href="#"><img src="/public/admin-assets/imgs/theme/flag-fr.png" alt="Français">Français</a>
+                            <a class="dropdown-item" href="#"><img src="/public/admin-assets/imgs/theme/flag-jp.png" alt="Français">日本語</a>
+                            <a class="dropdown-item" href="#"><img src="/public/admin-assets/imgs/theme/flag-cn.png" alt="Français">中国人</a>
+                        </div>
+                    </li>
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="/public/admin-assets/imgs/people/avatar2.jpg" alt="User"></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                            <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" href="#"><i class="material-icons md-exit_to_app"></i>Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <section class="content-main">
+            <div class="row">
+                <div class="col-9">
+                    <div class="content-header">
+                        <h2 class="content-title">Add New Product</h2>
+                        
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Basic</h4>
+                        </div>
+                        <div class="card-body">
+                            <form action="/addproduct" method="post" enctype="multipart/form-data" id="creationForm">
+                                <div class="mb-4">
+                                    <label for="product_name" class="form-label">Product Name</label>
+                                    <input type="text" name="productName" placeholder="Type here" class="form-control"
+                                        id="productName">
+                                    <span id="productNameError" class="text-danger mt-1"></span>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">Product description</label>
+                                    <textarea placeholder="Type here" name="description" class="form-control"
+                                        rows="4"></textarea>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-4">
+                                            <label class="form-label" for="product_price">Price</label>
+                                            <input type="text" placeholder="₹" name="price" class="form-control"
+                                            id="productPrice">
+                                        <span id="productPriceError" class="text-danger mt-1"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-4">
+                                            <label for="product_discount" class="form-label">Discount</label>
+                                            <input type="text" name="discount" placeholder="%" class="form-control"
+                                                id="productDiscount">
+                                            <span id="productDiscountError" class="text-danger mt-1"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="mb-4">
+                                            <label for="product_quantity" class="form-label">Small Quantity</label>
+                                            <input type="text" name="smallQuantity" placeholder="nos" class="form-control"
+                                                id="productQuantity">
+                                            <span id="productQuantityError" class="text-danger mt-1"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-4">
+                                            <label for="product_quantity" class="form-label">Medium Quantity</label>
+                                            <input type="text" name="mediumQuantity" placeholder="nos" class="form-control"
+                                                id="productQuantity">
+                                            <span id="productQuantityError" class="text-danger mt-1"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-4">
+                                            <label for="product_quantity" class="form-label">Large Quantity</label>
+                                            <input type="text" name="largeQuantity" placeholder="nos" class="form-control"
+                                                id="productQuantity">
+                                            <span id="productQuantityError" class="text-danger mt-1"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div> 
+                    
+                </div>
+                <div class="col-lg-4">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Media</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="input-upload">
+                                <label class="form-label">Image</label>
+                                <div id="previewContainer" class="row"></div>
+                                <input class="form-control" id="fileInput" type="file" name="images" multiple>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row gx-2">
+                                <div class="col-sm-6 mb-3">
+                                    <label class="form-label">Category</label>
+                                    <select class="form-select" style="width: auto;" name="productCategory">
+    
+                                        <% for( let i=0; i < categories.length; i++ ) { %>
+                                            <% if (categories[i].isListed) { %>
+                                                <option value="<%= categories[i]._id %>">
+                                                    <%= categories[i].name %>
+                                                </option>
+                                                <% } %>
+                                            <% } %>
+    
+    
+     
+                                    </select>
+                                </div>
+    
+                            </div>
+                        </div>
+                    </div>
+                        
+                        <div class="d-flex justify-content-center">
+                            <button class="btn btn-md rounded font-sm hover-up">Add Product</button>
+                        </div>
+                    </div> <!-- card end// -->
+                </div>
+            </form>
+        </div>
+        </section> <!-- content-main end// -->
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script>
+                    document.write(new Date().getFullYear())
+                    </script> ©, Evara - HTML Ecommerce Template .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+    <script>
+        const fileInput = document.getElementById("fileInput");
+        const previewContainer = document.getElementById("previewContainer");
+
+        let selectedFiles = []; 
+
+        fileInput.addEventListener("change", function (event) {
+            const files = event.target.files; // Get uploaded files
+
+            previewContainer.innerHTML = "";
+
+            for (const file of files) {
+                if (!file.type.startsWith("image/")) {
+                    alert("Only images are allowed!");
+                    continue;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    const previewElement = document.createElement("div");
+                    previewElement.classList.add("preview", "col-6", "mb-2");
+
+                    const image = document.createElement("img");
+                    image.src = event.target.result;
+                    image.classList.add("img-thumbnail");
+                    previewElement.appendChild(image);
+
+                    // Delete icon button
+                    const deleteButton = document.createElement("button");
+                    deleteButton.classList.add("btn-close", "btn-close-dark");
+                    deleteButton.setAttribute("aria-label", "Delete");
+                    const icon = document.createElement("span");
+                    icon.classList.add("fas", "fa-trash"); // Trash can icon
+                    deleteButton.appendChild(icon);
+                    previewElement.appendChild(deleteButton);
+
+                    previewContainer.appendChild(previewElement);
+                    selectedFiles.push(file); // Add file to selected files
+
+                    deleteButton.addEventListener("click", function () {
+                        previewContainer.removeChild(previewElement);
+                        selectedFiles.splice(selectedFiles.indexOf(file), 1); // Remove from array
+
+                        // Remove file from FileList
+                        const fileList = event.target.files;
+
+                        if (fileList) { // Make sure fileList is available
+                            const fileIndex = fileList.indexOf(file);
+                            // ... (rest of the code)
+                        } else {
+                            console.error("fileList is undefined"); // Log a message if it's missing
+                        }
+                        // const fileIndex = fileList.indexOf(file);
+                        if (fileIndex !== -1) {
+                            fileList.splice(fileIndex, 1); // Splice to actually remove from list
+                        }
+
+                        // Optionally reset input value (clear file selection)
+                        if (fileList.length === 0) {
+                            fileInput.value = ""; // Clear input value if no files remain
+                        }
+                    });
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+    </script>
+
+<script>
+
+    function validateForm(e) {
+        console.log("entered validation");
+        let productName = document.getElementById('productName').value;
+        let productPrice = document.getElementById('productPrice').value;
+        let productQuantity = document.getElementById('productQuantity').value;
+        let discount = document.getElementById('productDiscount').value;
+
+        //for clearing previous errors
+
+        document.getElementById('productNameError').innerHTML = "";
+        document.getElementById('productPriceError').innerHTML = "";
+        document.getElementById('productQuantityError').innerHTML = "";
+        document.getElementById('productDiscountError').innerHTML = "";
+        let isValid = true;
+
+        // Product Name validation
+        if (productName.trim() === "") {
+            document.getElementById('productNameError').innerText = "Product Name is required.";
+            isValid = false;
+        } else if (/^\d+$/.test(productName) || /^-\d+$/.test(productName)) {
+            document.getElementById('productNameError').innerText = "Product Name cannot contain numbers.";
+            isValid = false;
+        }
+
+        // Product Price validation
+        if (productPrice.trim() === "") {
+            document.getElementById('productPriceError').innerText = "Product Price is required.";
+            isValid = false;
+        }
+        else if (isNaN(productPrice) || parseFloat(productPrice) <= 0) {
+            document.getElementById('productPriceError').innerHTML = "Product Price must be a valid number greater than 0.";
+            isValid = false;
+        }
+
+        // Product Quantity validation
+
+        if (isNaN(productQuantity) || parseInt(productQuantity) < 0) {
+            document.getElementById('productQuantityError').innerHTML = "Product Quantity must be a valid non-negative integer.";
+            isValid = false;
+        } else if (productQuantity.trim() === "") {
+            document.getElementById('productQuantityError').innerText = "Product Quantity is required.";
+            isValid = false;
+        }
+
+        // Discount validation
+        if (discount.trim() === "") {
+            document.getElementById('productDiscountError').innerText = "Discount is required.";
+            isValid = false;
+        }
+        else if (isNaN(discount) || parseFloat(discount) < 0 || parseFloat(discount) > 100) {
+            document.getElementById('productDiscountError').innerHTML = "Discount must be a valid percentage between 0 and 100.";
+            isValid = false;
+        }
+
+        return isValid;
+    }
+    const form = document.getElementById("creationForm");
+    form.addEventListener("submit", (e) => {
+        const isValid = validateForm(e);
+        console.log(isValid);
+        if (!isValid) {
+            e.preventDefault();
+        }
+    })
+
+</script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/public/admin-assets/"></script>
+    <script src="/public/admin-assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/public/admin-assets/js/vendors/select2.min.js"></script>
+    <script src="/public/admin-assets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/public/admin-assets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Script -->
+    <script src="/public/admin-assets/js/main.js" type="text/javascript"></script>
+</body>
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-form-product-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:32 GMT -->
+</html>

@@ -1,0 +1,527 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-categories.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:21 GMT -->
+
+<head>
+    <meta charset="utf-8">
+    <title>Admin-Category</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/public/admin-assets/images/SnatchIt_logo-removebg-preview.png">
+    <!-- Template CSS -->
+    <link href="/public/admin-assets/css/main.css" rel="stylesheet" type="text/css" />
+    <!-- Toastify JS CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.css">
+
+
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="index.html" class="brand-wrap">
+                <img src="/public/admin-assets/images/SnatchIt_removeb.png" class="logo" alt="Evara Dashboard">
+            </a>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item">
+                    <a class="menu-link" href="admin-dashboard"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="admin-userEdit"> <i class="icon material-icons md-people""></i>
+                        <span class=" text">User Control</span>
+                    </a>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="admin-products"><i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="admin-products">Product List</a>
+                        <a href="admin-category" class="active">Categories</a>
+                    </div>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="admin-addproduct"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Add product</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="admin-orderPage"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Order List</span>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="admin-coupon"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Coupons</span>
+                    </a>
+                </li>
+                <li class="menu-item has-submenu active">
+                    <a class="menu-link" href="admin-products"><i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Offer Management</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="admin-productOffer" >Product Offer</a>
+                        <a href="admin-categoryOffer" class="active">Category Offer</a>
+                    </div>
+                </li>
+                <hr>
+                
+                <br>
+                <br>
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        <header class="main-header navbar">
+            <div class="col-search">
+                
+            </div>
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i
+                        class="material-icons md-apps"></i> </button>
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon" href="#">
+                            <i class="material-icons md-notifications"></i>
+                            <span class="badge rounded-pill">3</span>
+                        </a>
+                    </li>
+
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage"
+                            aria-expanded="false"><i class="material-icons md-public"></i></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownLanguage">
+                            <a class="dropdown-item text-brand" href="#"><img
+                                    src="/public/admin-assets/imgs/theme/flag-us.png" alt="English">English</a>
+                            <a class="dropdown-item" href="#"><img src="/public/admin-assets/imgs/theme/flag-fr.png"
+                                    alt="Français">Français</a>
+                            <a class="dropdown-item" href="#"><img src="/public/admin-assets/imgs/theme/flag-jp.png"
+                                    alt="Français">日本語</a>
+                            <a class="dropdown-item" href="#"><img src="/public/admin-assets/imgs/theme/flag-cn.png"
+                                    alt="Français">中国人</a>
+                        </div>
+                    </li>
+                    <li class="dropdown nav-item">
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount"
+                            aria-expanded="false"> <img class="img-xs rounded-circle"
+                                src="/public/admin-assets/imgs/people/avatar2.jpg" alt="User"></a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                            <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit
+                                Profile</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account
+                                Settings</a>
+                            <a class="dropdown-item" href="#"><i
+                                    class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
+                            <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help
+                                center</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" href="#"><i
+                                    class="material-icons md-exit_to_app"></i>Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        
+        <section class="content-main">
+            <div class="content-header">
+              <h2 class="content-title">Category-Offer Management</h2>
+              <div>
+        
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCoupon"
+                  data-bs-whatever="@getbootstrap" style="background-color: #2B1754;">Add Offer +</button>
+        
+              </div>
+        
+            </div>
+            <% if (locals.message) { %>
+              <input type="text" id="message" value="<%= message %>" hidden>
+              <% } %>
+                <div class="card mb-4">
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <% if (!offers.length) { %>
+        
+                        <h3>No Offers Are Added Yet</h3>
+        
+                        <% }else{ %>
+        
+                          <table class="table table-hover" id="categoryOfferTable">
+                            <thead>
+                              <tr class="text-left">
+                                <th class="text-center">No</th>
+                                <th class="text-center">Offer Name</th>
+                                <th class="text-center">Category</th>
+                                <th class="text-center">Discount</th>
+                                <th class="text-center">Starting date</th>
+                                <th class="text-center">Ending date</th>
+        
+                                <th class="text-center">Edit</th>
+                                <th class="text-center">Delete</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <% for( let i=0; i < offers.length; i++ ) { %>
+        
+        
+                                <tr class="text-center">
+                                  <td width="15%">
+                                    <%= i+1 %>
+                                  </td>
+                                  <td width="20%">
+                                    <%= offers[i].offerName %>
+                                  </td>
+                                  <td width="15%">
+                                    <%= offers[i].categoryOffer.category.name %>
+                                  </td>
+                                  <td width="15%">
+                                    <%= offers[i].categoryOffer.discount %>
+                                  </td>
+                                  <td width="20%">
+                                    <%= offers[i].formattedStartingDate %>
+                                  </td>
+                                  <td width="10%">
+                                    <%= offers[i].formattedEndingDate%>
+                                  </td>
+        
+                                  <td width="10%"><a onclick="getOfferData('<%= offers[i]._id %>')"
+                                      class="btn btn-sm rounded font-sm mt-15" type="button" data-bs-toggle="modal"
+                                      data-bs-target="#editCoupon" style="background-color: #2B1754; color: white;" data-bs-whatever="@getbootstrap">Edit</a></td>
+                                  <td width="20%">
+                                    <% if (offers[i].status) { %>
+                                      <button id="delete-categoryOffer<%= offers[i]._id %>"
+                                        class="btn btn-sm btn-success rounded font-sm mt-15"
+                                        onclick="deleteCategoryOffer('<%= offers[i]._id %>')">
+                                        Listed
+                                      </button>
+                                      <% } else { %>
+                                        <button id="delete-categoryOffer<%= offers[i]._id %>"
+                                          class="btn btn-sm btn-danger rounded font-sm mt-15"
+                                          onclick="deleteCategoryOffer('<%= offers[i]._id %>')">
+                                          Unlisted
+                                        </button>
+                                        <% } %>
+                                  </td>
+                                </tr>
+        
+                                <% } %>
+                            </tbody>
+                          </table> <!-- table-responsive.// -->
+                          <% } %>
+        
+                    </div>
+                  </div> <!-- card-body end// -->
+                </div> <!-- card end// -->
+        
+          </section> <!-- content-main end// -->
+          <!-- Modal Add Coupon -->
+
+  <div class="modal fade" id="addCoupon" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add Offer </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="/categoryAddOffer" method="post">
+            <div class="mb-3">
+              <label for="recipient-name" class="col-form-label">Offer Name</label>
+              <input type="text" class="form-control" name="offerName" id="" >
+            </div>
+            <div class="mb-3">
+              <label for="recipient-name" class="col-form-label">Category</label>
+              <select name="categoryName" id="" class="form-select">
+                <% for( let i=0; i < categories.length; i++ ) { %>
+                  <option class="form-option" value="<%= categories[i]._id %>">
+                    <%= categories[i].name %>
+                  </option>
+                  <% } %>
+              </select>
+              <!-- <input type="text" class="form-control" name="couponName" id="couponName"> -->
+            </div>
+            <div class="mb-3">
+              <label for="recipient-name" class="col-form-label">Discount Amount</label>
+              <input type="text" class="form-control" name="discountAmount" id="">
+            </div>
+            <div class="mb-3">
+              <label for="recipient-name" class="col-form-label">Starting date</label>
+              <input type="date" class="form-control" name="startDate" id="couponExpiry" placeholder="YYYY-MM-DD">
+            </div>
+            <div class="mb-3">
+              <label for="recipient-name" class="col-form-label">Ending date</label>
+              <input type="date" class="form-control" name="endDate" id="couponExpiry" placeholder="YYYY-MM-DD">
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary" style="background-color: #2B1754;">Create Offer</button>
+            </div>
+
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!--End Modal  Add Coupon-->
+
+
+  <!-- Modal Edit Coupon -->
+
+
+  <div class="modal fade" id="editCoupon" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Offer </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="/categoryEditOffer" method="post">
+            <div class="mb-3">
+              <label for="recipient-name" class="col-form-label">Offer Name</label>
+              <input type="text" class="form-control" name="offerName" id="offerName">
+            </div>
+            <div class="mb-3">
+              <label for="recipient-name" class="col-form-label">Category</label>
+              <select name="categoryName" id="categoryName" class="form-select">
+                <% for( let i=0; i < categories.length; i++ ) { %>
+                  <option class="form-option" value="<%= categories[i]._id %>">
+                    <%= categories[i].name %>
+                  </option>
+                  <% } %>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="recipient-name" class="col-form-label">Discount Amount</label>
+              <input type="text" class="form-control" name="discountAmount" id="discountAmount">
+            </div>
+            <div class="mb-3">
+              <label for="recipient-name" class="col-form-label">Starting Date (YYYY/MM/DD)</label>
+              <input type="date" class="form-control" name="startDate" id="startDate">
+            </div>
+            <div class="mb-3">
+              <label for="recipient-name" class="col-form-label">Ending Date (YYYY/MM/DD)</label>
+              <input type="date" class="form-control" name="endDate" id="endDate">
+            </div>
+            <div class="mb-3">
+              <input type="hidden" class="form-control" id="offerId" name="offerId" />
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary" style="background-color: #2B1754;">Update Offer</button>
+            </div>
+
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!--End Modal Edit Coupon-->
+
+
+
+
+
+
+        
+
+
+
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script>
+                        document.write(new Date().getFullYear())
+                    </script> ©, Evara - HTML Ecommerce Template .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/public/admin-assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/public/admin-assets/js/vendors/select2.min.js"></script>
+    <script src="/public/admin-assets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/public/admin-assets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Script -->
+    <script src="/public/admin-assets/js/main.js" type="text/javascript"></script>
+    <!-- Toastify JS JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.js"></script>
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        
+    <script>
+        function deleteCategoryOffer(offerId) {
+          Swal.fire({
+            title: 'Are you sure?',
+            text: 'You wont be able to undo this!!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Update it!',
+            cancelButtonText: 'Cancel',
+            reverseButtons: true,
+          }).then((response) => {
+            console.log(response);
+            if (response.isConfirmed) {
+              $.ajax({
+                url: "/listUnlistCategoryOffer/" + offerId ,
+                type: "PATCH",
+              }).done((res) => {
+                if (res) {
+                  if (res.listed) {  //to show green button and green toast message
+    
+                    Toastify({
+                      text: `${res.message}`,
+                      duration: 3000,
+                      gravity: "top", // top or bottom
+                      position: "center", // left, center or right
+                      stopOnFocus: true, // Prevents dismissing of toast on hover
+                      style: {
+                        background: "green",
+                      },
+                    }).showToast();
+    
+                    const button = document.getElementById(
+                      "delete-categoryOffer" + offerId
+                    );
+                    document.getElementById("delete-categoryOffer" + offerId).classList.remove("btn-danger");
+                    document.getElementById("delete-categoryOffer" + offerId).classList.add("btn-success");
+                    button.innerHTML = "Listed";
+                     
+                  } else {
+    
+                    Toastify({
+                      text: `${res.message}`,
+                      duration: 3000,
+                      gravity: "top", // top or bottom
+                      position: "center", // left, center or right
+                      stopOnFocus: true, // Prevents dismissing of toast on hover
+                      style: {
+                        background: "linear-gradient(to right, #00b09b, #96c93d)",
+                      },
+                    }).showToast();
+    
+                    const button = document.getElementById("delete-categoryOffer" + offerId);
+                    document.getElementById("delete-categoryOffer" + offerId).classList.remove("btn-success");
+                    document.getElementById("delete-categoryOffer" + offerId).classList.add("btn-danger");
+
+                    button.innerHTML = "Unlisted";
+                    
+                  }
+                  console.log(res.listed);
+                }
+              })
+            }
+          })
+        }
+
+       
+    
+      </script>
+    
+      <script>
+        function getOfferData(offerId) {
+          $.ajax({
+            url: "/categoryEditOffer/" + offerId,
+            method: 'GET',
+          })
+            .done((res) => {
+              if (res) {
+                console.log(res)
+                document.getElementById("categoryName").value = res.categoryOffer.category
+                document.getElementById('offerName').value = res.offerName;
+                document.getElementById('discountAmount').value = res.categoryOffer.discount;
+                document.getElementById('startDate').value = convertDateFormat(res.formattedStartingDate)
+                document.getElementById("endDate").value = convertDateFormat(res.formattedEndingDate)
+                document.getElementById('offerId').value = res._id;
+    
+                $("#editCoupon").modal("show");
+    
+              }
+            })
+            .fail((error) => {
+              console.log(error);
+            })
+    
+        }
+      </script>
+    
+      <script>
+        function convertDateFormat(dateString) {
+          try {
+            // Split the date string into components
+            const [year, month, day] = dateString.split('/');
+    
+            // Validate month and day values (optional)
+            if (month < 1 || month > 12 || day < 1 || day > 31) {
+              throw new Error("Invalid month or day value.");
+            }
+    
+            // Format the date in the desired format (YYYY-MM-DD)
+            return year + '-' + month.padStart(2, '0') + '-' + day.padStart(2, '0');
+          } catch (error) {
+            console.error("Invalid date format. Please provide a date string in the format 'yyyy/mm/dd'.", error);
+            return null; // Or return any other default value if conversion fails
+          }
+        }
+      </script>
+    
+    
+      <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          const message = document.getElementById("message");
+          console.log(message)
+          if (message.value != null) {
+            Swal.fire("Successfull", `Offer Updated`, "success").then(() => {
+            })
+          }
+        })
+      </script>
+    
+      <script>
+        $(document).ready(function () {
+          $('#categoryOfferTable').DataTable({
+            ordering: false,
+          });
+        });
+      </script>
+      
+        
+          
+</body>
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-categories.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:21 GMT -->
+
+</html>
