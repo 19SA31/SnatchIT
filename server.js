@@ -20,7 +20,7 @@ app.set("view engine","ejs");
 app.use(methodOverride("_method"));
 
 app.use(session({
-    secret: "1231fdsd54sg33435",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie:{

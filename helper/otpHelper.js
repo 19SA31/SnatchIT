@@ -11,8 +11,8 @@
 
     service: "gmail",
     auth:{
-      user:"ananthushaji693@gmail.com",
-      pass:"lsts rjot mwcf dwmf"
+      user: process.env.AUTH_EMAIL,
+      pass: process.env.AUTH_PASS
     }
   })
 
@@ -48,7 +48,7 @@
                 }
             
                 const mailOptions = {
-                  from: "ananthushaji693@gmail.com",
+                  from: process.env.AUTH_EMAIL,
                   to: userEmail,
                   subject: "Your OTP verification code",
                   text: `Your OTP is ${otp}`

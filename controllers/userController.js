@@ -311,8 +311,9 @@ const loadShop = async (req, res, next) => {
       });
     } else {
       let userId = req.session.user;
+      
 
-      const extractPrice = (price) => parseInt(price.replace(/[^\d]/g, ""));
+      
 
       const categories = await categoryHelper.getAllcategory();
 
@@ -329,14 +330,15 @@ const loadShop = async (req, res, next) => {
       if (req.query.filter) {
         if (req.query.filter == "Ascending") {
           console.log("inside ascending");
+          
           offerPrice.sort(
-            (a, b) => extractPrice(a.productPrice) - extractPrice(b.productPrice)
+            (a, b) => a.productPrice - b.productPrice
           );
           normalSorted="Ascending"
        
         } else if (req.query.filter == "Descending") {
           offerPrice.sort(
-            (a, b) => extractPrice(b.productPrice) - extractPrice(a.productPrice)
+            (a, b) => b.productPrice - a.productPrice
           );
           normalSorted="Descending"
       
