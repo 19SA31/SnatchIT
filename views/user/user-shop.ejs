@@ -451,6 +451,7 @@
                         <div class="widget-category mb-30">
                             <h5 class="section-title style-1 mb-30 wow fadeIn animated">Category Filter</h5>
                             <select name="" id="categoryFilter" class="form-select" style=" border-radius: 18px;">
+                                <option value="" selected disabled>Choose..</option>
                                 <% for( let i=0; i < categories.length; i++ ) { %>
                                     <option value="<%= categories[i]._id %>
                                         " class="form-select-input" style="font-size: 16px;">
@@ -691,13 +692,13 @@
     <script>
         // Function to fetch and display products based on search, filter, sort, and pagination
         const fetchProducts = (event,page) => {
-            console.log("fetched");
+
             // const searchQuery = document.getElementById('searchInput').value;
             const categoryFilter = $('#categoryFilter').val();
             const sortOption = $('#sortOptions').val();
             const currentPage = page||1; // Initial page
             const limitPerPage = 10; // Number of products per page
-            console.log(currentPage)
+
 
             const url = `/shopFilter?category=${categoryFilter}&sort=${sortOption}&page=${currentPage}&limit=${limitPerPage}`;
             console.log(url)
@@ -709,7 +710,7 @@
                     console.log(data)
                     const products = data.products;
                     const pageInfo = data.pageInfo;
-
+                    console.log(products);
                     // Update the product list on the page based on the fetched products
                     const productGrid = $('.product-grid-3');
                     productGrid.empty(); // Clear previous products
@@ -718,18 +719,18 @@
                         const productDiv = $('<div></div>').addClass('col-lg-4 col-md-4 col-sm-6');
                         productDiv.html(`
      
-     <div class="product-cart-wrap mb-30">
+                                    <div class="product-cart-wrap mb-30">
                                        <div class="product-img-action-wrap">
                                            <div class="product-img product-img-zoom">
                                                <a href="/user-productPage/${product._id}">
-                                                   <img class="default-img" src="/${product.image[0]}" alt="">
-                                                   <img class="hover-img" src="/${product.image[1]}" alt="">
+                                                   <img class="default-img" src="/public/uploads/${product.productImage[0]}" alt="">
+                                                   <img class="hover-img" src="/public/uploads/${product.productImage[1]}" alt="">
                                                </a>
                                            </div>
                                            <div class="product-action-1">
-                                               <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
+                                               
                                                <a aria-label="Add To Wishlist" class="action-btn hover-up" href="#"><i class="fi-rs-heart"></i></a>
-                                               <a aria-label="Compare" class="action-btn hover-up" href="#"><i class="fi-rs-shuffle"></i></a>
+                                               
                                            </div>
                                            
                                        </div>
@@ -737,7 +738,7 @@
                                            
                                                <div class="product-category">
                                                    <a href="#">
-                                                       ${product.category[0].categoryName}
+                                                       ${product.category[0].name}
                                                    </a>
                                                </div>
                                                

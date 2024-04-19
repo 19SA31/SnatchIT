@@ -448,6 +448,7 @@ const shopFilterLoad = async (req, res, next) => {
       wishListCount,
       categories,
       sorted,
+      
     });
   } catch (error) {
     next(error);
