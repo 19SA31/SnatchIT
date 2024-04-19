@@ -88,10 +88,46 @@ const findAllCoupons = () => {
     });
   };
 
+  const  applyCoupon = (userId, couponCode) => {
+    return new Promise(async (resolve, reject) => {
+      console.log(couponCode);
+      let coupon = await couponModel.findOne({ code: couponCode })
+      console.log("this is apply coupon",coupon);
+      if (coupon && coupon.isActive === "Active") {
+        if (!coupon.usedBy.includes(userId)) {
+          let cart = await cartModel.findOne({ user: new ObjectId(userId)});
+          console.log(cart)
+          const discount = coupon.discount;
+  
+          cart.totalAmount = cart.totalAmount - discount;
+          cart.coupon = couponCode;
+  
+          await cart.save();
+          console.log(cart)
+  
+          coupon.usedBy.push(userId);
+          await coupon.save();
+  
+          resolve({
+            discount,
+            cart,
+            status: true,
+            message: "Coupon applied successfully",
+          });
+        } else {
+          resolve({ status: false, message: "This coupon is already used" });
+        }
+      } else {
+        resolve({ status: false, message: "Invalid Coupon code" });
+      }
+    });
+  };
+
   module.exports = {
     findAllCoupons,
     addCoupon,
     deleteSelectedCoupon,
     getCouponData,
-    editCouponDetails
+    editCouponDetails,
+    applyCoupon
   }

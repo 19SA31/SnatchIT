@@ -12,23 +12,47 @@ const checkoutPage = async (req, res) => {
     const userId = req.session.user;
     const userData = await user.findById({ _id: userId })
     let cartItems = await cartHelper.getAllCartItems(userId);
-    console.log("This is checkout",cartItems);
+    let cart = await cartModel.findOne({ user: userId });
+    const coupons = await couponHelper.findAllCoupons();
     let totalandSubTotal = await cartHelper.totalSubtotal(userId, cartItems);
-    
-
-    
-
+    if (cart.coupon != null) {
+      const appliedCoupon = await couponModel.findOne({ code: cart.coupon });
+      cartItems[0].couponAmount = appliedCoupon.discount;
+  
       let totalAmountOfEachProduct = [];
       for (i = 0; i < cartItems.products.length; i++) {
         let total = cartItems.products[i].quantity * parseInt(cartItems.products[i].price);
         totalAmountOfEachProduct.push(total);
       }
-      res.render("user/checkout", {
-        userData,
-        cartItems,
-        totalandSubTotal,
-        totalAmountOfEachProduct
-      })
+      totalandSubTotal = totalandSubTotal;
+      console.log(cartItems);
+      if (cartItems) {
+        res.render("user/checkout", {
+          cartItems,
+          totalAmountOfEachProduct,
+          totalandSubTotal,
+          userData,
+          coupons,
+        });
+      }
+    } else {
+      let totalAmountOfEachProduct = [];
+      for (i = 0; i < cartItems.products.length; i++) {
+        let total = cartItems.products[i].quantity * parseInt(cartItems.products[i].price);
+        totalAmountOfEachProduct.push(total);
+      }
+      totalandSubTotal = totalandSubTotal;
+  
+      if (cartItems) {
+        res.render("user/checkout", {
+          cartItems,
+          totalAmountOfEachProduct,
+          totalandSubTotal,
+          userData,
+          coupons,
+        });
+      }
+    }
     
   } catch (error) {
     console.log(error);

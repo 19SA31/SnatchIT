@@ -96,7 +96,11 @@ const  loadUserProduct = async (req, res) => {
     .lean();
 
   const cartStatus = await cartHelper.isAProductInCart(userData, product._id);
-  console.log("this is loaduserproduct",cartStatus);
+  const wishlistStatus = await wishlistHelper.isInWishlist(
+    userData,
+    product._id
+  );
+  product.wishlistStatus = wishlistStatus;
   product.cartStatus = cartStatus; 
   res.render("user/user-productPage", {
     product,

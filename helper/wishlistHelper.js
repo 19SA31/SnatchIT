@@ -107,7 +107,7 @@ const getAllWishlistProducts = (userId) => {
       try {
         const wishList = await wishlistModel.findOne({
           user: userId,
-          "products.productItemId": productId,
+          "products.productId": productId,
         });
   
         if (wishList) {
