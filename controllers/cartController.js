@@ -10,8 +10,9 @@ const getCartPage = async(req,res)=>{
         const userData=req.session.user
 
         const cartItems= await cartHelper.getAllCartItems(userData)
+        console.log("this is getcartpage",cartItems);
 
-        if(cartItems){
+        if(cartItems.products.length){
   
         let totalandSubTotal = await cartHelper.totalSubtotal(userData, cartItems);
 

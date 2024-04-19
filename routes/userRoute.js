@@ -56,7 +56,7 @@ router.post("/otp-verification",userController.insertUserWithVerify)
 router.post("/login",userController.checkUser);
 router.post("/addToCart/:id/:size", productController.addToCart);
 router.post("/placeOrder",orderController.placeOrder)
-
+router.post("/searchProduct", productController.searchProduct);
 
 router.patch("/addAddress",userController.addAddress)
 router.patch("/updateCartQuantity", cartController.updateCartQuantity);

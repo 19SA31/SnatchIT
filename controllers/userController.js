@@ -85,7 +85,7 @@ const loadOTP = (req, res) => {
   }
 }
 
-const loadUserProduct = async (req, res) => {
+const  loadUserProduct = async (req, res) => {
   const id = req.params.id;
   const userData = req.session.user;
 
@@ -269,6 +269,7 @@ const loadShop = async (req, res, next) => {
         .exec();
       if (searchResult) {
         var sorted = true;
+        var normalSorted = false;
       }
 
       let userId = req.session.user;
@@ -296,7 +297,7 @@ const loadShop = async (req, res, next) => {
       let startIndex = (currentPage - 1) * itemsPerPage;
       let endIndex = startIndex + itemsPerPage;
       let totalPages = Math.ceil(offerPrice.length / 6);
-      console.log(totalPages);
+      console.log("total pages ",totalPages);
       const currentProduct = offerPrice.slice(startIndex, endIndex);
 
       res.render("user/user-shop", {
@@ -306,15 +307,12 @@ const loadShop = async (req, res, next) => {
         wishListCount,
         categories,
         sorted,
+        normalSorted,
         totalPages,
         payload,
       });
     } else {
       let userId = req.session.user;
-      
-
-      
-
       const categories = await categoryHelper.getAllcategory();
 
       let cartCount = await cartHelper.getCartCount(userId);
@@ -325,8 +323,7 @@ const loadShop = async (req, res, next) => {
 
       const offerPrice = await offerHelper.findOffer(products);
       let sorted = false;
-      let normalSorted;
-
+      
       if (req.query.filter) {
         if (req.query.filter == "Ascending") {
           console.log("inside ascending");
@@ -363,7 +360,7 @@ const loadShop = async (req, res, next) => {
       let startIndex = (currentPage - 1) * itemsPerPage;
       let endIndex = startIndex + itemsPerPage;
       let totalPages = Math.ceil(offerPrice.length / 6);
-      console.log(totalPages);
+      console.log("total pages ",totalPages);
       const currentProduct = offerPrice.slice(startIndex, endIndex);
 
       res.render("user/user-shop", {
@@ -384,11 +381,12 @@ const loadShop = async (req, res, next) => {
 
 const shopFilterLoad = async (req, res, next) => {
   try {
-    console.log("reached here");
+    console.log("SHOP FILTER reached here");
     let filteredProducts;
     const extractPrice = (price) => parseInt(price.replace(/[^\d]/g, ""));
     const { search, category, sort, page, limit } = req.query;
     if (category) {
+      console.log("if in shop filter");
       let userId = req.session.user;
       var categories = await categoryHelper.getAllcategory();
 
@@ -397,7 +395,7 @@ const shopFilterLoad = async (req, res, next) => {
       var wishListCount = await wishlistHelper.getWishListCount(userId);
 
       var products = await productHelper.getAllActiveProducts();
-      console.log(products);
+      
 
       let categorySortedProducts = await products.filter((product) => {
         return product.productCategory.toString().trim() == category.trim();
@@ -408,6 +406,7 @@ const shopFilterLoad = async (req, res, next) => {
     }
     console.log(filteredProducts);
     if (sort) {
+      console.log("if in shop filter----sort");
       if (sort == "Ascending") {
         console.log("inside ascending");
         filteredProducts.sort(
@@ -434,7 +433,7 @@ const shopFilterLoad = async (req, res, next) => {
         sorted = "Alpha";
       }
     }
-    console.log(filteredProducts);
+    
     let itemsPerPage = 6;
     let currentPage = parseInt(req.query.page) || 1;
     let startIndex = (currentPage - 1) * itemsPerPage;

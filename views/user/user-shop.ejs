@@ -80,9 +80,23 @@
                     </div>
                     <div class="header-right">
                         <div class="search-style-2">
-                            <form action="#">
-                                <input type="text" placeholder="Search for items...">
-                            </form>
+
+                            <div>
+                              <form action="/user-shop" method="GET">
+                                <div class="header-search-wrapper w-100">
+              
+                                  <div>
+                                    <input type="search" class="form-control w-100" id="searchInput" placeholder="Search in..."
+                                      required autocomplete="off" name="search">
+                                    <a href="#" class="search-toggle" role="button">
+                                      <i class="icon-search"></i>
+                                    </a>
+                                  </div>
+                                </div><!-- End .header-search-wrapper -->
+                              </form>
+                              <ul id="suggestionList"></ul>
+                            </div>
+              
                         </div>
                         <div class="header-action-right">
                             <div class="header-action-2">
@@ -351,13 +365,10 @@
                                                 </a>
                                             </div>
                                             <div class="product-action-1">
-                                                <a aria-label="Quick view" class="action-btn hover-up"
-                                                    data-bs-toggle="modal" data-bs-target="#quickViewModal"><i
-                                                        class="fi-rs-eye"></i></a>
+                                               
                                                 <a aria-label="Add To Wishlist" class="action-btn hover-up" href="#"><i
                                                         class="fi-rs-heart"></i></a>
-                                                <a aria-label="Compare" class="action-btn hover-up" href="#"><i
-                                                        class="fi-rs-shuffle"></i></a>
+                                                
                                             </div>
                                             <div class="product-badges product-badges-position product-badges-mrg">
                                                 <span class="hot">Hot</span>
@@ -616,7 +627,7 @@
     <script src="public/user-assets/js/maind134.js?v=3.4"></script>
     <script src="public/user-assets/js/shopd134.js?v=3.4"></script>
 
-    <script>
+    <!-- <script>
         const priceSorter = (value) => {
 
             if (!document.getElementById("sortedProducts")) {
@@ -673,7 +684,7 @@
                 })
             }
         }
-    </script>
+    </script> -->
 
    
 
@@ -720,9 +731,7 @@
                                                <a aria-label="Add To Wishlist" class="action-btn hover-up" href="#"><i class="fi-rs-heart"></i></a>
                                                <a aria-label="Compare" class="action-btn hover-up" href="#"><i class="fi-rs-shuffle"></i></a>
                                            </div>
-                                           <div class="product-badges product-badges-position product-badges-mrg">
-                                               <span class="hot">Hot</span>
-                                           </div>
+                                           
                                        </div>
                                        <div class="product-content-wrap">
                                            
@@ -842,80 +851,60 @@
         })
     </script>
 
-        function updateProductGrid(searchQuery, categoryFilter, sortOption, currentPage, limitPerPage) {
-            const productGrid = document.querySelector('.product-grid-3');
-            productGrid.innerHTML = ''; // Clear the existing product grid
+<script>
+    document.addEventListener('click', function (event) {
+      const suggestionList = document.getElementById('suggestionList');
+      const isClickInside = suggestionList.contains(event.target);
 
-            // Make the fetch call with search, filter, sort, and pagination parameters
-            fetch(`/products?search=${searchQuery}&category=${categoryFilter}&sort=${sortOption}&page=${currentPage}&limit=${limitPerPage}`)
-                .then(response => response.json())
-                .then(products => {
-                    products.forEach(product => {
-                        const productDiv = document.createElement('div');
-                        productDiv.classList.add('col-lg-4', 'col-md-4', 'col-sm-6');
-                        productDiv.innerHTML = `
-                        <div class="product-cart-wrap mb-30">
-                                        <div class="product-img-action-wrap">
-                                            <div class="product-img product-img-zoom">
-                                                <a href="/userHome/productView/${product._id}">
-                                                    <img class="default-img" src="/${product.productImage[0]}" alt="">
-                                                    <img class="hover-img" src="/${product.productImage[1]}" alt="">
-                                                </a>
-                                            </div>
-                                            <div class="product-action-1">
-                                                <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
-                                                <a aria-label="Add To Wishlist" class="action-btn hover-up" href="#"><i class="fi-rs-heart"></i></a>
-                                                <a aria-label="Compare" class="action-btn hover-up" href="#"><i class="fi-rs-shuffle"></i></a>
-                                            </div>
-                                            <div class="product-badges product-badges-position product-badges-mrg">
-                                                <span class="hot">Hot</span>
-                                            </div>
-                                        </div>
-                                        <div class="product-content-wrap">
-                                            
-                                                <div class="product-category">
-                                                    <a href="#">
-                                                        ${product.productCategory.name}
-                                                    </a>
-                                                </div>
-                                                
+      if (!isClickInside) {
+        suggestionList.innerHTML = ''; // Hide the suggestions by clearing the innerHTML
+      }
+    });
 
-                                                        <h2>
-                                                            <a href="#">
-                                                                ${product.productName}
-                                                            </a>
-                                                        </h2>
-                                                        <div class="rating-result" title="90%">
-                                                            <span>
-                                                                <span>
-                                                                    80%
-                                                                </span>
-                                                            </span>
-                                                        </div>
-                                                        <div class="product-price">
-                                                            <span class="text-dark">
-                                                                ${product.offerPrice}
+    let searchElement = document.getElementById('searchInput');
+    searchElement.onkeyup = function () {
+      let searchWord = searchElement.value;
+      console.log("searchWord", searchWord);
+      if (searchWord != '') {
+        loadData(searchWord);
+      } else {
+        document.getElementById('suggestionList').innerHTML = ''
+      }
 
-                                                            </span>
-                                                            <span class="old-price">
-                                                                ${product.productPrice}
-                                                            </span>
-                                                        </div>
-                                                        <div class="product-action-1 show">
-                                                            <a aria-label="Add To Cart" class="action-btn hover-up" href="shop-cart.html"><i class="fi-rs-shopping-bag-add"></i></a>
-                                                        </div>
-                                        </div>
-                                    </div>  <input type="text" id="sortedProducts" hidden>      `;
-                        productGrid.appendChild(productDiv); // Append the new product to the grid
-                    });
+    }
 
-                    const sortedProduct = document.getElementById("sortedProducts").value = JSON.stringify(products);
-                    console.log(sortedProduct);
-                })
-                .catch(error => console.error('Error fetching products:', error));
+    function loadData(query='') {
+    console.log(query);
+    $.ajax({
+        url: '/searchProduct',
+        type: 'POST',
+        data: { payload: query },
+        success: function(data) {
+            console.log("res block start");
+            console.log(data);
+            let searchResult = data.searchResult;
+            console.log("Hiii", searchResult);
+
+            let html = ''
+            console.log(data.searchResult.length);
+            if (data.searchResult.length > 0) {
+                for (let i = 0; i < data.searchResult.length; i++) {
+                    console.log("in loop", data.searchResult[i].productName);
+                    html += `<a href="/user-shop/${data.searchResult[i]._id}"><li style="display:flex;justify-content:space-evenly;text-align: center; border-bottom: 2px solid #acb1b5; width:80%% ;padding:10px"> ${data.searchResult[i].productName} </li></a>`;
+                }
+                $('#suggestionList').html(html); // Update suggestionList
+            }
+            console.log("end");
+        },
+        error: function(xhr, status, error) {
+            console.error('Error:', error);
         }
-    </script> -->
-    
+    });
+}
+
+  </script>
+
+      
 
 
 

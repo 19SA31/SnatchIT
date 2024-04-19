@@ -12,6 +12,7 @@ const checkoutPage = async (req, res) => {
     const userId = req.session.user;
     const userData = await user.findById({ _id: userId })
     let cartItems = await cartHelper.getAllCartItems(userId);
+    console.log("This is checkout",cartItems);
     let totalandSubTotal = await cartHelper.totalSubtotal(userId, cartItems);
     
 

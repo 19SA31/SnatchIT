@@ -101,9 +101,31 @@ const getAllWishlistProducts = (userId) => {
     });
   };
 
+
+  const isInWishlist = (userId, productId) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const wishList = await wishlistModel.findOne({
+          user: userId,
+          "products.productItemId": productId,
+        });
+  
+        if (wishList) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      } catch (error) {
+        console.log(error);
+        reject(error);
+      }
+    });
+  };
+
 module.exports= {
     getWishListCount,
     getAllWishlistProducts,
     addToWishlist,
-    removeProductFromWishlist
+    removeProductFromWishlist,
+    isInWishlist
 }
