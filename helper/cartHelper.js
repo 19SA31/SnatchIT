@@ -127,6 +127,7 @@ const addToCartHelper = (userId, productId, size) => {
           { user: userId },
           {
             $pull: { products: { _id: productId } },
+            $set: {coupon: null}
           }
         )
         .then((result) => {

@@ -1,5 +1,5 @@
 const couponHelper = require('../helper/couponHelper')
-
+const couponModel = require("../models/coupon-model");
 
 
 
@@ -82,10 +82,11 @@ const addCoupon = async (req, res) => {
       const price = parseInt(req.query.price);
     
       const userId = req.session.user;
-      const couponCode = req.body;
+      const couponCode = req.query.couponCode;
+      console.log(price,userId,couponCode);
       if (price > 1500) {
-        const result = await couponHelper.applyCoupon(userId, couponCode);
-        console.log(result);
+        const result = await couponHelper.applyCouponHelper(userId, couponCode);
+       
         if (result.status) {
           res.json({ result:result,status:true,message:"Coupon Applied Successfuly" }); 
         } else {

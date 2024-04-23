@@ -88,7 +88,7 @@ const findAllCoupons = () => {
     });
   };
 
-  const  applyCoupon = (userId, couponCode) => {
+  const  applyCouponHelper = (userId, couponCode) => {
     return new Promise(async (resolve, reject) => {
       console.log(couponCode);
       let coupon = await couponModel.findOne({ code: couponCode })
@@ -129,5 +129,5 @@ const findAllCoupons = () => {
     deleteSelectedCoupon,
     getCouponData,
     editCouponDetails,
-    applyCoupon
+    applyCouponHelper
   }

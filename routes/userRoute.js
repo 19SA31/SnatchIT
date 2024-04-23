@@ -59,6 +59,8 @@ router.post("/addToCart/:id/:size", productController.addToCart);
 router.post("/placeOrder",orderController.placeOrder)
 router.post("/searchProduct", productController.searchProduct);
 router.post("/applyCoupon", couponController.applyCoupon);
+router.post("/createOrder", orderController.createOrder);
+
 
 router.patch("/addAddress",userController.addAddress)
 router.patch("/updateCartQuantity", cartController.updateCartQuantity);

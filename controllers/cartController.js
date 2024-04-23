@@ -10,29 +10,33 @@ const getCartPage = async(req,res)=>{
         const userData=req.session.user
 
         const cartItems= await cartHelper.getAllCartItems(userData)
-        console.log("this is getcartpage",cartItems);
+        if(cartItems){
+            if(cartItems.products.length){
+      
+            let totalandSubTotal = await cartHelper.totalSubtotal(userData, cartItems);
 
-        if(cartItems.products.length){
-  
-        let totalandSubTotal = await cartHelper.totalSubtotal(userData, cartItems);
-
-        let totalAmountOfEachProduct = [];
-        for (i = 0; i < cartItems.products.length; i++) {
-          let total = cartItems.products[i].quantity * parseInt(cartItems.products[i].price);
-          totalAmountOfEachProduct.push(total);
-        }
-          res.render('user/user-cart',
-           { cartItems: cartItems ,
-           totalAmount: totalandSubTotal,
-           totalAmountOfEachProduct,
-           status : true
-           
-          });
-         }else{
-           res.render('user/user-cart',{
-            status : false
-           })
-         }
+            let totalAmountOfEachProduct = [];
+            for (i = 0; i < cartItems.products.length; i++) {
+              let total = cartItems.products[i].quantity * parseInt(cartItems.products[i].price);
+              totalAmountOfEachProduct.push(total);
+            }
+              res.render('user/user-cart',
+              { cartItems: cartItems ,
+              totalAmount: totalandSubTotal,
+              totalAmountOfEachProduct,
+              status : true
+              
+              });
+            }else{
+              res.render('user/user-cart',{
+                status : false
+              })
+            }
+          } else{
+            res.render('user/user-cart',{
+              status : false
+            })
+          } 
       
     } catch (error) {
         console.log(error);

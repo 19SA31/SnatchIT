@@ -1,10 +1,17 @@
 const user = require("../models/user-model")
 const cartModel = require('../models/cart-model')
 const productModel = require('../models/product-model')
+const couponModel = require("../models/coupon-model");
 const cartHelper = require('../helper/cartHelper')
 const orderHelper = require('../helper/orderHelper')
 const couponHelper = require('../helper/couponHelper')
 const moment = require("moment");
+const Razorpay = require("razorpay");
+
+var razorpay = new Razorpay({
+  key_id: process.env.KEY_ID,
+  key_secret: process.env.KEY_SECRET,
+});
 
 
 const checkoutPage = async (req, res) => {
@@ -17,7 +24,7 @@ const checkoutPage = async (req, res) => {
     let totalandSubTotal = await cartHelper.totalSubtotal(userId, cartItems);
     if (cart.coupon != null) {
       const appliedCoupon = await couponModel.findOne({ code: cart.coupon });
-      cartItems[0].couponAmount = appliedCoupon.discount;
+      cartItems.couponAmount = appliedCoupon.discount;
   
       let totalAmountOfEachProduct = [];
       for (i = 0; i < cartItems.products.length; i++) {
@@ -175,6 +182,25 @@ const cancelSingleOrder = async (req, res) => {
   }
 };
 
+const createOrder = async (req, res) => {
+  try {
+    console.log(req.body);
+    const amount = parseInt(req.body.totalAmount);
+    console.log("create order :",amount);
+    const order = await razorpay.orders.create({
+      amount: amount,
+      currency: "INR",
+      receipt: req.session.user,
+    });
+
+    console.log(order);
+
+    res.json({ orderId: order });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   checkoutPage,
   placeOrder,
@@ -183,5 +209,6 @@ module.exports = {
   adminOrderPageLoad,
   adminOrderDetails,
   changeOrderStatusOfEachProduct,
-  cancelSingleOrder
+  cancelSingleOrder,
+  createOrder
 }
