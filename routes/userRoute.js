@@ -35,15 +35,15 @@ router.get("/user-shop",userMiddleware.isLogout,userController.loadShop)
 
 router.get("/checkout",userMiddleware.isLogout,orderController.checkoutPage)
 
-router.get("/orderSuccessPage",userMiddleware.isLogout,orderController.orderSuccessPageLoad)
-
 router.get("/orderDetails/:id",orderController.orderDetails);
 
 router.get("/wishlist", userMiddleware.isLogout, wishlistController.wishListLoad);
 
 router.get("/shopFilter", userMiddleware.isLogout, userController.shopFilterLoad);
 
+router.get("/orderFailure", userMiddleware.isLogout, orderController.orderFailedPageLoad);
 
+router.get("/orderSuccess", userMiddleware.isLogout, orderController.orderSuccessPageLoad);
 
 
 
@@ -60,6 +60,7 @@ router.post("/placeOrder",orderController.placeOrder)
 router.post("/searchProduct", productController.searchProduct);
 router.post("/applyCoupon", couponController.applyCoupon);
 router.post("/createOrder", orderController.createOrder);
+router.post('/paymentSuccess', orderController.paymentSuccess);
 
 
 router.patch("/addAddress",userController.addAddress)

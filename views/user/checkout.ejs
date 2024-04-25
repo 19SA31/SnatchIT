@@ -20,9 +20,11 @@
     <link rel="stylesheet" href="public/user-assets/css/maind134.css?v=3.4">
     <link rel="stylesheet" type="text/css"
         href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.css">
+    
 </head>
 
 <body>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <header class="header-area header-style-1 header-height-2">
         <div class="header-top header-top-ptb-1 d-none d-lg-block">
             <div class="container">
@@ -430,7 +432,7 @@
                                                 </tr>
                                                 <tr>
                                                     <th>Total</th>
-                                                    <td colspan="2" class="product-subtotal"><span
+                                                    <td colspan="2" class="product-subtotal">₹<span
                                                             class="font-xl text-dark fw-900" id="totalAmount">
                                                             <% if (cartItems.couponAmount >0) { %>
                                                                 <%=totalandSubTotal-cartItems.couponAmount%>
@@ -700,6 +702,7 @@
     <script src="public/user-assets/js/maind134.js?v=3.4"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.js"></script>
 
+
     <script>
         $(document).ready(function () {
             $("#placeOrder").click(function () {
@@ -739,11 +742,10 @@
                     console.log("razorpay selected");
 
                     $.ajax({
-                        url: '/createorder',
+                        url: `/createorder?totalAmount=${totalAmount}`,
                         type: 'POST',
                         dataType: 'json',
                         contentType: 'application/json',
-                        data: JSON.stringify({ totalAmount: totalAmount }),
                         success: function (data) {
                             const parseAmount = parseInt(totalAmount);
                             console.log(data);
@@ -788,7 +790,7 @@
                     function handleFailure(description, address, paymentMethod) {
                         console.log('Payment failed:', description);
                         createOrderWithStatusPending(address, paymentMethod);
-                        window.location.href = "/orderFailedPage";
+                        window.location.href = "/orderFailure";
                     }
 
                     function createOrderWithStatusPending(address, paymentMethod) {
@@ -804,7 +806,7 @@
                             success: function (data) {
                                 console.log(data);
                                 if (data.success) {
-                                    window.location.href = '/orderFailedPage';
+                                    window.location.href = '/orderFailure';
                                 } else {
                                     console.error('Error: Order creation failed');
                                 }
@@ -819,26 +821,25 @@
                         $.ajax({
                             url: '/paymentSuccess',
                             type: 'POST',
-                            contentType: 'application/json',
-                            data: JSON.stringify({
+                            data: {
                                 paymentid: response.razorpay_payment_id,
                                 razorpayorderid: response.razorpay_order_id,
                                 signature: response.razorpay_signature,
                                 orderId
-                            }),
+                            },
                             success: function (data) {
                                 if (data.success) {
                                     $.ajax({
                                         url: '/placeOrder',
                                         type: 'POST',
-                                        contentType: 'application/json',
-                                        data: JSON.stringify({
+
+                                        data: {
                                             addressId: address,
                                             paymentOption: payment,
-                                        }),
+                                        },
                                         success: function (data) {
                                             console.log(data);
-                                            window.location.href = '/orderSuccessPage';
+                                            window.location.href = '/orderSuccess';
                                         },
                                         error: function (xhr, status, error) {
                                             console.error('Error:', error);
@@ -1035,7 +1036,7 @@
                             }).showToast();
                             setTimeout(() => {
                                 location.reload();
-                            }, 10000);
+                            }, 3000);
 
 
                         } else {
@@ -1051,7 +1052,7 @@
                             }).showToast();
                             setTimeout(() => {
                                 location.reload();
-                            }, 10000);
+                            }, 3000);
                         }
 
                     },

@@ -75,16 +75,13 @@ const placeOrder = async (req, res) => {
   if (result.status) {
     const cart = await cartHelper.clearAllCartItems(userId);
     if (cart) {
-      res.json({ url: "/orderSuccessPage", status: true });
+      res.json({ url: "/orderSuccess", status: true });
     }
   } else {
     res.json({ message: result.message, status: false })
   }
 };
 
-const orderSuccessPageLoad = (req, res) => {
-  res.render("user/orderSuccessPage");
-};
 
 
 const orderDetails = async (req, res) => {
@@ -184,11 +181,10 @@ const cancelSingleOrder = async (req, res) => {
 
 const createOrder = async (req, res) => {
   try {
-    console.log(req.body);
-    const amount = parseInt(req.body.totalAmount);
+    const amount = req.query.totalAmount;
     console.log("create order :",amount);
     const order = await razorpay.orders.create({
-      amount: amount,
+      amount: amount* 100,
       currency: "INR",
       receipt: req.session.user,
     });
@@ -201,14 +197,49 @@ const createOrder = async (req, res) => {
   }
 };
 
+const paymentSuccess = (req, res) => {
+  try {
+    console.log("this is payment success")
+    const { paymentid, signature, orderId } = req.body;
+    const { createHmac } = require("node:crypto");
+    
+
+    const hash = createHmac("sha256", process.env.KEY_SECRET)
+      .update(orderId + "|" + paymentid)
+      .digest("hex");
+    console.log(signature,hash);
+
+    if (hash === signature) {
+      console.log("success");
+      res.status(200).json({ success: true, message: "Payment successful" });
+    } else {
+      console.log("error");
+      res.json({ success: false, message: "Invalid payment details" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+const orderFailedPageLoad = (req, res) => {
+  res.render("user/orderFailure");
+};
+
+const orderSuccessPageLoad = (req, res) => {
+  res.render("user/orderSuccess");
+};
+
 module.exports = {
   checkoutPage,
   placeOrder,
-  orderSuccessPageLoad,
   orderDetails,
   adminOrderPageLoad,
   adminOrderDetails,
   changeOrderStatusOfEachProduct,
   cancelSingleOrder,
-  createOrder
+  createOrder,
+  paymentSuccess,
+  orderFailedPageLoad,
+  orderSuccessPageLoad
 }
