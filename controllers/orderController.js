@@ -182,7 +182,6 @@ const cancelSingleOrder = async (req, res) => {
 const createOrder = async (req, res) => {
   try {
     const amount = req.query.totalAmount;
-    console.log("create order :",amount);
     const order = await razorpay.orders.create({
       amount: amount* 100,
       currency: "INR",
@@ -207,7 +206,7 @@ const paymentSuccess = (req, res) => {
     const hash = createHmac("sha256", process.env.KEY_SECRET)
       .update(orderId + "|" + paymentid)
       .digest("hex");
-    console.log(signature,hash);
+    
 
     if (hash === signature) {
       console.log("success");
@@ -230,6 +229,57 @@ const orderSuccessPageLoad = (req, res) => {
   res.render("user/orderSuccess");
 };
 
+const loadSalesReport = async (req, res) => {
+  try {
+    orderHelper
+      .salesReport()
+      .then((response) => {
+        console.log(response);
+        response.forEach((order) => {
+          const orderDate = new Date(order.orderedOn);
+          const formattedDate = orderDate.toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          });
+          order.orderedOn = formattedDate;
+        });
+
+        res.render("admin/salesReport", { sales: response });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const loadSalesReportDateSort = async (req, res) => {
+  const startDate = req.body.startDate;
+  const endDate = req.body.endDate;
+  console.log(startDate, endDate);
+  orderHelper
+    .salesReportDateSort(startDate, endDate)
+    .then((response) => {
+      console.log(response);
+      response.forEach((order) => {
+        const orderDate = new Date(order.orderedOn);
+        const formattedDate = orderDate.toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        });
+        order.orderedOn = formattedDate;
+      });
+
+      res.json({ sales: response });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
 module.exports = {
   checkoutPage,
   placeOrder,
@@ -241,5 +291,7 @@ module.exports = {
   createOrder,
   paymentSuccess,
   orderFailedPageLoad,
-  orderSuccessPageLoad
+  orderSuccessPageLoad,
+  loadSalesReport,
+  loadSalesReportDateSort
 }

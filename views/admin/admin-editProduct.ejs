@@ -75,10 +75,11 @@
                     </div>
                 </li>
             </ul>
-            <hr>
-            
-            <br>
-            <br>
+            <li class="menu-item">
+                <a class="menu-link" href="salesReport"> <i class="icon material-icons md-add_box"></i>
+                    <span class="text">Sales Report</span>
+                </a>
+            </li>
         </nav>
     </aside>
     <main class="main-wrap">
@@ -238,8 +239,9 @@
                                         <img src="/public/uploads/<%= product.productImage[0] %>"
                                             style="width: 100px; height: 72px;" alt="">
                                 <% } %>
-                                <input class="form-control" type="file" name="images" multiple>
-                                <input type="hidden" value="<%= product.productImage %> " name="oldImage">
+                                <div id="previewContainer" class="row"></div>
+                                <input id="imageUpload" class="form-control" type="file" name="images"  multiple>
+                                <div id="errorMessage" style="color: red; display: none;">Only images are allowed.</div>
                                 <% if(Array.isArray(product.productImage)) { %>
                                 <p> 
                                     <%= product.productImage.length %> out of <%= product.productImage.length %> images available
@@ -433,6 +435,33 @@
             })
         }
     </script>
+
+<script>
+    document.getElementById('imageUpload').addEventListener('change', function() {
+        var files = this.files;
+        var errorMessage = document.getElementById('errorMessage');
+        var allowedTypes = ['image/jpeg', 'image/png', 'image/gif']; 
+        var containsNonImage = false;
+    
+        for (var i = 0; i < files.length; i++) {
+            if (!allowedTypes.includes(files[i].type)) {
+                containsNonImage = true;
+                break;
+            }
+        }
+    
+        if (containsNonImage) {
+            errorMessage.style.display = 'block';
+            this.value = ''; 
+
+            setTimeout(function() {
+            errorMessage.style.display = 'none';
+        }, 3000);
+        } else {
+            errorMessage.style.display = 'none';
+        }
+    });
+</script>
 
 </body>
 
