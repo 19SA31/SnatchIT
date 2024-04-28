@@ -36,7 +36,23 @@ const userSchema =new mongoose.Schema({
     isActive:{
         type:Boolean,
         required:true
-    }
+    },
+    wallet: {
+        balance: { type: Number, default: 0 },
+        details: [
+          {
+            type: { type: String, enum: ["credit", "debit", "refund"] },
+            amount: { type: Number },
+            date: { type: Date },
+            transactionId: {
+              type: Number,
+              default: function () {
+                return Math.floor(100000 + Math.random() * 900000);
+              },
+            },
+          },
+        ],
+      },
 
 })
 

@@ -2,6 +2,7 @@ const cartModel = require("../models/cart-model");
 const userModel = require('../models/user-model');
 const productModel = require("../models/product-model");
 const orderModel = require("../models/order-model");
+const walletHelper = require("../helper/walletHelper");
 const ObjectId = require("mongoose").Types.ObjectId;
 
 
@@ -204,54 +205,7 @@ const placeOrder = (body, userId) => {
     });
   };
 
-  const cancelSingleOrder = (orderId, singleOrderId, price) => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const cancelled = await orderModel.findOneAndUpdate(
-          {
-            _id: new ObjectId(orderId),
-            "products._id": new ObjectId(singleOrderId),
-          },
-          {
-            $set: { "products.$.status": "cancelled" },
-          },
-          {
-            new: true,
-          }
-        );
-        const result = await orderModel.aggregate([
-          {
-            $unwind: "$products",
-          },
-          {
-            $match: {
-              _id: new ObjectId(orderId),
-              "products._id": new ObjectId(singleOrderId),
-            },
-          },
-        ]);
-        const singleProductId = result[0].products.product;
-        const singleProductSize = result[0].products.size;
-        const singleProductQuantity = result[0].products.quantity;
   
-        const stockIncrease = await productModel.updateOne(
-          { _id: singleProductId, "productQuantity.size": singleProductSize },
-          {
-            $inc: {
-              "productQuantity.$.quantity": singleProductQuantity,
-              totalQuantity: singleProductQuantity,
-            },
-          }
-        );
-        const response = await orderModel.findOne({ _id: orderId });
-        
-  
-        resolve(cancelled);
-      } catch (error) {
-        console.log(error);
-      }
-    });
-  };
 
   const salesReport = async () => {
     try {
@@ -305,6 +259,65 @@ const placeOrder = (body, userId) => {
       throw error; // Re-throwing the error to be caught elsewhere if needed.
     }
   };
+
+  const cancelSingleOrder = (orderId, singleOrderId, price) => {
+    console.log("enterd in to cancel single order");
+    return new Promise(async (resolve, reject) => {
+      try {
+        const cancelled = await orderModel.findOneAndUpdate(
+          {
+            _id: new ObjectId(orderId),
+            "products._id": new ObjectId(singleOrderId),
+          },
+          {
+            $set: { "products.$.status": "cancelled" },
+          },
+          {
+            new: true,
+          }
+        );
+        const result = await orderModel.aggregate([
+          {
+            $unwind: "$products",
+          },
+          {
+            $match: {
+              _id: new ObjectId(orderId),
+              "products._id": new ObjectId(singleOrderId),
+            },
+          },
+        ]);
+        const singleProductId = result[0].products.product;
+        const singleProductSize = result[0].products.size;
+        const singleProductQuantity = result[0].products.quantity;
+  
+        const stockIncrease = await productModel.updateOne(
+          { _id: singleProductId, "productQuantity.size": singleProductSize },
+          {
+            $inc: {
+              "productQuantity.$.quantity": singleProductQuantity,
+              totalQuantity: singleProductQuantity,
+            },
+          }
+        );
+        const response = await orderModel.findOne({ _id: orderId });
+        console.log("order id is",orderId)
+        console.log("response issssssssssss",response.paymentMethod)
+        if (response.paymentMethod == 'RazorPay') {
+          console.log("razorpay");
+          const walletUpdation = await walletHelper.walletAmountAdding(
+            response.user,
+            price
+          );
+        }
+  
+        resolve(cancelled);
+      } catch (error) {
+        console.log(error);
+      
+      }
+    });
+  };
   
   
 
@@ -315,7 +328,7 @@ const placeOrder = (body, userId) => {
     getOrderDetailsOfEachProduct,
     getAllOrders,
     changeOrderStatusOfEachProduct,
-    cancelSingleOrder,
     salesReport,
-    salesReportDateSort
+    salesReportDateSort,
+    cancelSingleOrder
   }

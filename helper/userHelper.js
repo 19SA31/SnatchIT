@@ -54,36 +54,6 @@ const updateUserDetails = (userId,userDetails)=>{
       });
 }
 
-// const updateUserPassword = async (userId,passwordDetails)=>{
-//     return new Promise(async(resolve,reject)=>{
-//         const user = await userModel.findById(new ObjectId(userId));
-//         console.log(user,"this is password helper");
-//         let response = {};
-//         if (user) {
-//           if (user.isActive) {
-//             const success = await bcrypt.compare(
-//               passwordDetails.oldPassword,
-//               user.password
-//             );
-//             if(success){
-//                 if (
-//                     passwordDetails.newPassword &&
-//                     passwordDetails.newPassword === passwordDetails.confirmPassword
-//                   ) {
-//                     user.password = await bcrypt.hash(passwordDetails.newPassword, 10);
-//                 }
-//                 await user.save();
-//                 response.status = true;
-//                 resolve(response);
-
-//             }else {
-//                 response.message = "Incorrect Password";
-//                 resolve(response);
-//             }
-//           }
-//         }
-//     })
-// }
 
 
 
@@ -149,11 +119,24 @@ const deleteAddressHelper = async (userId,addressId)=>{
     }
 }
 
+const getWalletDetails = async (userId) => {
+  return new Promise(async (resolve, reject) => {
+    const result = await userModel.findOne({ _id: userId });
+
+    if (result) {
+      resolve(result);
+    } else {
+      console.log("not found");
+    }
+  });
+};
+
 module.exports={
     addAddressToUser,
     updateUserDetails,
     updateUserPassword,
     editAddressHelper,
-    deleteAddressHelper
+    deleteAddressHelper,
+    getWalletDetails
 
 }

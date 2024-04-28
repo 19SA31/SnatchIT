@@ -267,9 +267,9 @@
                         <div class="attr-detail attr-size">
                             <strong class="mr-10">Size</strong>
                             <ul class="list-filter size-filter font-small">
-                                <li><a id="S" onclick="checkCart('S')">S</a></li>
-                                <li class="active" id="M"><a onclick="checkCart('M')">M</a></li>
-                                <li><a id="L" onclick="checkCart('L')">L</a></li>
+                                <li><a id="S" onclick="clickSize('<%= product._id %>','S',)">S</a></li>
+                                <li class="active" id="M"><a onclick="clickSize('<%= product._id %>','M')">M</a></li>
+                                <li><a id="L" onclick="clickSize('<%= product._id %>','L')">L</a></li>
                             </ul>
                         </div>
                         <div class="bt-1 border-color-1 mt-30 mb-30"></div>
@@ -835,32 +835,79 @@
   </script>
 
 <script>
-    function checkCart(cartStatus,selectedSize,cartLength) {
+    function clickSize(id,size) {
         
-         if (cartStatus && cartLength > 0) { 
-            var productsInCart =  JSON.stringify(cartStatus.products) ;
-
-            // Check if there is a product with the selected size in the cart
-            var productWithSize = productsInCart.find(function(product) {
-                return product.size === selectedSize;
-            });
-            console.log(productWithSize);
-
-            if (productWithSize) {
-                // If a product with the selected size exists in the cart, show "View in cart" button
-                document.getElementById('viewCartBtn').style.display = 'inline-block';
-                document.getElementById('addToCartBtn').style.display = 'none';
-            } else {
-                // If no product with the selected size exists in the cart, show "Add to cart" button
-                document.getElementById('addToCartBtn').style.display = 'inline-block';
-                document.getElementById('viewCartBtn').style.display = 'none';
+        console.log("Entered in to sizeClick function")
+    sizeClicked = size;
+    console.log(sizeClicked);
+    $.ajax({
+        url:`/size/${id}/${size}`,
+        method:'POST',
+        contentType:'application/json',
+        success:function(response){
+            const messageDisplay = document.getElementById("messageDisplay");
+            const size = response.message;
+            if(size !== undefined){
+                if(response.message === 0){
+                    messageDisplay.innerHTML = "Product Out of Stock!!";
+                    messageDisplay.style.color = "red"
+                    document.getElementById("addToCartButton").disabled = true
+                }else if(response.message < 10){
+                    messageDisplay.innerHTML = `${size} item Available in Stock`
+                    messageDisplay.style.color = 'red';
+                    document.getElementById("addToCartButton").disabled = false;
+                }else{
+                   
+                    messageDisplay.innerHTML = `${size} item Avaliable in Stock`;
+                    messageDisplay.style.color = 'green'
+                    document.getElementById("addToCartButton").disabled = false;
+                }
+            }else{
+                messageDisplay.innerHTML = "";
             }
-         } else { 
-            // If cartStatus is not available, always show "Add to cart" button
-            document.getElementById('addToCartBtn').style.display = 'inline-block';
-            document.getElementById('viewCartBtn').style.display = 'none';
-         } 
+           isProductWithThisSize(id, sizeClicked)
+        },
+        error:function(error){
+            console.error("AJAX error :",error)
+        }
+    })
     }
+
+
+    function isProductWithThisSize(productId, sizeClicked) {
+    $.ajax({
+        url: `/productWithSizeCartCheck?id=${productId}&size=${sizeClicked}`,
+        method: 'GET',
+        contentType: 'application/json',
+        success: function(response) {
+            const quantityButton = document.getElementById('quantityElement')
+            const addToCartButton = document.getElementById("addToCartButton");
+
+            if (response.response === true) {
+                console.log("product in cart");
+
+               
+                
+                addToCartButton.textContent = "View Cart";
+                addToCartButton.style.backgroundColor = "orange";
+                // Add an onclick event to redirect to the cart page
+                addToCartButton.onclick = function() {
+                    window.location.href = "/loadCartPage"; // Change "/cart" to your actual cart page URL
+                };
+            } else {
+                console.log("product not in");
+                // Change button content back to "Add to Cart"
+                addToCartButton.textContent = "Add to Cart";
+                // Change button color back to its original color (you may need to set the original color)
+                addToCartButton.style.backgroundColor = ""; // Set your original color here
+                // Remove the onclick event to prevent redirection
+                addToCartButton.onclick = function() {
+                    addToCart(`${productId}`);
+                };
+            }
+        }
+    });
+}
 </script>
 
 <script>

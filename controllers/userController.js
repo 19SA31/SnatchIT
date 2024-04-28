@@ -100,6 +100,7 @@ const  loadUserProduct = async (req, res) => {
     userData,
     product._id
   );
+  console.log(cartStatus);
   product.wishlistStatus = wishlistStatus;
   product.cartStatus = cartStatus; 
   res.render("user/user-productPage", {
@@ -212,7 +213,11 @@ const loadAccount = async(req,res)=>{
     const userId = req.session.user
 
     const userData = await user.findOne({_id:userId})
-
+    const walletData = await userHelper.getWalletDetails(userId);
+        console.log("HHH",walletData);
+        for (const amount of walletData.wallet.details) {
+            amount.formattedDate = moment(amount.date).format("MMM Do, YYYY");
+          }
     const orderDetails = await orderHelper.getOrderDetails(userId);
     for (const order of orderDetails) {
       const dateString = order.orderedOn;
@@ -227,38 +232,15 @@ const loadAccount = async(req,res)=>{
     }
     res.render("user/user-account",{
       userData,
-      orderDetails
+      orderDetails,
+      walletData
     })
   } catch (error) {
     console.log(error);
   }
 }
 
-// const loadShop = async(req,res)=>{
-//   try {
-//     const users = req.session.user;
-//     const categories = await categoryHelper.getAllcategory();
-//     let Products = await productHelper.getAllActiveProducts();
 
-
-//     if (users) {
-//       res.render("user/user-shop", {
-//         products: Products,
-//         categories,
-//         users
-
-//       });
-//     } else {
-//       res.render("user/SnatchIt-Home", {
-//         products: Products,
-//         categories
-
-//       });
-//     }
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
 
 
 const loadShop = async (req, res, next) => {
