@@ -73,7 +73,6 @@
                         <span class="text">Offer Management</span>
                     </a>
                     <div class="submenu">
-                        <a href="admin-productOffer">Product Offer</a>
                         <a href="admin-categoryOffer">Category Offer</a>
                     </div>
                 </li>
@@ -166,7 +165,7 @@
                                 <th>No</th>
                                 <th>Coupon Name</th>
                                 <th>Coupon Code</th>
-                                <th>Discount Amount</th>
+                                <th>Discount (%)</th>
                                 <th>Expiry Date</th>
                                 <th>Edit</th>
                                 <th>Delete</th>
@@ -221,26 +220,28 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                  <form action="/addCoupon" method="post">
+                  <form action="/addCoupon" method="post" id="addCouponForm">
                     <div class="mb-3">
-                      <label for="recipient-name" class="col-form-label">Coupon Name</label>
-                      <input type="text" class="form-control" name="couponName" id="couponName">
+                        <label for="couponName" class="col-form-label">Coupon Name</label>
+                        <input type="text" class="form-control" name="couponName" id="couponName">
+                        <div id="couponNameError" style="color: red;"></div>
                     </div>
                     <div class="mb-3">
-                      <label for="recipient-name" class="col-form-label">Discount Amount</label>
-                      <input type="text" class="form-control" name="couponAmount" id="couponAmount">
+                        <label for="couponDiscount" class="col-form-label">Discount ( in % )</label>
+                        <input type="text" class="form-control" name="couponDiscount" id="couponDiscount">
+                        <div id="couponDiscountError" style="color: red;"></div>
                     </div>
                     <div class="mb-3">
-                      <label for="recipient-name" class="col-form-label">Expired On</label>
-                      <input type="date" class="form-control" name="couponExpiry" id="couponExpiry" placeholder="DD/MM/YYYY">
+                        <label for="couponExpiry" class="col-form-label">Expired On</label>
+                        <input type="date" class="form-control" name="couponExpiry" id="couponExpiry" placeholder="DD/MM/YYYY">
                     </div>
-        
+                
                     <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                      <button type="submit" class="btn btn-dark" style="background-color: #2B1754;">Create Coupon</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" id="addCouponSubmit" class="btn btn-dark" style="background-color: #2B1754;">Create Coupon</button>
                     </div>
-        
-                  </form>
+                </form>
+                
                 </div>
         
               </div>
@@ -258,27 +259,29 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                  <form action="/editCoupon" method="post">
+                  <form action="/editCoupon" method="post" id="editCouponForm">
                     <div class="mb-3">
                       <label for="recipient-name" class="col-form-label">Coupon Name</label>
-                      <input type="text" class="form-control" name="couponName" id="couponNme">
+                      <input type="text" class="form-control" name="couponName1" id="couponName1">
+                      <div id="couponNameError1" style="color: red;"></div>
                     </div>
         
                     <div class="mb-3">
                       <label for="recipient-name" class="col-form-label">Discount Amount</label>
-                      <input type="text" class="form-control" name="couponAmount" id="couponAmont">
+                      <input type="text" class="form-control" name="couponAmount1" id="couponDiscount1">
+                      <div id="couponDiscountError1" style="color: red;"></div>
                     </div>
                     <div class="mb-3">
                       <label for="recipient-name" class="col-form-label">Expired On (YYYY/MM/DD)</label>
-                      <input type="date" class="form-control" name="couponExpiry" id="couponExpiring">
+                      <input type="date" class="form-control" name="couponExpiry1" id="couponExpiring1">
                     </div>
                     <div class="mb-3">
-                      <input type="hidden" class="form-control" id="couponId" name="couponId" />
+                      <input type="hidden" class="form-control" id="couponId1" name="couponId1" />
                     </div>
         
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                      <button type="submit" class="btn btn-primary" style="background-color: #2B1754;">Update Coupon</button>
+                      <button type="submit" id="editCouponSubmit" class="btn btn-primary" style="background-color: #2B1754;">Update Coupon</button>
                     </div>
         
                   </form>
@@ -342,10 +345,10 @@
               })
                 .done((response) => {
                   if (response) {
-                    document.getElementById('couponNme').value = response.couponData.couponName;
-                    document.getElementById('couponAmont').value = response.couponData.discount;
-                    document.getElementById('couponExpiring').value = response.couponData.expiryDate;
-                    document.getElementById('couponId').value = response.couponData._id;
+                    document.getElementById('couponName1').value = response.couponData.couponName;
+                    document.getElementById('couponDiscount1').value = response.couponData.discount;
+                    document.getElementById('couponExpiring1').value = response.couponData.expiryDate;
+                    document.getElementById('couponId1').value = response.couponData._id;
         
                     $("#editCoupon").modal("show");
         
@@ -411,6 +414,87 @@
             // Set the minimum date for the input field to today
             document.getElementById('couponExpiry').min = today;
           </script><!-- content-main end// -->
+
+<script>
+  function validateForm() {
+    console.log("ADDCOUOP");
+    var couponName = document.getElementById("couponName").value;
+    var couponDiscount = document.getElementById("couponDiscount").value;
+    console.log(couponName,couponDiscount);
+    var couponNameError = document.getElementById("couponNameError");
+    var couponDiscountError = document.getElementById("couponDiscountError");
+
+    document.getElementById('couponNameError').innerHTML = "";
+    document.getElementById('couponDiscountError').innerHTML = "";
+
+    // Validate couponName
+    if (!couponName.match(/^[a-zA-Z0-9\s]+$/) || couponName.trim() == "") {
+      document.getElementById('couponNameError').innerText = "Coupon name can only contain letters, numbers, and spaces.";
+      return false;
+    }
+
+    // Validate couponDiscount
+    if (couponDiscount === "") {
+      document.getElementById('couponDiscountError').innerText = "Please enter a discount value.";
+      return false;
+    }
+
+    // Check if couponDiscount is a valid number and within range
+    if (isNaN(couponDiscount) || parseFloat(couponDiscount) < 0 || parseFloat(couponDiscount) > 99) {
+      document.getElementById('couponDiscountError').innerText = "Enter a valid value";
+      return false;
+    }
+
+    return true;
+  }
+  
+  document.getElementById("addCouponSubmit").addEventListener("click", function(event) {
+    if (!validateForm()) {
+      event.preventDefault();
+    }
+  });
+</script>
+
+<script>
+  function validateForm1() {
+    
+    var couponName = document.getElementById("couponName1").value;
+    var couponDiscount = document.getElementById("couponDiscount1").value;
+    console.log(couponName,couponDiscount);
+    var couponNameError = document.getElementById("couponNameError1");
+    var couponDiscountError = document.getElementById("couponDiscountError1");
+
+    document.getElementById('couponNameError1').innerHTML = "";
+    document.getElementById('couponDiscountError1').innerHTML = "";
+
+    // Validate couponName
+    if (!couponName.match(/^[a-zA-Z0-9\s]+$/) || couponName.trim() == "") {
+      document.getElementById('couponNameError1').innerText = "Coupon name can only contain letters, numbers, and spaces.";
+      return false;
+    }
+
+    // Validate couponDiscount
+    if (couponDiscount === "") {
+      document.getElementById('couponDiscountError1').innerText = "Please enter a discount value.";
+      return false;
+    }
+
+    // Check if couponDiscount is a valid number and within range
+    if (isNaN(couponDiscount) || parseFloat(couponDiscount) < 0 || parseFloat(couponDiscount) > 99) {
+      document.getElementById('couponDiscountError1').innerText = "Enter a valid value";
+      return false;
+    }
+
+    return true;
+  }
+  
+  document.getElementById("editCouponSubmit").addEventListener("click", function(event) {
+    if (!validateForm1()) {
+      event.preventDefault();
+    }
+  });
+</script>
+
 </body>
 
 

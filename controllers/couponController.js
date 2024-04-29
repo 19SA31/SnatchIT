@@ -104,7 +104,11 @@ const addCoupon = async (req, res) => {
 
 
   function dateFormatter(date) {
+    if(date){
     return date.toISOString().slice(0, 10);
+    }else {
+      return ""; // Handle the case where date is null or undefined
+    }
   }
 
 
