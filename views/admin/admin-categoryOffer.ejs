@@ -141,7 +141,7 @@
               <h2 class="content-title">Category-Offer Management</h2>
               <div>
         
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCoupon"
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryOffer"
                   data-bs-whatever="@getbootstrap" style="background-color: #2B1754;">Add Offer +</button>
         
               </div>
@@ -229,7 +229,7 @@
           </section> <!-- content-main end// -->
           <!-- Modal Add Coupon -->
 
-  <div class="modal fade" id="addCoupon" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="addCategoryOffer" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -240,7 +240,8 @@
           <form action="/categoryAddOffer" method="post">
             <div class="mb-3">
               <label for="recipient-name" class="col-form-label">Offer Name</label>
-              <input type="text" class="form-control" name="offerName" id="" >
+              <input type="text" class="form-control" name="offerName" id="offerName">
+              <div id="offerNameError" style="color: red;"></div>
             </div>
             <div class="mb-3">
               <label for="recipient-name" class="col-form-label">Category</label>
@@ -254,8 +255,9 @@
               <!-- <input type="text" class="form-control" name="couponName" id="couponName"> -->
             </div>
             <div class="mb-3">
-              <label for="recipient-name" class="col-form-label">Discount Amount</label>
-              <input type="text" class="form-control" name="discountAmount" id="">
+              <label for="recipient-name" class="col-form-label">Discount (%)</label>
+              <input type="text" class="form-control" name="offerDiscount" id="offerDiscount">
+              <div id="offerDiscountError" style="color: red;"></div>
             </div>
             <div class="mb-3">
               <label for="recipient-name" class="col-form-label">Starting date</label>
@@ -268,7 +270,7 @@
 
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary" style="background-color: #2B1754;">Create Offer</button>
+              <button type="submit" id="createCategorySubmit" class="btn btn-primary" style="background-color: #2B1754;">Create Offer</button>
             </div>
 
           </form>
@@ -294,7 +296,8 @@
           <form action="/categoryEditOffer" method="post">
             <div class="mb-3">
               <label for="recipient-name" class="col-form-label">Offer Name</label>
-              <input type="text" class="form-control" name="offerName" id="offerName">
+              <input type="text" class="form-control" name="offerName1" id="offerName1">
+              <div id="offerNameError1" style="color: red;"></div>
             </div>
             <div class="mb-3">
               <label for="recipient-name" class="col-form-label">Category</label>
@@ -308,8 +311,9 @@
             </div>
 
             <div class="mb-3">
-              <label for="recipient-name" class="col-form-label">Discount Amount</label>
-              <input type="text" class="form-control" name="discountAmount" id="discountAmount">
+              <label for="recipient-name" class="col-form-label">Discount (%)</label>
+              <input type="text" class="form-control" name="offerDiscount1" id="offerDiscount1">
+              <div id="offerDiscountError1" style="color: red;"></div>
             </div>
             <div class="mb-3">
               <label for="recipient-name" class="col-form-label">Starting Date (YYYY/MM/DD)</label>
@@ -325,7 +329,7 @@
 
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary" style="background-color: #2B1754;">Update Offer</button>
+              <button type="submit" id="editCategorySubmit" class="btn btn-primary" style="background-color: #2B1754;">Update Offer</button>
             </div>
 
           </form>
@@ -460,8 +464,8 @@
               if (res) {
                 console.log(res)
                 document.getElementById("categoryName").value = res.categoryOffer.category
-                document.getElementById('offerName').value = res.offerName;
-                document.getElementById('discountAmount').value = res.categoryOffer.discount;
+                document.getElementById('offerName1').value = res.offerName;
+                document.getElementById('offerDiscount1').value = res.categoryOffer.discount;
                 document.getElementById('startDate').value = convertDateFormat(res.formattedStartingDate)
                 document.getElementById("endDate").value = convertDateFormat(res.formattedEndingDate)
                 document.getElementById('offerId').value = res._id;
@@ -517,6 +521,84 @@
         });
       </script>
       
+
+      <script>
+        function validateForm() {
+          var offerName = document.getElementById("offerName").value;
+          var offerDiscount = document.getElementById("offerDiscount").value;
+          console.log(offerName,offerDiscount);
+          var offerNameError = document.getElementById("offerNameError");
+          var offerDiscountError = document.getElementById("offerDiscountError");
+      
+          document.getElementById('offerNameError').innerHTML = "";
+          document.getElementById('offerDiscountError').innerHTML = "";
+      
+          // Validate offerName
+          if (!offerName.match(/^[a-zA-Z0-9\s]+$/) || offerName.trim() == "") {
+            document.getElementById('offerNameError').innerText = "Coupon name can only contain letters, numbers, and spaces.";
+            return false;
+          }
+      
+          // Validate offerDiscount
+          if (offerDiscount === "") {
+            document.getElementById('offerDiscountError').innerText = "Please enter a discount value.";
+            return false;
+          }
+      
+          // Check if offerDiscount is a valid number and within range
+          if (isNaN(offerDiscount) || parseFloat(offerDiscount) < 0 || parseFloat(offerDiscount) > 99) {
+            document.getElementById('offerDiscountError').innerText = "Enter a valid value";
+            return false;
+          }
+      
+          return true;
+        }
+        
+        document.getElementById("createCategorySubmit").addEventListener("click", function(event) {
+          if (!validateForm()) {
+            event.preventDefault();
+          }
+        });
+      </script>
+
+<script>
+  function validateForm1() {
+    var offerName = document.getElementById("offerName1").value;
+    var offerDiscount = document.getElementById("offerDiscount1").value;
+    console.log(offerName,offerDiscount);
+    var offerNameError = document.getElementById("offerNameError1");
+    var offerDiscountError = document.getElementById("offerDiscountError1");
+
+    document.getElementById('offerNameError1').innerHTML = "";
+    document.getElementById('offerDiscountError1').innerHTML = "";
+
+    // Validate offerName
+    if (!offerName.match(/^[a-zA-Z0-9\s]+$/) || offerName.trim() == "") {
+      document.getElementById('offerNameError1').innerText = "Coupon name can only contain letters, numbers, and spaces.";
+      return false;
+    }
+
+    // Validate offerDiscount
+    if (offerDiscount === "") {
+      document.getElementById('offerDiscountError1').innerText = "Please enter a discount value.";
+      return false;
+    }
+
+    // Check if offerDiscount is a valid number and within range
+    if (isNaN(offerDiscount) || parseFloat(offerDiscount) < 0 || parseFloat(offerDiscount) > 99) {
+      document.getElementById('offerDiscountError1').innerText = "Enter a valid value";
+      return false;
+    }
+
+    return true;
+  }
+  
+  document.getElementById("editCategorySubmit").addEventListener("click", function(event) {
+    if (!validateForm1()) {
+      event.preventDefault();
+    }
+  });
+</script>
         
           
 </body>
