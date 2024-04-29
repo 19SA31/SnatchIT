@@ -8,6 +8,7 @@ const cartHelper = require('../helper/cartHelper');
 const productModel = require('../models/product-model')
 const categoryModel = require("../models/category-model");
 const cartModel = require('../models/cart-model')
+const offerModel = require("../models/offer-model");
 const productHelper = require('../helper/productHelper')
 const categoryHelper = require('../helper/categoryHelper')
 const orderHelper = require('../helper/orderHelper')
@@ -95,14 +96,22 @@ const  loadUserProduct = async (req, res) => {
     .populate("productCategory")
     .lean();
 
+
+  const result = await offerModel.find({'categoryOffer.category':product.productCategory})
   const cartStatus = await cartHelper.isAProductInCart(userData, product._id);
   const wishlistStatus = await wishlistHelper.isInWishlist(
     userData,
     product._id
   );
-  console.log(cartStatus);
+  
   product.wishlistStatus = wishlistStatus;
   product.cartStatus = cartStatus; 
+  console.log(result);
+  if(result.length > 0){
+    product.categoryOffer = result[0].categoryOffer.discount;
+  } else {
+    product.categoryOffer = 0;
+  }
   res.render("user/user-productPage", {
     product,
     userData,
@@ -338,7 +347,21 @@ const loadShop = async (req, res, next) => {
             return 0;
           });
           normalSorted="Alpha"
-        }
+        } else if (req.query.filter == "ReverseAlpha") {
+          offerPrice
+          .sort((a, b) => {
+              const nameA = a.productName.toUpperCase();
+              const nameB = b.productName.toUpperCase();
+              if (nameA < nameB) {
+                  return 1; 
+              }
+              if (nameA > nameB) {
+                  return -1;
+              }
+              return 0;
+          });
+          normalSorted = "ReverseAlpha";
+      }
       }
 
       let itemsPerPage = 6;
@@ -392,6 +415,7 @@ const shopFilterLoad = async (req, res, next) => {
     }
     console.log(filteredProducts);
     if (sort) {
+      console.log(sort);
       console.log("if in shop filter----sort");
       if (sort == "Ascending") {
         console.log("inside ascending");
@@ -417,7 +441,21 @@ const shopFilterLoad = async (req, res, next) => {
           return 0;
         });
         sorted = "Alpha";
-      }
+      } else if (sort == "ReverseAlpha") {
+        filteredProducts.sort((a, b) => {
+            const nameA = a.productName.toUpperCase();
+            const nameB = b.productName.toUpperCase();
+            if (nameA < nameB) {
+                return 1; 
+            }
+            if (nameA > nameB) {
+                return -1;
+            }
+            return 0;
+        });
+        sorted = "ReverseAlpha";
+    }
+    
     }
     
     let itemsPerPage = 6;

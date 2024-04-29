@@ -267,6 +267,7 @@
                                         <th scope="col" class="text-center">Price</th>
                                         <th scope="col" class="text-center">Size</th>
                                         <th scope="col" class="text-center">Quantity</th>
+                                        <th scope="col" class="text-center">Discount</th>
                                         <th scope="col" class="text-center">Subtotal</th>
                                         <th scope="col" class="text-center">Remove</th>
                                     </tr>
@@ -314,6 +315,9 @@
                                                             </a>
                                                         </div>
                                                     </td>
+                                                    <td>
+                                                        <span>%</span>
+                                                    </td>
                                                     <td class="text-right" data-title="Cart">
                                                         <span id="individualTotal<%= cartItems.products[i]._id %>">₹
                                                             <%=totalAmountOfEachProduct[i]%></span>
@@ -356,6 +360,7 @@
                                                         </span>
                                                     </td>
                                                 </tr>
+                                               
                                                 <tr>
                                                     <td class="cart_total_label">Shipping</td>
                                                     <td class="cart_total_amount">

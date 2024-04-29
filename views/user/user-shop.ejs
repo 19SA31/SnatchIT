@@ -325,25 +325,36 @@
                                             <select name="" id="normalSorter" class="form-select" style=" border-radius: 18px;">
                                                 <option value="Ascending" style="font-size: 16px;">Price: Low to High</option>
                                                 <option value="Descending" style="font-size: 16px;">Price: High to Low</option>
-                                                <option value="Alpha" style="font-size: 16px;">Aa-Zz</option>                     
+                                                <option value="Alpha" style="font-size: 16px;">Aa-Zz</option>     
+                                                <option value="ReverseAlpha" style="font-size: 16px;">Zz-Aa</option>                
                                                 </select>
                                                 <% } else if (normalSorted=="Descending") { %>
                                                     <select name="" id="normalSorter" class="form-select" style=" border-radius: 18px;">
                                                     <option value="Descending" style="font-size: 16px;">Price: High to Low</option>
                                                     <option value="Ascending" style="font-size: 16px;">Price: Low to High</option>
                                                     <option value="Alpha" style="font-size: 16px;">Aa-Zz</option>  
+                                                    <option value="ReverseAlpha" style="font-size: 16px;">Zz-Aa</option>
                                                 </select>
                                                     <% } else if (normalSorted=="Alpha") { %>
                                                         <select name="" id="normalSorter" class="form-select" style=" border-radius: 18px;">
                                                         <option value="Alpha" style="font-size: 16px;">Aa-Zz</option>
                                                         <option value="Ascending" style="font-size: 16px;">Price: Low to High</option>
                                                         <option value="Descending" style="font-size: 16px;">Price: High to Low</option>
+                                                        <option value="ReverseAlpha" style="font-size: 16px;">Zz-Aa</option>
                                                     </select>
+                                                    <% } else if (normalSorted=="ReverseAlpha") { %>
+                                                        <select name="" id="normalSorter" class="form-select" style="border-radius: 18px;">
+                                                            <option value="ReverseAlpha" style="font-size: 16px;">Zz-Aa</option>
+                                                            <option value="Ascending" style="font-size: 16px;">Price: Low to High</option>
+                                                            <option value="Descending" style="font-size: 16px;">Price: High to Low</option>
+                                                            <option value="Alpha" style="font-size: 16px;">Aa-Zz</option>
+                                                        </select>
                                                         <% } else { %>
                                                             <select name="" id="normalSorter" class="form-select" style=" border-radius: 18px;">
                                                                 <option value="Ascending" style="font-size: 16px;">Price: Low to High</option>
-                                      <option value="Descending" style="font-size: 16px;">Price: High to Low</option>
-                                      <option value="Alpha" style="font-size: 16px;">Aa-Zz</option>
+                                                                <option value="Descending" style="font-size: 16px;">Price: High to Low</option>
+                                                                <option value="Alpha" style="font-size: 16px;">Aa-Zz</option>
+                                                                <option value="ReverseAlpha" style="font-size: 16px;">Zz-Aa</option>
                                                               </select>
                                         <% } %>
                                       
@@ -403,12 +414,10 @@
                                                         </div>
                                                         <div class="product-price">
                                                             <span class="text-dark">
-                                                                <%= products[i].offerPrice %>
+                                                                ₹ <%= products[i].productPrice %>
 
                                                             </span>
-                                                            <span class="old-price">
-                                                                <%= products[i].productPrice %>
-                                                            </span>
+                                                            
                                                         </div>
                                                         <div class="product-action-1 show">
                                                             <a aria-label="Add To Cart" class="action-btn hover-up"
@@ -628,64 +637,7 @@
     <script src="public/user-assets/js/maind134.js?v=3.4"></script>
     <script src="public/user-assets/js/shopd134.js?v=3.4"></script>
 
-    <!-- <script>
-        const priceSorter = (value) => {
-
-            if (!document.getElementById("sortedProducts")) {
-                const result = document.getElementById("products").value;
-                console.log(result)
-                $.ajax({
-                    url: `/priceSort/${value}`,
-                    method: "POST",
-                    data: { products: result },
-                    success: (response) => {
-                        updateProductGrid(response.products);
-
-                    }
-                })
-            } else {
-                const result = document.getElementById("sortedProducts").value;
-                console.log(result)
-                $.ajax({
-                    url: `/priceSort/${value}`,
-                    method: "POST",
-                    data: { products: result },
-                    success: (response) => {
-                        updateProductGrid(response.products);
-
-                    }
-                })
-            }
-
-        }
-    </script>
-
-    <script>
-        const alphaSorter = () => {
-
-            if (!document.getElementById("sortedProducts")) {
-                const result = document.getElementById("products").value;
-                $.ajax({
-                    url: "/alphaSort",
-                    method: "POST",
-                    data: { products: result },
-                    success: (response) => {
-                        updateProductGrid(response.products);
-                    }
-                })
-            } else {
-                const result = document.getElementById("sortedProducts").value;
-                $.ajax({
-                    url: "/alphaSort",
-                    method: "POST",
-                    data: { products: result },
-                    success: (response) => {
-                        updateProductGrid(response.products);
-                    }
-                })
-            }
-        }
-    </script> -->
+    
 
    
 

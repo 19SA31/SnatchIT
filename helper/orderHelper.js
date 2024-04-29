@@ -2,6 +2,7 @@ const cartModel = require("../models/cart-model");
 const userModel = require('../models/user-model');
 const productModel = require("../models/product-model");
 const orderModel = require("../models/order-model");
+const couponModel = require("../models/coupon-model");
 const walletHelper = require("../helper/walletHelper");
 const ObjectId = require("mongoose").Types.ObjectId;
 
@@ -10,6 +11,7 @@ const ObjectId = require("mongoose").Types.ObjectId;
 const placeOrder = (body, userId) => {
     return new Promise(async (resolve, reject) => {
       try {
+        
         const cart = await cartModel.findOne({ user: userId });
         const address = await userModel.findOne(
           { _id: userId, "address._id": body.addressId },
@@ -70,6 +72,8 @@ const placeOrder = (body, userId) => {
   
           resolve({ result: result, status: true });
         }
+        
+
       } catch (error) {
         console.log(error);
       }

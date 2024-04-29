@@ -39,7 +39,7 @@ const findAllCoupons = () => {
       const coupon = new couponModel({
         couponName: couponData.couponName,
         code: couponCode[0],
-        discount: couponData.couponAmount,
+        discount: couponData.couponDiscount,
         expiryDate: convertedDate,
       });
   
@@ -77,11 +77,11 @@ const findAllCoupons = () => {
   const editCouponDetails = (editedCouponData) => {
     return new Promise(async (resolve, reject) => {
       let coupon = await couponModel.findById({
-        _id: editedCouponData.couponId,
+        _id: editedCouponData.couponId1,
       });
-      coupon.couponName = editedCouponData.couponName;
-      coupon.discount = editedCouponData.couponAmount;
-      coupon.expiryDate = editedCouponData.couponExpiry;
+      coupon.couponName = editedCouponData.couponName1;
+      coupon.discount = editedCouponData.couponDiscount1;
+      coupon.expiryDate = editedCouponData.couponExpiry1;
   
       await coupon.save();
       resolve(coupon);
@@ -98,16 +98,14 @@ const findAllCoupons = () => {
           let cart = await cartModel.findOne({ user: new ObjectId(userId)});
           console.log(cart)
           const discount = coupon.discount;
-  
+          console.log(cart.totalAmount,discount);
           cart.totalAmount = cart.totalAmount - discount;
           cart.coupon = couponCode;
   
           await cart.save();
           console.log(cart)
   
-          coupon.usedBy.push(userId);
-          await coupon.save();
-  
+          
           resolve({
             discount,
             cart,

@@ -70,9 +70,13 @@ const placeOrder = async (req, res) => {
   console.log("this is order controller");
   const body = req.body;
   const userId = req.session.user;
-
+  let coupon = await couponModel.findOne({ code: body.couponCode })
+  console.log(coupon.usedBy);
   const result = await orderHelper.placeOrder(body, userId);
   if (result.status) {
+      coupon.usedBy.push(userId);
+            await coupon.save();
+  
     const cart = await cartHelper.clearAllCartItems(userId);
     if (cart) {
       res.json({ url: "/orderSuccess", status: true });

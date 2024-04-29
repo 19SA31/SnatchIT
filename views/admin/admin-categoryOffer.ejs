@@ -301,7 +301,7 @@
             </div>
             <div class="mb-3">
               <label for="recipient-name" class="col-form-label">Category</label>
-              <select name="categoryName" id="categoryName" class="form-select">
+              <select name="categoryName1" id="categoryName1" class="form-select">
                 <% for( let i=0; i < categories.length; i++ ) { %>
                   <option class="form-option" value="<%= categories[i]._id %>">
                     <%= categories[i].name %>
@@ -317,11 +317,11 @@
             </div>
             <div class="mb-3">
               <label for="recipient-name" class="col-form-label">Starting Date (YYYY/MM/DD)</label>
-              <input type="date" class="form-control" name="startDate" id="startDate">
+              <input type="date" class="form-control" name="startDate1" id="startDate1">
             </div>
             <div class="mb-3">
               <label for="recipient-name" class="col-form-label">Ending Date (YYYY/MM/DD)</label>
-              <input type="date" class="form-control" name="endDate" id="endDate">
+              <input type="date" class="form-control" name="endDate1" id="endDate1">
             </div>
             <div class="mb-3">
               <input type="hidden" class="form-control" id="offerId" name="offerId" />
@@ -463,11 +463,11 @@
             .done((res) => {
               if (res) {
                 console.log(res)
-                document.getElementById("categoryName").value = res.categoryOffer.category
+                document.getElementById("categoryName1").value = res.categoryOffer.category
                 document.getElementById('offerName1').value = res.offerName;
                 document.getElementById('offerDiscount1').value = res.categoryOffer.discount;
-                document.getElementById('startDate').value = convertDateFormat(res.formattedStartingDate)
-                document.getElementById("endDate").value = convertDateFormat(res.formattedEndingDate)
+                document.getElementById('startDate1').value = convertDateFormat(res.formattedStartingDate)
+                document.getElementById("endDate1").value = convertDateFormat(res.formattedEndingDate)
                 document.getElementById('offerId').value = res._id;
     
                 $("#editCoupon").modal("show");

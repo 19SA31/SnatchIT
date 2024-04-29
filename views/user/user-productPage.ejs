@@ -246,7 +246,14 @@
                                 ₹<%= product.productPrice %>
                               </span></ins>
                             <span class="save-price  font-md color3 ml-15">
-                              <%= product.productDiscount %> % Off
+                                
+                                    <% if (product.productDiscount < product.categoryOffer) { %>
+                                        <%= product.categoryOffer %>  % Off for category
+                                    <% } else { %>
+                                        <%= product.productDiscount %> % Off for product
+                                    <% } %>
+
+                                
                             </span>
                           </div>
                         </div>

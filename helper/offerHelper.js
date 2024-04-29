@@ -8,7 +8,7 @@ const createCategoryOffer = (data) => {
           startingDate: data.startDate,
           endingDate: data.endDate,
           "categoryOffer.category": data.categoryName,
-          "categoryOffer.discount": data.discountAmount,
+          "categoryOffer.discount": data.offerDiscount,
           "categoryOffer.offerStatus": true,
         });
         resolve(result);
@@ -72,11 +72,11 @@ const getAllOffersOfCategories = () => {
           { _id: data.offerId },
           {
             $set: {
-              offerName: data.offerName,
-              startingDate: data.startDate,
-              endingDate: data.endDate,
-              "categoryOffer.category": data.categoryName,
-              "categoryOffer.discount": data.discountAmount,
+              offerName: data.offerName1,
+              startingDate: data.startDate1,
+              endingDate: data.endDate1,
+              "categoryOffer.category": data.categoryName1,
+              "categoryOffer.discount": data.offerDiscount1,
               "categoryOffer.offerStatus": true,
             },
           }
@@ -204,6 +204,8 @@ const getAllOffersOfProducts = () => {
 
   
 
+  
+
   module.exports = {
     createCategoryOffer,
     getAllOffersOfCategories,
@@ -212,5 +214,5 @@ const getAllOffersOfProducts = () => {
     editCategoryOffer,
     getAllOffersOfProducts,
     findOffer,
-    getActiveOffer
+    getActiveOffer,
   }

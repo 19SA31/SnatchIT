@@ -418,11 +418,19 @@
 
                                                     </td>
                                                 </tr>
+                                                <tr >
+                                                    <th style="display: none;" >coupon code</th>
+                                                    <td style="display: none;" id="couponCodeTable">
+                                                        <% if (cartItems.couponAmount>0) { %>
+                                                            <span> <%=cartItems.coupon %> </span>
+                                                            <% } %>
+                                                    </td>
+                                                </tr>
                                                 <tr>
                                                     <th>Coupon Discount</th>
                                                     <td colspan="2" class="text-dark">
                                                         <% if (cartItems.couponAmount>0) { %>
-                                                            <span>₹ <%=cartItems.couponAmount %></span>
+                                                            <span> -<%=cartItems.couponAmount %> %</span>
 
                                                             <% } else { %>
                                                                 <span>No Coupons Applied</span>
@@ -435,7 +443,8 @@
                                                     <td colspan="2" class="product-subtotal">₹<span
                                                             class="font-xl text-dark fw-900" id="totalAmount">
                                                             <% if (cartItems.couponAmount >0) { %>
-                                                                <%=totalandSubTotal-cartItems.couponAmount%>
+                                                                <%= Math.round(totalandSubTotal - (totalandSubTotal * cartItems.couponAmount / 100)) %>
+
                                                             <% } else {%>
                                                                 <%= totalandSubTotal %>
                                                             <% } %>
@@ -708,9 +717,12 @@
             $("#placeOrder").click(function () {
                 let address = $("input[name='address']:checked").val();
                 let payment = $("input[name='payment_option']:checked").val();
+                let code = document.getElementById("couponCodeTable").textContent.trim();
+                
                 const data = {
                     addressId: address,
                     paymentOption: payment,
+                    couponCode: code
                 }
 
                 const totalAmount = document.getElementById("totalAmount").innerText.trim();

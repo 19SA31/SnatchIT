@@ -14,7 +14,7 @@ const getCartPage = async(req,res)=>{
             if(cartItems.products.length){
       
             let totalandSubTotal = await cartHelper.totalSubtotal(userData, cartItems);
-
+            let discountOfEachProduct = [];
             let totalAmountOfEachProduct = [];
             for (i = 0; i < cartItems.products.length; i++) {
               let total = cartItems.products[i].quantity * parseInt(cartItems.products[i].price);
