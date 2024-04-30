@@ -643,37 +643,37 @@
                         <div class="form-group col-md-12">
                             <label>House Name/No.<span class="required">*</span></label>
                             <input class="form-control square" name="housename" type="text" id="housename1">
-                            <span id="house-error" class="text-danger"></span>
+                            <span id="house-error1" class="text-danger"></span>
                         </div>
                         <div class="form-group col-md-6">
                             <label>Street Name <span class="required">*</span></label>
                             <input class="form-control square" name="streetname" type="text" id="streetname1">
-                            <span id="street-error" class="text-danger"></span>
+                            <span id="street-error1" class="text-danger"></span>
                         </div>
                         <div class="form-group col-md-6">
                             <label>Area/Locality<span class="required">*</span></label>
                             <input class="form-control square" name="areaname" type="text" id="areaname1">
-                            <span id="area-error" class="text-danger"></span>
+                            <span id="area-error1" class="text-danger"></span>
                         </div>
                         <div class="form-group col-md-6">
                             <label>District<span class="required">*</span></label>
                             <input class="form-control square" name="districtname" type="text" id="districtname1">
-                            <span id="district-error" class="text-danger"></span>
+                            <span id="district-error1" class="text-danger"></span>
                         </div>
                         <div class="form-group col-md-6">
                             <label>State<span class="required">*</span></label>
                             <input class="form-control square" name="statename" type="text" id="statename1">
-                            <span id="state-error" class="text-danger"></span>
+                            <span id="state-error1" class="text-danger"></span>
                         </div>
                         <div class="form-group col-md-6">
                             <label>Country<span class="required">*</span></label>
                             <input class="form-control square" name="countryname" type="text" id="countryname1">
-                            <span id="country-error" class="text-danger"></span>
+                            <span id="country-error1" class="text-danger"></span>
                         </div>
                         <div class="form-group col-md-6">
                             <label>PIN <span class="required">*</span></label>
                             <input class="form-control square" name="pin" type="text" id="pin1">
-                            <span id="pin-error" class="text-danger"></span>
+                            <span id="pin-error1" class="text-danger"></span>
                         </div>
                         <div class="col-md-12">
                             <button type="submit" class="btn btn-fill-out submit">Save</button>
@@ -1152,49 +1152,49 @@
 
 
             if (!houseRegex.test(document.getElementById("housename1").value)) {
-                document.getElementById("house-error").innerHTML = "Invalid Format";
+                document.getElementById("house-error1").innerHTML = "Invalid Format";
                 isValid = false;
             } else {
                 document.getElementById("house-error").innerHTML = "";
             }
 
             if (!streetRegex.test(document.getElementById("streetname1").value)) {
-                document.getElementById("street-error").innerHTML = "Invalid";
+                document.getElementById("street-error1").innerHTML = "Invalid";
                 isValid = false;
             } else {
                 document.getElementById("street-error").innerHTML = "";
             }
 
             if (!areaRegex.test(document.getElementById("areaname1").value)) {
-                document.getElementById("area-error").innerHTML = "Invalid";
+                document.getElementById("area-error1").innerHTML = "Invalid";
                 isValid = false;
             } else {
                 document.getElementById("area-error").innerHTML = "";
             }
 
             if (!districtRegex.test(document.getElementById("districtname1").value)) {
-                document.getElementById("district-error").innerHTML = "Invalid";
+                document.getElementById("district-error1").innerHTML = "Invalid";
                 isValid = false;
             } else {
                 document.getElementById("district-error").innerHTML = "";
             }
 
             if (!stateRegex.test(document.getElementById("statename1").value)) {
-                document.getElementById("state-error").innerHTML = "Invalid";
+                document.getElementById("state-error1").innerHTML = "Invalid";
                 isValid = false;
             } else {
-                document.getElementById("state-error").innerHTML = "";
+                document.getElementById("state-error1").innerHTML = "";
             }
 
             if (!countryRegex.test(document.getElementById("countryname1").value)) {
-                document.getElementById("country-error").innerHTML = "Invalid";
+                document.getElementById("country-error1").innerHTML = "Invalid";
                 isValid = false;
             } else {
                 document.getElementById("country-error").innerHTML = "";
             }
 
             if (!pincodeRegex.test(document.getElementById("pin1").value)) {
-                document.getElementById("pin-error").innerHTML = "Invalid Pincode (should be 6 digits)";
+                document.getElementById("pin-error1").innerHTML = "Invalid Pincode (should be 6 digits)";
                 isValid = false;
             } else {
                 document.getElementById("pin-error").innerHTML = "";
