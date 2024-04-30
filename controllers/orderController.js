@@ -71,9 +71,8 @@ const placeOrder = async (req, res) => {
   const body = req.body;
   const userId = req.session.user;
   let coupon = await couponModel.findOne({ code: body.couponCode })
-  console.log(coupon.usedBy);
   const result = await orderHelper.placeOrder(body, userId);
-  if (result.status) {
+  if (result.status && coupon) {
       coupon.usedBy.push(userId);
             await coupon.save();
   
@@ -81,8 +80,14 @@ const placeOrder = async (req, res) => {
     if (cart) {
       res.json({ url: "/orderSuccess", status: true });
     }
-  } else {
-    res.json({ message: result.message, status: false })
+  }else if(result.status){
+    const cart = await cartHelper.clearAllCartItems(userId);
+    if (cart) {
+      res.json({ url: "/orderSuccess", status: true });
+    }
+  
+  }else {
+    res.json({ message: result.result, status: false })
   }
 };
 
@@ -186,15 +191,29 @@ const cancelSingleOrder = async (req, res) => {
 const createOrder = async (req, res) => {
   try {
     const amount = req.query.totalAmount;
-    const order = await razorpay.orders.create({
-      amount: amount* 100,
-      currency: "INR",
-      receipt: req.session.user,
-    });
+    const cart = await cartModel.findOne({ user: req.session.user });
+    for (const product of cart.products) {
+      const availableStock = await productModel.findOne({
+        _id: product.productId,
+        "productQuantity.size": product.size,
+      });
+      console.log("this is available stock",availableStock);
+      const availableStockForSize = availableStock.productQuantity.find(item => item.size === product.size);
 
-    console.log(order);
+      if (!availableStockForSize || availableStockForSize.quantity < product.quantity) {
+          // If stock is not available for the preferred size, reject the promise and return error
+          res.json ({result:`Insufficient stock for size ${product.size}`, status: false});
+      }else {
+          const order = await razorpay.orders.create({
+            amount: amount* 100,
+            currency: "INR",
+            receipt: req.session.user,
+          });
+          console.log(order);
 
-    res.json({ orderId: order });
+          res.json({ orderId: order , status: true});
+      }    
+    }
   } catch (error) {
     console.log(error);
   }

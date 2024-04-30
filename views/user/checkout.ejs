@@ -761,38 +761,51 @@
                         success: function (data) {
                             const parseAmount = parseInt(totalAmount);
                             console.log(data);
-                            var options = {
-                                "key": "rzp_test_hb6zaZS4NZIqmD",
-                                "amount": 100000,
-                                "currency": "INR",
-                                "name": "Snatch It",
-                                "description": "Test Transaction",
-                                "image": "http://localhost:4004/public/user-assets/images/SnatchIt_logo.png",
-                                "order_id": data.orderId.id,
-                                "handler": function (response) {
-                                    console.log(response);
-                                    console.log("Hello");
-                                    verify(response, data.orderId.id);
-                                    console.log("hey");
-                                },
-                                "prefill": {
-                                    "name": "Gaurav Kumar",
-                                    "email": "gaurav.kumar@example.com",
-                                    "contact": "9000090000"
-                                },
-                                "notes": {
-                                    "address": "Razorpay Corporate Office"
-                                },
-                                "theme": {
-                                    "color": "#3399cc"
-                                }
-                            };
-                            var rzp = new Razorpay(options);
-                            rzp.open();
-                            rzp.on("payment.failed", function (response) {
-                                console.log('Payment failed:', response.error.description);
-                                handleFailure(response.error.description, address, payment);
-                            });
+                            if(data.status){
+                                var options = {
+                                    "key": "rzp_test_hb6zaZS4NZIqmD",
+                                    "amount": 100000,
+                                    "currency": "INR",
+                                    "name": "Snatch It",
+                                    "description": "Test Transaction",
+                                    "image": "http://localhost:4004/public/user-assets/images/SnatchIt_logo.png",
+                                    "order_id": data.orderId.id,
+                                    "handler": function (response) {
+                                        console.log(response);
+                                        console.log("Hello");
+                                        verify(response, data.orderId.id);
+                                        console.log("hey");
+                                    },
+                                    "prefill": {
+                                        "name": "Gaurav Kumar",
+                                        "email": "gaurav.kumar@example.com",
+                                        "contact": "9000090000"
+                                    },
+                                    "notes": {
+                                        "address": "Razorpay Corporate Office"
+                                    },
+                                    "theme": {
+                                        "color": "#3399cc"
+                                    }
+                                };
+                                var rzp = new Razorpay(options);
+                                rzp.open();
+                                rzp.on("payment.failed", function (response) {
+                                    console.log('Payment failed:', response.error.description);
+                                    handleFailure(response.error.description, address, payment);
+                                });
+                            }else{
+                                Toastify({
+                                    text: data.result,
+                                    duration: 3000,
+                                    gravity: "top",
+                                    position: "center",
+                                    stopOnFocus: true,
+                                    style: {
+                                        background: "linear-gradient(to right, #ff9966, #ff5e62)",
+                                    },
+                                }).showToast();
+                            }
                         },
                         error: function (xhr, status, error) {
                             console.error('Error:', error);
