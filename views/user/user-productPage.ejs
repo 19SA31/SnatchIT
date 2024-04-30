@@ -274,9 +274,9 @@
                         <div class="attr-detail attr-size">
                             <strong class="mr-10">Size</strong>
                             <ul class="list-filter size-filter font-small">
-                                <li><a id="S" onclick="clickSize('<%= product._id %>','S',)">S</a></li>
-                                <li class="active" id="M"><a onclick="clickSize('<%= product._id %>','M')">M</a></li>
-                                <li><a id="L" onclick="clickSize('<%= product._id %>','L')">L</a></li>
+                                <li><a id="S" onclick="isProductWithThisSize('<%= product._id %>','S')">S</a></li>
+                                <li class="active" id="M"><a onclick="isProductWithThisSize('<%= product._id %>','M')">M</a></li>
+                                <li><a id="L" onclick="isProductWithThisSize('<%= product._id %>','L')">L</a></li>
                             </ul>
                         </div>
                         <div class="bt-1 border-color-1 mt-30 mb-30"></div>
@@ -298,11 +298,11 @@
                             </li>
                         </ul>
                         <% if (product.cartStatus) { %>
-                            <button type="button" class="btn button-add-to-cart" style="background-color: #b7aae4;"
+                            <button type="button" id="addToCartButton" class="btn button-add-to-cart" style="background-color: #b7aae4;"
                               onclick="viewCart()"> View in cart</button>
   
                         <% } else { %>
-                              <button type="submit" class="button button-add-to-cart" style="background-color: #2B1754;"
+                              <button type="submit" id="addToCartButton" class="button button-add-to-cart" style="background-color: #2B1754;"
                                 onclick="addToCart('<%=product._id%>')">Add to cart</button>
                         <% } %><span>
                         <% if (product.wishlistStatus) { %>
@@ -783,7 +783,6 @@
         size = "M";
         quantity = parseInt(document.getElementById("mediumQuantity").innerHTML);
       }
-      console.log(productId);
       if (quantity > 0) {
         $.ajax({
           url: `/addToCart/${productId}/${size}`,
@@ -842,44 +841,6 @@
   </script>
 
 <script>
-    function clickSize(id,size) {
-        
-        console.log("Entered in to sizeClick function")
-    sizeClicked = size;
-    console.log(sizeClicked);
-    $.ajax({
-        url:`/size/${id}/${size}`,
-        method:'POST',
-        contentType:'application/json',
-        success:function(response){
-            const messageDisplay = document.getElementById("messageDisplay");
-            const size = response.message;
-            if(size !== undefined){
-                if(response.message === 0){
-                    messageDisplay.innerHTML = "Product Out of Stock!!";
-                    messageDisplay.style.color = "red"
-                    document.getElementById("addToCartButton").disabled = true
-                }else if(response.message < 10){
-                    messageDisplay.innerHTML = `${size} item Available in Stock`
-                    messageDisplay.style.color = 'red';
-                    document.getElementById("addToCartButton").disabled = false;
-                }else{
-                   
-                    messageDisplay.innerHTML = `${size} item Avaliable in Stock`;
-                    messageDisplay.style.color = 'green'
-                    document.getElementById("addToCartButton").disabled = false;
-                }
-            }else{
-                messageDisplay.innerHTML = "";
-            }
-           isProductWithThisSize(id, sizeClicked)
-        },
-        error:function(error){
-            console.error("AJAX error :",error)
-        }
-    })
-    }
-
 
     function isProductWithThisSize(productId, sizeClicked) {
     $.ajax({
@@ -887,19 +848,15 @@
         method: 'GET',
         contentType: 'application/json',
         success: function(response) {
-            const quantityButton = document.getElementById('quantityElement')
             const addToCartButton = document.getElementById("addToCartButton");
 
             if (response.response === true) {
                 console.log("product in cart");
-
-               
-                
                 addToCartButton.textContent = "View Cart";
-                addToCartButton.style.backgroundColor = "orange";
+                addToCartButton.style.backgroundColor = "#b7aae4";
                 // Add an onclick event to redirect to the cart page
                 addToCartButton.onclick = function() {
-                    window.location.href = "/loadCartPage"; // Change "/cart" to your actual cart page URL
+                    window.location.href = "/user-cart"; // Change "/cart" to your actual cart page URL
                 };
             } else {
                 console.log("product not in");

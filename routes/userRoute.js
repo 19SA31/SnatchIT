@@ -45,6 +45,13 @@ router.get("/orderFailure", userMiddleware.isLogout, orderController.orderFailed
 
 router.get("/orderSuccess", userMiddleware.isLogout, orderController.orderSuccessPageLoad);
 
+router.get("/popularProducts",userMiddleware.isLogout,productController.fetchPopular);
+
+router.get("/newProducts",userMiddleware.isLogout,productController.fetchNew)
+
+router.get("/productWithSizeCartCheck",userMiddleware.isLogout,productController.productWithSizeCartCheck)
+
+
 
 
 

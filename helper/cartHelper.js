@@ -23,12 +23,15 @@ const addToCartHelper = (userId, productId, size) => {
         product.productPrice -(product.productPrice * product.productDiscount) / 100
       );
       
-      const existingCartItem = await cartModel.findOne(
-        { 
-            user: userId,
-            "products.productId": productId,
+      const existingCartItem = await cartModel.findOne({
+        user: userId,
+        "products": {
+          $elemMatch: {
+            productId: productId,
+            "productQuantity.size": size
+          }
         }
-      );
+      });
     
       if(!existingCartItem){
       const cart = await cartModel.updateOne(

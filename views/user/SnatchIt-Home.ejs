@@ -262,13 +262,14 @@
                             <button class="nav-link active" id="nav-tab-one" data-bs-toggle="tab" data-bs-target="#tab-one" type="button" role="tab" aria-controls="tab-one" aria-selected="true">Featured</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="nav-tab-two" data-bs-toggle="tab" data-bs-target="#tab-two" type="button" role="tab" aria-controls="tab-two" aria-selected="false">Popular</button>
+                            <button class="nav-link" id="nav-tab-two" data-bs-toggle="tab" data-bs-target="#tab-two" type="button" role="tab" aria-controls="tab-two" aria-selected="false" onclick="getPopularProducts()">Popular</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="nav-tab-three" data-bs-toggle="tab" data-bs-target="#tab-three" type="button" role="tab" aria-controls="tab-three" aria-selected="false">New added</button>
+                            <button class="nav-link" id="nav-tab-three" data-bs-toggle="tab" data-bs-target="#tab-three" type="button" role="tab" aria-controls="tab-three" aria-selected="false" onclick="getNewProducts()">New added</button>
                         </li>
                     </ul>
                 </div>
+                
                 <!--End nav-tabs-->
                 <div class="tab-content wow fadeIn animated" id="myTabContent">
                     <div class="tab-pane fade show active" id="tab-one" role="tabpanel" aria-labelledby="tab-one">
@@ -594,6 +595,7 @@
 });
 
 </script>
+
 
 </body>
 
