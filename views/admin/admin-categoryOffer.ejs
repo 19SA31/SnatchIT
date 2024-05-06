@@ -252,7 +252,7 @@
                   </option>
                   <% } %>
               </select>
-              <!-- <input type="text" class="form-control" name="couponName" id="couponName"> -->
+              
             </div>
             <div class="mb-3">
               <label for="recipient-name" class="col-form-label">Discount (%)</label>
@@ -484,15 +484,15 @@
       <script>
         function convertDateFormat(dateString) {
           try {
-            // Split the date string into components
+            
             const [year, month, day] = dateString.split('/');
     
-            // Validate month and day values (optional)
+            
             if (month < 1 || month > 12 || day < 1 || day > 31) {
               throw new Error("Invalid month or day value.");
             }
     
-            // Format the date in the desired format (YYYY-MM-DD)
+            
             return year + '-' + month.padStart(2, '0') + '-' + day.padStart(2, '0');
           } catch (error) {
             console.error("Invalid date format. Please provide a date string in the format 'yyyy/mm/dd'.", error);
@@ -533,19 +533,18 @@
           document.getElementById('offerNameError').innerHTML = "";
           document.getElementById('offerDiscountError').innerHTML = "";
       
-          // Validate offerName
           if (!offerName.match(/^[a-zA-Z0-9\s]+$/) || offerName.trim() == "") {
             document.getElementById('offerNameError').innerText = "Coupon name can only contain letters, numbers, and spaces.";
             return false;
           }
       
-          // Validate offerDiscount
+          
           if (offerDiscount === "") {
             document.getElementById('offerDiscountError').innerText = "Please enter a discount value.";
             return false;
           }
       
-          // Check if offerDiscount is a valid number and within range
+          
           if (isNaN(offerDiscount) || parseFloat(offerDiscount) < 0 || parseFloat(offerDiscount) > 99) {
             document.getElementById('offerDiscountError').innerText = "Enter a valid value";
             return false;
@@ -572,19 +571,19 @@
     document.getElementById('offerNameError1').innerHTML = "";
     document.getElementById('offerDiscountError1').innerHTML = "";
 
-    // Validate offerName
+  
     if (!offerName.match(/^[a-zA-Z0-9\s]+$/) || offerName.trim() == "") {
       document.getElementById('offerNameError1').innerText = "Coupon name can only contain letters, numbers, and spaces.";
       return false;
     }
 
-    // Validate offerDiscount
+    
     if (offerDiscount === "") {
       document.getElementById('offerDiscountError1').innerText = "Please enter a discount value.";
       return false;
     }
 
-    // Check if offerDiscount is a valid number and within range
+    
     if (isNaN(offerDiscount) || parseFloat(offerDiscount) < 0 || parseFloat(offerDiscount) > 99) {
       document.getElementById('offerDiscountError1').innerText = "Enter a valid value";
       return false;

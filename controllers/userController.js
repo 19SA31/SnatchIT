@@ -107,8 +107,9 @@ const  loadUserProduct = async (req, res) => {
   product.wishlistStatus = wishlistStatus;
   product.cartStatus = cartStatus; 
   console.log(result);
-  if(result.length > 0){
+  if(result.length > 0 ){
     product.categoryOffer = result[0].categoryOffer.discount;
+    
   } else {
     product.categoryOffer = 0;
   }

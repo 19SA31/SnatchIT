@@ -316,11 +316,11 @@
                                                         </div>
                                                     </td>
                                                     <td>
-                                                        <span>%</span>
+                                                        <span><%= maximumDiscounts[i]%>%</span>
                                                     </td>
                                                     <td class="text-right" data-title="Cart">
                                                         <span id="individualTotal<%= cartItems.products[i]._id %>">₹
-                                                            <%=totalAmountOfEachProduct[i]%></span>
+                                                            <%=Math.round(totalAmountOfEachProduct[i]-(totalAmountOfEachProduct[i]*maximumDiscounts[i]/100))%></span>
                                                     </td>
                                                     <td class="action" data-title="Remove">
                                                         <a onclick="removeItemFromCart('<%= cartItems.products[i]._id %>')"

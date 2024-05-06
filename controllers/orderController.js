@@ -25,7 +25,7 @@ const checkoutPage = async (req, res) => {
     if (cart.coupon != null) {
       const appliedCoupon = await couponModel.findOne({ code: cart.coupon });
       cartItems.couponAmount = appliedCoupon.discount;
-  
+
       let totalAmountOfEachProduct = [];
       for (i = 0; i < cartItems.products.length; i++) {
         let total = cartItems.products[i].quantity * parseInt(cartItems.products[i].price);
@@ -49,7 +49,7 @@ const checkoutPage = async (req, res) => {
         totalAmountOfEachProduct.push(total);
       }
       totalandSubTotal = totalandSubTotal;
-  
+
       if (cartItems) {
         res.render("user/checkout", {
           cartItems,
@@ -60,7 +60,7 @@ const checkoutPage = async (req, res) => {
         });
       }
     }
-    
+
   } catch (error) {
     console.log(error);
   }
@@ -73,20 +73,20 @@ const placeOrder = async (req, res) => {
   let coupon = await couponModel.findOne({ code: body.couponCode })
   const result = await orderHelper.placeOrder(body, userId);
   if (result.status && coupon) {
-      coupon.usedBy.push(userId);
-            await coupon.save();
-  
+    coupon.usedBy.push(userId);
+    await coupon.save();
+
     const cart = await cartHelper.clearAllCartItems(userId);
     if (cart) {
       res.json({ url: "/orderSuccess", status: true });
     }
-  }else if(result.status){
+  } else if (result.status) {
     const cart = await cartHelper.clearAllCartItems(userId);
     if (cart) {
       res.json({ url: "/orderSuccess", status: true });
     }
-  
-  }else {
+
+  } else {
     res.json({ message: result.result, status: false })
   }
 };
@@ -197,22 +197,22 @@ const createOrder = async (req, res) => {
         _id: product.productId,
         "productQuantity.size": product.size,
       });
-      console.log("this is available stock",availableStock);
+      console.log("this is available stock", availableStock);
       const availableStockForSize = availableStock.productQuantity.find(item => item.size === product.size);
 
       if (!availableStockForSize || availableStockForSize.quantity < product.quantity) {
-          // If stock is not available for the preferred size, reject the promise and return error
-          res.json ({result:`Insufficient stock for size ${product.size}`, status: false});
-      }else {
-          const order = await razorpay.orders.create({
-            amount: amount* 100,
-            currency: "INR",
-            receipt: req.session.user,
-          });
-          console.log(order);
+        // If stock is not available for the preferred size, reject the promise and return error
+        res.json({ result: `Insufficient stock for size ${product.size}`, status: false });
+      } else {
+        const order = await razorpay.orders.create({
+          amount: amount * 100,
+          currency: "INR",
+          receipt: req.session.user,
+        });
+        console.log(order);
 
-          res.json({ orderId: order , status: true});
-      }    
+        res.json({ orderId: order, status: true });
+      }
     }
   } catch (error) {
     console.log(error);
@@ -224,12 +224,12 @@ const paymentSuccess = (req, res) => {
     console.log("this is payment success")
     const { paymentid, signature, orderId } = req.body;
     const { createHmac } = require("node:crypto");
-    
+
 
     const hash = createHmac("sha256", process.env.KEY_SECRET)
       .update(orderId + "|" + paymentid)
       .digest("hex");
-    
+
 
     if (hash === signature) {
       console.log("success");
@@ -252,56 +252,9 @@ const orderSuccessPageLoad = (req, res) => {
   res.render("user/orderSuccess");
 };
 
-const loadSalesReport = async (req, res) => {
-  try {
-    orderHelper
-      .salesReport()
-      .then((response) => {
-        console.log(response);
-        response.forEach((order) => {
-          const orderDate = new Date(order.orderedOn);
-          const formattedDate = orderDate.toLocaleDateString("en-GB", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-          });
-          order.orderedOn = formattedDate;
-        });
 
-        res.render("admin/salesReport", { sales: response });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  } catch (error) {
-    console.log(error);
-  }
-};
 
-const loadSalesReportDateSort = async (req, res) => {
-  const startDate = req.body.startDate;
-  const endDate = req.body.endDate;
-  console.log(startDate, endDate);
-  orderHelper
-    .salesReportDateSort(startDate, endDate)
-    .then((response) => {
-      console.log(response);
-      response.forEach((order) => {
-        const orderDate = new Date(order.orderedOn);
-        const formattedDate = orderDate.toLocaleDateString("en-GB", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-        });
-        order.orderedOn = formattedDate;
-      });
 
-      res.json({ sales: response });
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
 
 
 
@@ -317,6 +270,4 @@ module.exports = {
   paymentSuccess,
   orderFailedPageLoad,
   orderSuccessPageLoad,
-  loadSalesReport,
-  loadSalesReportDateSort
 }

@@ -833,10 +833,9 @@
         type: 'POST',
         data: { payload: query },
         success: function(data) {
-            console.log("res block start");
             console.log(data);
             let searchResult = data.searchResult;
-            console.log("Hiii", searchResult);
+            console.log(searchResult);
 
             let html = ''
             console.log(data.searchResult.length);

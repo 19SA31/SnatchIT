@@ -35,7 +35,7 @@ router.get(
     offerController.categoryOfferLoad
   );
 router.get("/categoryEditOffer/:id", adminMiddleware.isLogoutAdmin, offerController.categoryEditLoad);
-router.get("/salesReport",adminMiddleware.isLogoutAdmin, orderController.loadSalesReport);
+
 
 
 router.post("/admin-login",adminMiddleware.isLoginAdmin,adminController.checkAdmin);
@@ -44,7 +44,7 @@ router.post("/addCoupon", couponController.addCoupon);
 router.post("/editCoupon", couponController.editCoupon);
 router.post("/categoryAddOffer", offerController.addCategoryOffer);
 router.post("/categoryEditOffer", offerController.categoryEditOffer);
-router.post("/salesReport", orderController.loadSalesReportDateSort);
+
 
 router.delete("/deleteCoupon/:id", couponController.deleteCoupon);
 

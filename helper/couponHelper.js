@@ -1,7 +1,6 @@
 const couponModel = require("../models/coupon-model");
 const cartModel = require("../models/cart-model");
 const voucherCode = require("voucher-code-generator");
-
 const ObjectId = require("mongoose").Types.ObjectId;
 const moment=require("moment")
 
@@ -21,12 +20,6 @@ const findAllCoupons = () => {
     return new Promise(async (resolve, reject) => {
      
       const dateString = couponData.couponExpiry;
-      // const [day, month, year] = dateString.split(/[-/]/);
-  
-      // const paddedMonth = month.padStart(2, "0");
-      // const paddedDay = day.padStart(2, "0");
-  
-      // const dateString = new Date(`${year}-${paddedMonth}-${paddedDay}`);
       const date = moment(dateString, 'YYYY-MM-DD');
       const convertedDate = date.toISOString();
   

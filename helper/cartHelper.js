@@ -147,38 +147,30 @@ const addToCartHelper = (userId, productId, size) => {
     });
   };
 
-  const isAProductInCart = (userId, productId) => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const cart = await cartModel.findOne({
-          user: userId,
-          "products.productId": productId,
-        });
-
-        if (cart) {
-          resolve(cart);
-        } else {
-          resolve(false);
-        }
-      } catch (error) {
-        console.log(error);
-        reject(error);
-      }
-    });
+  const isAProductInCart = async (userId, productId) => {
+    try {
+      const cart = await cartModel.findOne({
+        user: userId,
+        "products.productId": productId,
+      });
+      return cart ? cart : false;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   };
+  
 
-  const getCartCount = (userId) => {
-    return new Promise(async (resolve, reject) => {
-      let count = 0;
-      let cart = await cartModel.findOne({ user: userId });
-      if (cart) {
-        count = cart.products.length;
-      } else {
-        count = 0;
-      }
-      resolve(count);
-    });
+  const getCartCount = async (userId) => {
+    try {
+      const cart = await cartModel.findOne({ user: userId });
+      return cart ? cart.products.length : 0;
+    } catch (error) {
+      console.log(error);
+      return 0;
+    }
   };
+  
   
 
   module.exports = {

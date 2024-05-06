@@ -8,94 +8,83 @@ const ObjectId = require("mongoose").Types.ObjectId;
 
 
 
-const placeOrder = (body, userId) => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        
-        const cart = await cartModel.findOne({ user: userId });
-        const address = await userModel.findOne(
+const placeOrder = async (body, userId) => {
+  try {
+      
+      const cart = await cartModel.findOne({ user: userId });
+      const address = await userModel.findOne(
           { _id: userId, "address._id": body.addressId },
-          {
-            "address.$": 1,
-            _id: 0,
-          }
-        );
-        console.log(address);
-        const user = await userModel.findOne({ _id: userId });
-        console.log(cart);
-        let products = [];
-        let status = "pending";
-        if (body.status) {
+          { "address.$": 1, _id: 0 }
+      );
+      const user = await userModel.findOne({ _id: userId });
+      let products = [];
+      let status = "pending";
+      if (body.status) {
           status = "payment pending";
-        }
-
-
-        
-          for (const product of cart.products) {
-
-            const availableStock = await productModel.findOne({
+      }
+      for (const product of cart.products) {
+          
+          const availableStock = await productModel.findOne({
               _id: product.productId,
               "productQuantity.size": product.size,
-            });
-            console.log("this is available stock",availableStock);
-            const availableStockForSize = availableStock.productQuantity.find(item => item.size === product.size);
+          });
 
-            if (!availableStockForSize || availableStockForSize.quantity < product.quantity) {
-                // If stock is not available for the preferred size, reject the promise and return error
-                resolve ({result:`Insufficient stock for size ${product.size}` , status: false });
-            }else{
+          const availableStockForSize = availableStock.productQuantity.find(item => item.size === product.size);
 
-                products.push({
-                  product: product.productId,
-                  quantity: product.quantity,
-                  size: product.size,
-                  productPrice: product.price,
-                  status: status,
-                });
-        
-                
-        
-                let changeStock = await productModel.updateOne(
+      if (!availableStockForSize || availableStockForSize.quantity < product.quantity) {
+              
+              return { result: `Insufficient stock for size ${product.size}`, status: false };
+          } else {
+              
+            products.push({
+              product: product.productId,
+              quantity: product.quantity,
+              size: product.size,
+              productPrice: product.price,
+              status: status,
+          });
+              await productModel.updateOne(
                   { _id: product.productId, "productQuantity.size": product.size },
                   {
-                    $inc: {
-                      "productQuantity.$.quantity": -product.quantity,
-                      totalQuantity: -product.quantity,
-                    },
+                      $inc: {
+                          "productQuantity.$.quantity": -product.quantity,
+                          totalQuantity: -product.quantity,
+                      },
                   }
-                );
-              }
+              );
 
-        
-              if (cart && address) {
-                const result = orderModel.create({
-                  user: userId,
-                  products: products,
-                  address: {
-                    name: user.name,
-                    house: address.address[0].housename,
-                    street: address.address[0].streetname,
-                    area: address.address[0].areaname,
-                    district: address.address[0].districtname,
-                    state: address.address[0].statename,
-                    country: address.address[0].countryname,
-                    pin: address.address[0].pin,
-                    phone: user.phone,
-                  },
-                  paymentMethod: body.paymentOption,
-                  totalAmount: cart.totalAmount,
-                });
-        
-                resolve({ result: result, status: true });
-              }
-          
-            } 
-
-      } catch (error) {
-        console.log(error);
+              
+          }
       }
-    });
-  };
+
+      if (cart && address) {
+          const result = await orderModel.create({
+              user: userId,
+              products: products,
+              address: {
+                  name: user.name,
+                  house: address.address[0].housename,
+                  street: address.address[0].streetname,
+                  area: address.address[0].areaname,
+                  district: address.address[0].districtname,
+                  state: address.address[0].statename,
+                  country: address.address[0].countryname,
+                  pin: address.address[0].pin,
+                  phone: user.phone,
+              },
+              paymentMethod: body.paymentOption,
+              totalAmount: cart.totalAmount,
+          });
+
+          return { result: result, status: true };
+      }
+  } catch (error) {
+      console.log(error);
+     
+  }
+};
+
+
 
   const getOrderDetails = (userId) => {
     return new Promise(async (resolve, reject) => {

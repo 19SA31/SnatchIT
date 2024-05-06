@@ -24,8 +24,8 @@ const addToCart = async (req, res) => {
     let payload = req.body.payload.trim();
     try {
       let searchResult = await productModel
-        .find({ productName: { $regex: new RegExp("^" + payload + ".*", "i") } })
-        .exec();
+            .find({ productName: { $regex: new RegExp(payload, "i") } }) // Search for the payload anywhere in the product name
+            .exec();
       searchResult = searchResult.slice(0, 5);
       res.json({ searchResult });
     } catch (error) {
