@@ -25,7 +25,7 @@ const checkoutPage = async (req, res) => {
     if (cart.coupon != null) {
       const appliedCoupon = await couponModel.findOne({ code: cart.coupon });
       cartItems.couponAmount = appliedCoupon.discount;
-
+      
       let totalAmountOfEachProduct = [];
       for (i = 0; i < cartItems.products.length; i++) {
         let total = cartItems.products[i].quantity * parseInt(cartItems.products[i].price);
@@ -252,7 +252,56 @@ const orderSuccessPageLoad = (req, res) => {
   res.render("user/orderSuccess");
 };
 
+const loadSalesReport = async (req, res) => {
+  try {
+    orderHelper
+      .salesReport()
+      .then((response) => {
+        console.log(response);
+        response.forEach((order) => {
+          const orderDate = new Date(order.orderedOn);
+          const formattedDate = orderDate.toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          });
+          order.orderedOn = formattedDate;
+        });
 
+        res.render("admin/salesReport", { sales: response });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const loadSalesReportDateSort = async (req, res) => {
+  const startDate = req.body.startDate;
+  const endDate = req.body.endDate;
+  console.log(startDate, endDate);
+  orderHelper
+    .salesReportDateSort(startDate, endDate)
+    .then((response) => {
+      console.log(response);
+      response.forEach((order) => {
+        const orderDate = new Date(order.orderedOn);
+        const formattedDate = orderDate.toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        });
+        order.orderedOn = formattedDate;
+      });
+
+      res.json({ sales: response });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
 
 
 
@@ -270,4 +319,6 @@ module.exports = {
   paymentSuccess,
   orderFailedPageLoad,
   orderSuccessPageLoad,
+  loadSalesReport,
+  loadSalesReportDateSort
 }

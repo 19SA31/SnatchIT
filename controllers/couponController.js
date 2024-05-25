@@ -1,5 +1,6 @@
 const couponHelper = require('../helper/couponHelper')
 const couponModel = require("../models/coupon-model");
+const cartModel = require("../models/cart-model");
 
 
 
@@ -101,6 +102,27 @@ const addCoupon = async (req, res) => {
     }
   };
 
+  const removeCoupon = async (req, res) => {
+    try {
+     
+      const appliedCoupon = req.query.coupon;
+      const userId = req.query.userId
+      const coupon = await couponModel.findOne({code:appliedCoupon});
+      const cart = await cartModel.findOne({user:userId})
+    
+      if (coupon) {
+        cart.coupon = null;
+        await cart.save();
+        res.json({success:true})
+      } else {  
+        res.status(404).send('No active coupon found.'); 
+      }
+    } catch (error) {
+      console.error('Error removing coupon:', error);
+      res.status(500).send('Internal Server Error');
+    }
+  };
+
 
 
   function dateFormatter(date) {
@@ -119,6 +141,7 @@ module.exports = {
     deleteCoupon,
     getEditCoupon,
     editCoupon,
-    applyCoupon
+    applyCoupon,
+    removeCoupon
     
 }

@@ -268,6 +268,8 @@ const checkAdmin= async(req,res)=>{
     }
   }
 
+  
+
 
 
 
@@ -290,5 +292,6 @@ module.exports = {
     addProduct,
     softDeleteProduct,
     editProductLoad,
-    deleteImage
+    deleteImage,
+
 }

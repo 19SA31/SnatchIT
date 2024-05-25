@@ -68,6 +68,7 @@ router.post("/searchProduct", productController.searchProduct);
 router.post("/applyCoupon", couponController.applyCoupon);
 router.post("/createOrder", orderController.createOrder);
 router.post('/paymentSuccess', orderController.paymentSuccess);
+router.post('/removeCoupon', couponController.removeCoupon);
 
 
 router.patch("/addAddress",userController.addAddress)

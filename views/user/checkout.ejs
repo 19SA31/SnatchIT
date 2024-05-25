@@ -430,7 +430,12 @@
                                                     <th>Coupon Discount</th>
                                                     <td colspan="2" class="text-dark">
                                                         <% if (cartItems.couponAmount>0) { %>
-                                                            <span> -<%=cartItems.couponAmount %> %</span>
+                                                            <span> -<%=cartItems.couponAmount %>%</span>
+                                                            <span><button class="btn-small right"
+                                                                onclick="removeCoupon('<%=cartItems.coupon %>','<%=userData._id %>')"
+                                                                style="background-color: #ff0000; color: white;">
+                                                                Remove</button>
+                                                            </span>
 
                                                             <% } else { %>
                                                                 <span>No Coupons Applied</span>
@@ -1091,6 +1096,42 @@
 
         })
     </script>
+
+<script>
+    function removeCoupon(Coupon, userId) {
+      let coupon = Coupon;
+      $.ajax({
+        url: `/removeCoupon?coupon=${coupon}&userId=${userId}`,
+        type: 'POST',
+        success: function(response) {
+          console.log(response);
+          Toastify({
+            text: "Coupon removed successfully!",
+            duration: 3000,
+            gravity: "top",
+            position: "center",
+            backgroundColor: "green",
+          }).showToast();
+  
+        //   $('#couponAmountText').text('No Coupons Applied');
+  
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+        },
+        error: function(xhr, status, error) {
+          console.error('Error removing coupon:', error);
+          Toastify({
+            text: "Error removing coupon",
+            duration: 3000,
+            gravity: "top",
+            position: "center",
+            backgroundColor: "red",
+          }).showToast();
+        }
+      });
+    }
+  </script>
 </body>
 
 
