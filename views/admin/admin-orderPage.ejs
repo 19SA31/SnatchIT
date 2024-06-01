@@ -186,7 +186,7 @@
                                 <%= allOrders[i].formattedDate %>
                               </td>
                               <td width="7%">
-                                ₹ <%= allOrders[i].totalAmount %>
+                                ₹ <%= Math.round(allOrders[i].totalAmount-(allOrders[i].totalAmount*allOrders[i].couponAmount/100)) %>
                               </td>
                               <td width="7%">
                                 <%= allOrders[i].paymentMethod %>

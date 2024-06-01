@@ -4,6 +4,7 @@ const categoryHelper = require("../helper/categoryHelper");
 const categoryModel = require("../models/category-model");
 const productHelper = require("../helper/productHelper");
 const productModel =  require("../models/product-model");
+const orderModel =  require("../models/order-model");
 const fs = require("fs");
 const bcrypt=require("bcrypt");
 
@@ -15,12 +16,88 @@ const adminLogin = (req,res)=>{
     }
 }
 
-const loadDashboard = (req,res)=>{
-    try {
-        res.render("admin/admin-dashboard")
-    } catch (error) {
-        console.log(error);
-    }
+const loadDashboard = async(req,res)=>{
+  try {
+    
+    const salesDetails = await orderModel.find();
+    console.log("sales",salesDetails);
+
+   
+    const products = await productModel.find();
+    const categories = await categoryModel.find();
+
+   
+    const topSellingProducts = await orderModel.aggregate([
+      { $unwind: "$products" },
+      {
+        $group: {
+          _id: "$products.product",
+          totalQuantity: { $sum: "$products.quantity" },
+        },
+      }, 
+      { $sort: { totalQuantity: -1 } }, 
+      { $limit: 10 }, 
+    ]);
+
+    
+    const productIds = topSellingProducts.map((product) => product._id);
+
+    
+   
+    const productsData = await productModel.find(
+      { _id: { $in: productIds } },
+      { name: 1, image: 1 }
+    );
+
+    
+    const topSellingCategories = await orderModel.aggregate([
+      { $unwind: "$products" }, 
+      {
+        $lookup: {
+          from: "products",
+          localField: "products.product",
+          foreignField: "_id",
+          as: "product",
+        },
+      }, 
+      { $unwind: "$product" },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "product.category",
+          foreignField: "_id",
+          as: "category",
+        },
+      }, 
+      
+      { $unwind: "$category" }, 
+      {
+        $group: {
+          _id: "$category._id",
+          totalQuantity: { $sum: "$products.quantity" },
+        },
+      },
+      { $sort: { totalQuantity: -1 } }, 
+      { $limit: 10 },
+    ]);
+
+  
+    const topSellingCategoriesData = await categoryModel.find({
+      _id: { $in: topSellingCategories.map((cat) => cat._id) },
+    });
+
+    res.render("admin/admin-dashboard", {
+      salesDetails: salesDetails,
+      products: products,
+      categories: categories,
+      productsData: productsData,
+      topSellingCategories: topSellingCategoriesData,
+      topSellingProducts: topSellingProducts,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
 }
 
 const adminCategory = (req, res) => {

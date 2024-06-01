@@ -278,10 +278,22 @@
                                                 </td>
                                             </tr>
                                             <% }) %>
+                                            
+                                            <td colspan="4">
+                                                <article class="float-end">
+                                                    <dl class="dlist">
+                                                        <dt>Coupon Discount:</dt>
+                                                        <dd> <b class="h6">
+                                                                <%= productDetails[0].couponAmount %>%
+                                                            </b> </dd>
+                                                    </dl>
+
+                                                </article>
+                                            </td>
                                                 <td colspan="4">
                                                     <article class="float-end">
                                                         <dl class="dlist">
-                                                            <dt>Grand total:</dt>
+                                                            <dt>Total:</dt>
                                                             <dd> <b class="h5">
                                                                     <%= productDetails[0].formattedTotal %>
                                                                 </b> </dd>
@@ -289,6 +301,21 @@
     
                                                     </article>
                                                 </td>
+                                                
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="4">
+                                                        <article class="float-end">
+                                                            <dl class="dlist">
+                                                                <dt class="h5">Grand Total:</dt>
+                                                                <dd>
+                                                                    <b class="h5 text-danger">
+                                                                        &#8377; <%= Math.round(productDetails[0].formattedTotal-(productDetails[0].formattedTotal*productDetails[0].couponAmount/100)) %>
+                                                                    </b>
+                                                                </dd>
+                                                            </dl>
+                                                        </article>
+                                                    </td>
                                                 </tr>
                                     </tbody>
                                 </table>

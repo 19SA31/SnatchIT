@@ -365,11 +365,11 @@
                               </td>
                             </tr>
                             <tr>
-                              <td class="cart_total_label">Coupon</td>
+                              <td class="cart_total_label">Coupon Discount</td>
                               <% if (productDetails[0].couponAmount>0) { %>
                                 <td class="cart_total_amount"> <i class="ti-gift mr-5"></i>
                                   <span id="couponAmount">
-                                    <%=productDetails[0].couponAmount %>
+                                    <%=productDetails[0].couponAmount %> %
                                   </span>
                                 </td>
                                 <% } else { %>
@@ -382,7 +382,7 @@
                               <td class="cart_total_label">Total</td>
                               <td class="cart_total_amount"><strong><span class="font-xl fw-900 text-dark"
                                     style="color: 2B1754;" id="totalAmountFinal">
-                                    ₹ <%= productDetails[0].totalAmount %>
+                                    ₹ <%= Math.round(productDetails[0].totalAmount-(productDetails[0].totalAmount*productDetails[0].couponAmount/100)) %>
                                   </span></strong>
                               </td>
                             </tr>

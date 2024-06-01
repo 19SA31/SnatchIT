@@ -8,7 +8,7 @@ const ObjectId = require("mongoose").Types.ObjectId;
 
 
 
-const placeOrder = async (body, userId) => {
+const placeOrder = async (body, userId,discount) => {
   try {
       
       const cart = await cartModel.findOne({ user: userId });
@@ -74,6 +74,7 @@ const placeOrder = async (body, userId) => {
               },
               paymentMethod: body.paymentOption,
               totalAmount: cart.totalAmount,
+              couponAmount:discount
           });
 
           return { result: result, status: true };

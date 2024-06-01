@@ -71,7 +71,8 @@ const placeOrder = async (req, res) => {
   const body = req.body;
   const userId = req.session.user;
   let coupon = await couponModel.findOne({ code: body.couponCode })
-  const result = await orderHelper.placeOrder(body, userId);
+  console.log("#####checking coupon",coupon);
+  const result = await orderHelper.placeOrder(body, userId,coupon.discount);
   if (result.status && coupon) {
     coupon.usedBy.push(userId);
     await coupon.save();
