@@ -46,8 +46,9 @@ const loadDashboard = async(req,res)=>{
    
     const productsData = await productModel.find(
       { _id: { $in: productIds } },
-      { name: 1, image: 1 }
+      { productName: 1, productImage: 1 }
     );
+    console.log("hellol",productsData);
 
     
     const topSellingCategories = await orderModel.aggregate([
@@ -64,7 +65,7 @@ const loadDashboard = async(req,res)=>{
       {
         $lookup: {
           from: "categories",
-          localField: "product.category",
+          localField: "product.productCategory",
           foreignField: "_id",
           as: "category",
         },
@@ -85,6 +86,7 @@ const loadDashboard = async(req,res)=>{
     const topSellingCategoriesData = await categoryModel.find({
       _id: { $in: topSellingCategories.map((cat) => cat._id) },
     });
+    
 
     res.render("admin/admin-dashboard", {
       salesDetails: salesDetails,
@@ -345,6 +347,77 @@ const checkAdmin= async(req,res)=>{
     }
   }
 
+  const showChart = async (req, res) => {
+ 
+    try {
+     
+      if (req.query.msg) {
+      
+       
+        const monthlySalesData = await orderModel.aggregate([
+          {
+            $match: { "products.status": "delivered" }, 
+          },
+          {
+            $group: {
+              _id: { $month: "$orderedOn" },
+              totalAmount: { $sum: "$totalAmount" }, 
+            },
+          },
+          {
+            $sort: { _id: 1 },
+          },
+        ]);
+        
+  
+        
+        const dailySalesData = await orderModel.aggregate([
+          {
+            $match: { "products.status": "delivered" }, 
+          },
+          {
+            $group: {
+              _id: { $dayOfMonth: "$orderedOn" }, 
+              totalAmount: { $sum: "$totalAmount" },
+            },
+          },
+          {
+            $sort: { _id: 1 },
+          },
+        ]);
+        console.log("daily",dailySalesData);
+  
+        const orderStatuses = await orderModel.aggregate([
+          {
+            $unwind: "$products", 
+          },
+          {
+            $group: {
+              _id: "$products.status", 
+              count: { $sum: 1 }, 
+            },
+          },
+        ]);
+        console.log("order",orderStatuses);
+  
+       
+        const eachOrderStatusCount = {};
+        orderStatuses.forEach((status) => {
+          eachOrderStatusCount[status._id] = status.count;
+        });
+        
+  
+        res
+          .status(200)
+          .json({ monthlySalesData, dailySalesData, eachOrderStatusCount });
+      }
+     
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  };
+
   
 
 
@@ -370,5 +443,6 @@ module.exports = {
     softDeleteProduct,
     editProductLoad,
     deleteImage,
+    showChart
 
 }

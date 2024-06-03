@@ -46,6 +46,7 @@ router.post("/editCoupon", couponController.editCoupon);
 router.post("/categoryAddOffer", offerController.addCategoryOffer);
 router.post("/categoryEditOffer", offerController.categoryEditOffer);
 router.post("/salesReport", orderController.loadSalesReportDateSort);
+router.post("/showChart",adminController.showChart)
 
 
 router.delete("/deleteCoupon/:id", couponController.deleteCoupon);

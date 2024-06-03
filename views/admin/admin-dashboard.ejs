@@ -22,7 +22,7 @@
     <link rel="stylesheet" type="text/css"
         href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.css">
         
-    <script>
+    <!-- <script>
         const activePage = window.location.pathname;
 
         const navLinks = document.querySelectorAll('.menu-link').forEach((link) => {
@@ -42,7 +42,7 @@
                 }
             }
         });
-    </script>
+    </script> -->
 
 </head>
 
@@ -283,31 +283,35 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <% const sortedProducts=productsData.sort((a, b)=> {
-                      // Find the totalQuantity of each product in topSellingProducts
-                      const quantityA = topSellingProducts.find(product => product._id.toString() ===
-                      a._id.toString())?.totalQuantity || 0;
-                      const quantityB = topSellingProducts.find(product => product._id.toString() ===
-                      b._id.toString())?.totalQuantity || 0;
-                      // Sort in descending order of totalQuantity
-                      return quantityB - quantityA;
-                      });
-          
-                      // Render sorted products
-                      sortedProducts.forEach(product => { %>
-                      <tr>
-                        <td class="text-center"><img src="/public/uploads/<%= product.productImage[0] %>" alt="<%= product.productName %>"
-                            style="max-width: 70px; max-height: 70px;"></td>
-                        <td class="text-center" style="vertical-align: middle; ">
-                          <%= product.productName %>
-                        </td>
-                        <td class="text-center"  style="vertical-align: middle; ">
-                          <%= topSellingProducts.find(topProduct=> topProduct._id.toString() ===
-                            product._id.toString())?.totalQuantity || 0 %>
-                        </td>
-                      </tr>
-                      <% }); %>
-                  </tbody>
+                    <% const sortedProducts = productsData.sort((a, b) => {
+                        // Find the totalQuantity of each product in topSellingProducts
+                        const quantityA = topSellingProducts.find(product => product._id.toString() === a._id.toString())?.totalQuantity || 0;
+                        const quantityB = topSellingProducts.find(product => product._id.toString() === b._id.toString())?.totalQuantity || 0;
+                        // Sort in descending order of totalQuantity
+                        return quantityB - quantityA;
+                    });
+                    
+                    // Render sorted products
+                    console.log('Sorted Products:**', sortedProducts);
+                    sortedProducts.forEach(product => { %>
+                        <tr>
+                            <td class="text-center">
+                                <% if (product.productImage && product.productImage.length > 0) { %>
+                                    <img src="/public/uploads/<%= product.productImage[0] %>" alt="<%= product.productName %>" style="max-width: 70px; max-height: 70px;">
+                                <% } else { %>
+                                    <img src="/path/to/default-image.jpg" alt="No Image Available" style="max-width: 70px; max-height: 70px;">
+                                <% } %>
+                            </td>
+                            <td class="text-center" style="vertical-align: middle;">
+                                <%= product.productName %>
+                            </td>
+                            <td class="text-center" style="vertical-align: middle;">
+                                <%= topSellingProducts.find(topProduct => topProduct._id.toString() === product._id.toString())?.totalQuantity || 0 %>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+                
                 </table>
               </div>
             
@@ -436,6 +440,7 @@
           }
     
           if ($('#dailyChart').length) {
+            
             var dailyCtx = document.getElementById('dailyChart').getContext('2d');
             var dailyChart = new Chart(dailyCtx, {
               type: 'line',
@@ -472,6 +477,7 @@
     
         function pieChart(eachOrderStatusCount) {
           if ($('#myChart2').length) {
+            
             var statusLabels = Object.keys(eachOrderStatusCount);
             var statusData = Object.values(eachOrderStatusCount);
     
