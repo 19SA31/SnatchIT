@@ -16,6 +16,7 @@ const placeOrder = async (body, userId,discount) => {
           { _id: userId, "address._id": body.addressId },
           { "address.$": 1, _id: 0 }
       );
+      console.log("1st inside placeorder, showind address",address);
       const user = await userModel.findOne({ _id: userId });
       let products = [];
       let status = "pending";
@@ -31,10 +32,39 @@ const placeOrder = async (body, userId,discount) => {
 
           const availableStockForSize = availableStock.productQuantity.find(item => item.size === product.size);
 
+
       if (!availableStockForSize || availableStockForSize.quantity < product.quantity) {
               
               return { result: `Insufficient stock for size ${product.size}`, status: false };
           } else {
+
+            if (body.paymentOption == "Wallet") {
+              if (cart.totalAmount > user.wallet.balance) {
+                console.log("This is cart.totalAmount", cart.totalAmount);
+                console.log("This is user.wallet.balance", user.wallet.balance);
+                return({ status: false, message: "Insufficient Balance" });
+                
+              } else {
+                const newDetail = {
+                  type: "debit",
+                  amount: cart.totalAmount,
+                  date: new Date(),
+                  transactionId: Math.floor(100000 + Math.random() * 900000),
+                };
+    
+                // Updating user with new balance and new detail
+                const response = await userModel.findOneAndUpdate(
+                  { _id: userId },
+                  {
+                    $set: {
+                      "wallet.balance": user.wallet.balance - cart.totalAmount,
+                    },
+                    $push: { "wallet.details": newDetail },
+                  }
+                  
+                );
+              }
+            } 
               
             products.push({
               product: product.productId,
@@ -43,7 +73,8 @@ const placeOrder = async (body, userId,discount) => {
               productPrice: product.price,
               status: status,
           });
-              await productModel.updateOne(
+          console.log("inside order helper's placeorder ",products)
+             const quantityUpdate= await productModel.updateOne(
                   { _id: product.productId, "productQuantity.size": product.size },
                   {
                       $inc: {
@@ -53,11 +84,13 @@ const placeOrder = async (body, userId,discount) => {
                   }
               );
 
-              
+              console.log(quantityUpdate);
+
           }
       }
-
+      console.log(cart,"\n",address)
       if (cart && address) {
+        console.log("inside updating cart and address for ordermodel")
           const result = await orderModel.create({
               user: userId,
               products: products,
@@ -76,7 +109,7 @@ const placeOrder = async (body, userId,discount) => {
               totalAmount: cart.totalAmount,
               couponAmount:discount
           });
-
+          console.log("cart and address creating for order    ",result)
           return { result: result, status: true };
       }
   } catch (error) {
@@ -329,6 +362,70 @@ const placeOrder = async (body, userId,discount) => {
       }
     });
   };
+
+  const returnSingleOrder = (orderId, singleOrderId,price) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const cancelled = await orderModel.findOneAndUpdate(
+          {
+            _id: new ObjectId(orderId),
+            "products._id": new ObjectId(singleOrderId),
+          },
+          {
+            $set: { "products.$.status": "return pending" },
+          },
+          {
+            new: true,
+          }
+        );
+        const result = await orderModel.aggregate([
+          {
+            $unwind: "$products",
+          },
+          {
+            $match: {
+              _id: new ObjectId(orderId),
+              "products._id": new ObjectId(singleOrderId),
+            },
+          },
+        ]);
+        const singleProductId = result[0].products.product;
+        const singleProductSize = result[0].products.size;
+        const singleProductQuantity = result[0].products.quantity;
+  
+        const stockIncrease = await productModel.updateOne(
+          { _id: singleProductId, "productQuantity.size": singleProductSize },
+          {
+            $inc: {
+              "productQuantity.$.quantity": singleProductQuantity,
+              totalQuantity: singleProductQuantity,
+            },
+          }
+        );
+        const response = await orderModel.findOne({ _id: orderId });
+        let amountToReturn;
+        response.products.forEach(product=>{
+          if(product._id==singleOrderId){
+            amountToReturn = product.productPrice
+          }
+        })
+        console.log("order id is",orderId)
+        console.log("response issssssssssss",response.paymentMethod)
+        if (response.paymentMethod == 'RazorPay') {
+          console.log("razorpay");
+          console.log("price issssssssssssssss",price)
+          const walletUpdation = await walletHelper.walletAmountAdding(
+            response.user,
+            amountToReturn
+          );
+        }
+  
+        resolve(cancelled);
+      } catch (error) {
+        console.log(error);
+      }
+    });
+  };
   
   
 
@@ -341,5 +438,6 @@ const placeOrder = async (body, userId,discount) => {
     changeOrderStatusOfEachProduct,
     salesReport,
     salesReportDateSort,
-    cancelSingleOrder
+    cancelSingleOrder,
+    returnSingleOrder
   }

@@ -21,6 +21,7 @@
 </head>
 
 <body>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <header class="header-area header-style-5">
         <div class="header-top header-top-ptb-1 d-none d-lg-block">
             <div class="container">
@@ -173,7 +174,11 @@
                     <div class="col-lg-6 col-md-6 mb-lg-0  pt-3">
                       
                     </div>
-                    
+                    <% if (productDetails.deliveryStatus) { %>
+                      <div class="col-lg-6 col-md-6 mb-lg-0  pt-3">
+                        <button class="btn btn- text-end" id="invoice">Download Invoice</button>
+                      </div>
+                      <% } %>
       
                 </div>
       
@@ -284,7 +289,7 @@
                                     <a href="#" class="text-muted">Returned</a>
                                     <% } else if (productDetails[i].products.status=="payment pending" ) { %>
                                       <a onclick="retryPayment('<%=productDetails[0].orderId%>')"
-                                        class="text-muted">Retry</a>>
+                                        class="text-muted">Retry</a>
                                       <% } else { %>
                                         <a onclick="cancelOrder('<%=productDetails[i]._id%>','<%=productDetails[i].products._id%>')"
                                           class="text-danger">Cancel</a>
@@ -558,6 +563,7 @@
     <!-- Template  JS -->
     <script src="/public/user-assets/js/maind134.js?v=3.4"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/easyinvoice/dist/easyinvoice.min.js"></script>
 
     <script>
       const cancelOrder = (orderId, singleOrderId) => {
@@ -622,6 +628,171 @@
       }
     })
 
+  }
+</script>
+<script>
+  $(document).ready(function () {
+    $('#invoice').click((e) => {
+
+      let productDetails = JSON.parse(document.getElementById('productDetails').value);
+
+
+      console.log('product',productDetails);
+
+      e.preventDefault();
+      ;
+      Swal.fire({
+        title: 'Do you want to download Invoice?',
+        showCancelButton: true,
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          let filteredProducts = productDetails.filter((product) => {
+            return product.products.status !== "cancelled";
+          });
+          console.log('filter',filteredProducts);
+          let products = filteredProducts.map((product) => ({
+            quantity: product.products.quantity,
+            description: product.orderedProduct.productName,
+            tax: 0,
+            price: product.products.productPrice
+          }));
+          
+          // let orderTotal=0;
+          // products.forEach(element => {
+          //   orderTotal+=element.price;
+          // });
+          let totalAmount = products.reduce((total, product) => total + product.price, 0);
+          if (filteredProducts[0].couponAmount > 0) {
+            let couponPercentage = filteredProducts[0].couponAmount;
+            let couponDeduction = (totalAmount * couponPercentage) / 100
+            products.push({
+              quantity: 1,
+              description: "Coupon Deduction",
+              tax: 0,
+              price: -couponDeduction,
+            })
+          }
+
+
+
+          const data = {
+            "apiKey": "free",
+            "mode": "development",
+            "documentTitle": "INVOICE ",
+            "currency": "INR",
+            "taxNotation": "GST",
+            "marginTop": 25,
+            "marginRight": 25,
+            "marginLeft": 25,
+            "marginBottom": 25,
+            "logo": "https://public.easyinvoice.cloud/img/logo_en_original.png",
+            "sender": {
+              "company": "Snatch-It",
+              "address": "Hightech City, Bangalore",
+              "zip": "532576",
+              "city": "Gurgaon",
+              "country": "India"
+            },
+            "client": {
+              "company":  productDetails[0].address.name ,
+              "address": productDetails[0].address.house,
+              "zip": "567855",
+              "city": productDetails[0].address.city,
+              "country": productDetails[0].address.country
+            },
+            "invoiceNumber": "2021.0001",
+            "invoiceDate": "12-03-2024",
+            "products": products,
+            "bottomNotice": "Thank you for your business."
+          };
+          console.log(data)
+
+          easyinvoice.createInvoice(data, function (result) {
+            easyinvoice.download('SnatchIT-invoice.pdf', result.pdf);
+            console.log("success")
+          });
+        }
+      });
+    });
+  }); 
+</script>
+
+<script>
+  const retryPayment = (orderId) => {
+    console.log(orderId);
+    fetch(`/createRazorpayOrder?orderId=${orderId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        amount: 100000, // Total amount to be paid in paise (e.g., ₹100 = 10000 paise)
+        currency: 'INR', // Currency code
+        description: 'Test Transaction', // Description of the order
+        orderId: orderId
+      }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Open Razorpay payment modal
+        console.log('Received data from server:', data);
+        const orderId = data.order_id;
+        const totalAmount = data.totalAmount
+        const amount = totalAmount * 100
+
+        var options = {
+          "key": "rzp_test_hb6zaZS4NZIqmD",
+          "amount": amount, // Example amount, replace with actual amount
+          "currency": "INR",
+          "name": "Snatch It",
+          "description": 'Test Transaction',
+          "image": "http://localhost:4004/public/user-assets/images/SnatchIt_logo.png",
+          "order_id": orderId, // Use the order_id received from the server
+          "handler": function (response) {
+            // Handle successful payment
+            console.log('Payment successful:', response);
+            // Send the payment details to your server for verification
+            fetch('/paymentSuccess', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                orderId: orderId, // Use order_id instead of data.id
+                paymentId: response.razorpay_payment_id,
+              }),
+            })
+              .then(response => response.json())
+              .then(data => {
+                console.log('Verification response:', data);
+                // Redirect to a success page or display a success message
+                window.location.href = '/orderSuccess';
+
+              })
+              .catch(error => {
+                console.error('Error verifying payment:', error);
+                // Handle payment verification error
+              });
+          },
+          "prefill": {
+            "name": "Gaurav Kumar",
+            "email": "gaurav.kumar@example.com",
+            "contact": "9000090000"
+          },
+          "theme": {
+            "color": "#3399cc"
+          }
+        };
+
+        var rzp = new Razorpay(options);
+        rzp.open();
+      })
+      .catch(error => {
+        console.error('Error creating Razorpay order:', error);
+        // Handle order creation error                                                                                                                                                                                                                 
+      });
   }
 </script>
 </body>

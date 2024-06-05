@@ -2,6 +2,7 @@ const user = require("../models/user-model")
 const cartModel = require('../models/cart-model')
 const productModel = require('../models/product-model')
 const couponModel = require("../models/coupon-model");
+const orderModel = require("../models/order-model");
 const cartHelper = require('../helper/cartHelper')
 const orderHelper = require('../helper/orderHelper')
 const couponHelper = require('../helper/couponHelper')
@@ -67,27 +68,51 @@ const checkoutPage = async (req, res) => {
 }
 
 const placeOrder = async (req, res) => {
-  console.log("this is order controller");
+  
   const body = req.body;
   const userId = req.session.user;
+  console.log("this is order controller",body);
+  const cart = await cartModel.findOne({user:userId})
   let coupon = await couponModel.findOne({ code: body.couponCode })
-  console.log("#####checking coupon",coupon);
-  const result = await orderHelper.placeOrder(body, userId,coupon.discount);
-  if (result.status && coupon) {
-    coupon.usedBy.push(userId);
-    await coupon.save();
+  if (cart) { 
+         console.log("inside cart before checking cod condition",body.totalAmount,body.paymentOption);
+    if (body.totalAmount > 1000 && body.paymentOption === "COD") {
+       console.log("checking high amount in cod");
+        return res.json({ message: "COD is not available for this price range", status: false });
+    } else if(coupon){
+      
+      console.log("#####checking coupon",coupon);
+      const result = await orderHelper.placeOrder(body, userId, coupon);
 
-    const cart = await cartHelper.clearAllCartItems(userId);
-    if (cart) {
-      res.json({ url: "/orderSuccess", status: true });
+      if (result.status) {
+        if (coupon) {
+            coupon.usedBy.push(userId);
+            await coupon.save();
+        }
+        await cartHelper.clearAllCartItems(userId);
+       if(body.pay==="failed"){
+        return res.json({ status: true });
+       }
+        return res.json({ url: "/orderSuccess", status: true });
+      }
+    }else{
+      coupon=0;
+      const result = await orderHelper.placeOrder(body, userId, coupon);
+      console.log("inside ordercontroller's place order for payment failed using razorpay\nno coupon",result)
+      if (result.status) {
+        
+        if (coupon) {
+            coupon.usedBy.push(userId);
+            await coupon.save();
+        }
+        await cartHelper.clearAllCartItems(userId);
+        if(body.pay==="failed"){
+          return res.json({ status: true });
+         }
+        return res.json({ url: "/orderSuccess", status: true });
     }
-  } else if (result.status) {
-    const cart = await cartHelper.clearAllCartItems(userId);
-    if (cart) {
-      res.json({ url: "/orderSuccess", status: true });
-    }
-
-  } else {
+  } 
+}else {
     res.json({ message: result.result, status: false })
   }
 };
@@ -304,6 +329,48 @@ const loadSalesReportDateSort = async (req, res) => {
     });
 };
 
+const retryPayment = async (req, res) => {
+  try {
+    console.log("inside retrypayment");
+    const orderId = req.query.orderId;
+    console.log('orderId',orderId);
+    const orderDetails = await orderModel.findOne({ orderId: orderId });
+    console.log(orderDetails);
+
+    orderDetails.products.forEach((item) => {
+      item.status = "pending";
+    });
+   
+    await orderDetails.save();
+    
+    const totalAmount = orderDetails.totalAmount;
+    console.log('orderdetails',orderDetails);
+
+  
+    res.status(200).json({ orderId: orderDetails._id, totalAmount });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const returnSingleOrder = async (req, res) => {
+  try {
+    const orderId = req.query.orderId;
+    const singleOrderId = req.query.singleOrderId;
+    const price = req.query.price;
+    const result = await orderHelper.returnSingleOrder(orderId, singleOrderId,price);
+    if (result) {
+      res.json({ status: true });
+    } else {
+      res.json({ status: false });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
 
 
 
@@ -321,5 +388,7 @@ module.exports = {
   orderFailedPageLoad,
   orderSuccessPageLoad,
   loadSalesReport,
-  loadSalesReportDateSort
+  loadSalesReportDateSort,
+  retryPayment,
+  returnSingleOrder
 }

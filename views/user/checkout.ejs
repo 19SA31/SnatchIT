@@ -723,16 +723,17 @@
                 let address = $("input[name='address']:checked").val();
                 let payment = $("input[name='payment_option']:checked").val();
                 let code = document.getElementById("couponCodeTable").textContent.trim();
-                
+                const totalAmount = document.getElementById("totalAmount").innerText.trim();
+                console.log(totalAmount);
                 
                 const data = {
                     addressId: address,
                     paymentOption: payment,
-                    couponCode: code
+                    couponCode: code,
+                    totalAmount: totalAmount
                 }
 
-                const totalAmount = document.getElementById("totalAmount").innerText.trim();
-                console.log(totalAmount);
+                 
 
                 if (payment === "COD") {
                     $.ajax({
@@ -756,7 +757,30 @@
                             }
                         }
                     })
-                } else if (payment === "RazorPay") {
+                }else if (payment === "Wallet"){
+                    $.ajax({
+                        url: "/placeOrder",
+                        method: "POST",
+                        data: data,
+                        success: (response) => {
+                            if (response.status) {
+                                window.location.href = response.url
+                            } else {
+                                Toastify({
+                                    text: `${response.message}`,
+                                    duration: 3000,
+                                    gravity: "top",
+                                    position: "center",
+                                    stopOnFocus: true,
+                                    style: {
+                                        background: "linear-gradient(to right, aqua, blue)",
+                                    },
+                                }).showToast();
+                            }
+                        }
+                    })
+                } 
+                else if (payment === "RazorPay") {
                     console.log("razorpay selected");
 
                     $.ajax({
@@ -797,7 +821,7 @@
                                 var rzp = new Razorpay(options);
                                 rzp.open();
                                 rzp.on("payment.failed", function (response) {
-                                    console.log('Payment failed:', response.error.description);
+                                    console.log('Payment failed:', response,address, payment);
                                     handleFailure(response.error.description, address, payment);
                                 });
                             }else{
@@ -821,19 +845,21 @@
                     function handleFailure(description, address, paymentMethod) {
                         console.log('Payment failed:', description);
                         createOrderWithStatusPending(address, paymentMethod);
-                        window.location.href = "/orderFailure";
+                        window.location.href = '/orderFailure';
                     }
 
                     function createOrderWithStatusPending(address, paymentMethod) {
+                        
                         $.ajax({
                             url: '/placeOrder',
                             type: 'POST',
-                            contentType: 'application/json',
-                            data: JSON.stringify({
+                            
+                            data: {
                                 addressId: address,
                                 paymentOption: paymentMethod,
-                                status: "payment pending"
-                            }),
+                                status: "payment pending",
+                                pay: "failed"
+                            },
                             success: function (data) {
                                 console.log(data);
                                 if (data.success) {

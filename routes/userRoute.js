@@ -69,6 +69,8 @@ router.post("/applyCoupon", couponController.applyCoupon);
 router.post("/createOrder", orderController.createOrder);
 router.post('/paymentSuccess', orderController.paymentSuccess);
 router.post('/removeCoupon', couponController.removeCoupon);
+router.post("/createRazorpayOrder", orderController.retryPayment);
+router.patch("/returnSingleOrder", orderController.returnSingleOrder);
 
 
 router.patch("/addAddress",userController.addAddress)

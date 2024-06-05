@@ -48,7 +48,7 @@ const addToCartHelper = (userId, productId, size) => {
         },
         { upsert: true }
       );
-      console.log(cart);
+      console.log("addtocartHelper",cart);
   
       resolve(cart);}
       else{
