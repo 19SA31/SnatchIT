@@ -22,11 +22,13 @@ const addToCart = async (req, res) => {
   const searchProduct = async (req, res, next) => {
 
     let payload = req.body.payload.trim();
+    console.log("payload",payload);
     try {
       let searchResult = await productModel
-            .find({ productName: { $regex: new RegExp(payload, "i") } }) // Search for the payload anywhere in the product name
+            .find({ productName: { $regex: new RegExp(payload, "i") } }) 
             .exec();
       searchResult = searchResult.slice(0, 5);
+      
       res.json({ searchResult });
     } catch (error) {
       // res.status(500).render("error", { error, layout: false });

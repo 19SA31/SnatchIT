@@ -30,6 +30,7 @@ const couponLoad = async (req,res)=>{
 
 const addCoupon = async (req, res) => {
     try {
+      console.log(req.body);
       if (req.body.couponAmount > 1000) {
         req.flash("message", "Max Coupon Amount Exceeded");
         res.redirect("/admin-coupon");
@@ -37,8 +38,17 @@ const addCoupon = async (req, res) => {
         req.flash("message", "Minimum Coupon Amount Not Met");
         res.redirect('/admin-coupon');
       } else {
+        const existingCoupon = await couponModel.findOne({ 
+          couponName: { $regex: new RegExp(req.body.couponName, "i") } 
+      });
+        
+        if(existingCoupon){
+          req.flash("message", "Coupon already exists");
+          res.redirect('/admin-coupon');
+        }else{
         const coupon = await couponHelper.addCoupon(req.body);
-        res.redirect("/admin-coupon");
+        req.flash("message", "Coupon added successfully");
+        res.redirect("/admin-coupon");}
       }
     
     } catch (error) {
@@ -70,9 +80,20 @@ const addCoupon = async (req, res) => {
 
   const editCoupon = async (req, res) => {
     try {
-      let editedCoupon = await couponHelper.editCouponDetails(req.body);
-  
-      res.redirect("/admin-coupon");
+      console.log(req.body);
+      const existingCoupon = await couponModel.findOne({ 
+          couponName: req.body.couponName1 
+      });
+      console.log("###checkin",existingCoupon);
+      if(existingCoupon){
+        req.flash("message", "Coupon already exists");
+        res.redirect('/admin-coupon');
+      }else{
+        let editedCoupon = await couponHelper.editCouponDetails(req.body);
+        req.flash("message", "Coupon updated successfully");
+        res.redirect("/admin-coupon");
+      }
+      
     } catch (error) {
       console.log(error);
     }

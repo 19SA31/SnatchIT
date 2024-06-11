@@ -82,21 +82,21 @@
                         <div class="search-style-2">
 
                             <div>
-                              <form action="/user-shop" method="GET">
-                                <div class="header-search-wrapper w-100">
-              
-                                  <div>
-                                    <input type="search" class="form-control w-100" id="searchInput" placeholder="Search in..."
-                                      required autocomplete="off" name="search">
-                                    <a href="#" class="search-toggle" role="button">
-                                      <i class="icon-search"></i>
-                                    </a>
-                                  </div>
-                                </div><!-- End .header-search-wrapper -->
-                              </form>
-                              <ul id="suggestionList"></ul>
+                                <form action="/user-shop" method="GET">
+                                    <div class="header-search-wrapper w-100">
+
+                                        <div>
+                                            <input type="search" class="form-control w-100" id="searchInput"
+                                                placeholder="Search in..." required autocomplete="off" name="search">
+                                            <a href="#" class="search-toggle" role="button">
+                                                <i class="icon-search"></i>
+                                            </a>
+                                        </div>
+                                    </div><!-- End .header-search-wrapper -->
+                                </form>
+                                <ul id="suggestionList"></ul>
                             </div>
-              
+
                         </div>
                         <div class="header-action-right">
                             <div class="header-action-2">
@@ -236,7 +236,7 @@
                 <div class="mobile-search search-style-3 mobile-header-border">
                     <form action="#">
                         <input type="text" placeholder="Search for items…">
-                        <button type="submit"><i class="fi-rs-search"></i></button>
+                        <button type="sub"><i class="fi-rs-search"></i></button>
                     </form>
                 </div>
                 <div class="mobile-menu-wrap mobile-header-border">
@@ -267,11 +267,9 @@
                     <!-- mobile menu start -->
                     <nav>
                         <ul class="mobile-menu">
-                            <li class="menu-item-has-children"><span></span><a
-                                    href="SnatchIt-Home">Home</a>
+                            <li class="menu-item-has-children"><span></span><a href="SnatchIt-Home">Home</a>
                             </li>
-                            <li class="menu-item"><span></span><a
-                                    href="/user-shop">Shop</a>
+                            <li class="menu-item"><span></span><a href="/user-shop">Shop</a>
                             </li>
                         </ul>
                     </nav>
@@ -316,48 +314,68 @@
 
                             <div class="sort-by-product-area">
                                 <div class="sort-by-cover mr-10">
-                                    
+
                                 </div>
                                 <div class="sort-by-cover">
-                                    
+
                                     <div id="sorter">
-                                        <% if (normalSorted=="Ascending") { %>
-                                            <select name="" id="normalSorter" class="form-select" style=" border-radius: 18px;">
-                                                <option value="Ascending" style="font-size: 16px;">Price: Low to High</option>
-                                                <option value="Descending" style="font-size: 16px;">Price: High to Low</option>
-                                                <option value="Alpha" style="font-size: 16px;">Aa-Zz</option>     
-                                                <option value="ReverseAlpha" style="font-size: 16px;">Zz-Aa</option>                
-                                                </select>
-                                                <% } else if (normalSorted=="Descending") { %>
-                                                    <select name="" id="normalSorter" class="form-select" style=" border-radius: 18px;">
-                                                    <option value="Descending" style="font-size: 16px;">Price: High to Low</option>
-                                                    <option value="Ascending" style="font-size: 16px;">Price: Low to High</option>
-                                                    <option value="Alpha" style="font-size: 16px;">Aa-Zz</option>  
+                                        <% if (normalSorted=="Ascending" ) { %>
+                                            <select name="" id="normalSorter" class="form-select"
+                                                style=" border-radius: 18px;">
+                                                <option value="Ascending" style="font-size: 16px;">Price: Low to High
+                                                </option>
+                                                <option value="Descending" style="font-size: 16px;">Price: High to Low
+                                                </option>
+                                                <option value="Alpha" style="font-size: 16px;">Aa-Zz</option>
+                                                <option value="ReverseAlpha" style="font-size: 16px;">Zz-Aa</option>
+                                            </select>
+                                            <% } else if (normalSorted=="Descending" ) { %>
+                                                <select name="" id="normalSorter" class="form-select"
+                                                    style=" border-radius: 18px;">
+                                                    <option value="Descending" style="font-size: 16px;">Price: High to
+                                                        Low</option>
+                                                    <option value="Ascending" style="font-size: 16px;">Price: Low to
+                                                        High</option>
+                                                    <option value="Alpha" style="font-size: 16px;">Aa-Zz</option>
                                                     <option value="ReverseAlpha" style="font-size: 16px;">Zz-Aa</option>
                                                 </select>
-                                                    <% } else if (normalSorted=="Alpha") { %>
-                                                        <select name="" id="normalSorter" class="form-select" style=" border-radius: 18px;">
+                                                <% } else if (normalSorted=="Alpha" ) { %>
+                                                    <select name="" id="normalSorter" class="form-select"
+                                                        style=" border-radius: 18px;">
                                                         <option value="Alpha" style="font-size: 16px;">Aa-Zz</option>
-                                                        <option value="Ascending" style="font-size: 16px;">Price: Low to High</option>
-                                                        <option value="Descending" style="font-size: 16px;">Price: High to Low</option>
-                                                        <option value="ReverseAlpha" style="font-size: 16px;">Zz-Aa</option>
+                                                        <option value="Ascending" style="font-size: 16px;">Price: Low to
+                                                            High</option>
+                                                        <option value="Descending" style="font-size: 16px;">Price: High
+                                                            to Low</option>
+                                                        <option value="ReverseAlpha" style="font-size: 16px;">Zz-Aa
+                                                        </option>
                                                     </select>
-                                                    <% } else if (normalSorted=="ReverseAlpha") { %>
-                                                        <select name="" id="normalSorter" class="form-select" style="border-radius: 18px;">
-                                                            <option value="ReverseAlpha" style="font-size: 16px;">Zz-Aa</option>
-                                                            <option value="Ascending" style="font-size: 16px;">Price: Low to High</option>
-                                                            <option value="Descending" style="font-size: 16px;">Price: High to Low</option>
-                                                            <option value="Alpha" style="font-size: 16px;">Aa-Zz</option>
+                                                    <% } else if (normalSorted=="ReverseAlpha" ) { %>
+                                                        <select name="" id="normalSorter" class="form-select"
+                                                            style="border-radius: 18px;">
+                                                            <option value="ReverseAlpha" style="font-size: 16px;">Zz-Aa
+                                                            </option>
+                                                            <option value="Ascending" style="font-size: 16px;">Price:
+                                                                Low to High</option>
+                                                            <option value="Descending" style="font-size: 16px;">Price:
+                                                                High to Low</option>
+                                                            <option value="Alpha" style="font-size: 16px;">Aa-Zz
+                                                            </option>
                                                         </select>
                                                         <% } else { %>
-                                                            <select name="" id="normalSorter" class="form-select" style=" border-radius: 18px;">
-                                                                <option value="Ascending" style="font-size: 16px;">Price: Low to High</option>
-                                                                <option value="Descending" style="font-size: 16px;">Price: High to Low</option>
-                                                                <option value="Alpha" style="font-size: 16px;">Aa-Zz</option>
-                                                                <option value="ReverseAlpha" style="font-size: 16px;">Zz-Aa</option>
-                                                              </select>
-                                        <% } %>
-                                      
+                                                            <select name="" id="normalSorter" class="form-select"
+                                                                style=" border-radius: 18px;">
+                                                                <option value="Ascending" style="font-size: 16px;">
+                                                                    Price: Low to High</option>
+                                                                <option value="Descending" style="font-size: 16px;">
+                                                                    Price: High to Low</option>
+                                                                <option value="Alpha" style="font-size: 16px;">Aa-Zz
+                                                                </option>
+                                                                <option value="ReverseAlpha" style="font-size: 16px;">
+                                                                    Zz-Aa</option>
+                                                            </select>
+                                                            <% } %>
+
                                     </div>
 
                                 </div>
@@ -371,15 +389,19 @@
                                         <div class="product-img-action-wrap">
                                             <div class="product-img product-img-zoom">
                                                 <a href="/user-productPage/<%= products[i]._id %>">
-                                                    <img class="default-img" src="public/uploads/<%= products[i].productImage[0] %>" alt="" />
-                                                    <img class="hover-img" src="/public/uploads/<%= products[i].productImage[1] %>" alt="" />
+                                                    <img class="default-img"
+                                                        src="public/uploads/<%= products[i].productImage[0] %>"
+                                                        alt="" />
+                                                    <img class="hover-img"
+                                                        src="/public/uploads/<%= products[i].productImage[1] %>"
+                                                        alt="" />
                                                 </a>
                                             </div>
                                             <div class="product-action-1">
-                                               
+
                                                 <a aria-label="Add To Wishlist" class="action-btn hover-up" href="#"><i
                                                         class="fi-rs-heart"></i></a>
-                                                
+
                                             </div>
                                             <div class="product-badges product-badges-position product-badges-mrg">
                                                 <span class="hot">Hot</span>
@@ -408,7 +430,7 @@
                                                         <div class="rating-result" title="90%">
                                                             <span>
                                                                 <span>
-                                                                    
+
                                                                 </span>
                                                             </span>
                                                         </div>
@@ -417,7 +439,7 @@
                                                                 ₹ <%= products[i].productPrice %>
 
                                                             </span>
-                                                            
+
                                                         </div>
                                                         <div class="product-action-1 show">
                                                             <a aria-label="Add To Cart" class="action-btn hover-up"
@@ -436,24 +458,30 @@
                         <!--pagination-->
                         <div id="paginationLinks" class="d-flex">
                             <!-- Pagination links will be dynamically added here -->
-                           <% if (sorted) { %>
-                            <% for( let i = 1; i <= totalPages; i++ ) { %>
-                                <a href="/shop?search=<%=payload%>&page=<%= i %>" class="page-link"><%= i %></a>
-                             <% } %>
-                             <% } else if (normalSorted) { %>
-                              <% for( let i = 1; i < totalPages; i++ ) { %>
-                                <a href="/shop?filter=<%=filter%>&page=<%= i %>" class="page-link"><%= i %></a>
-                              <% } %>
-                            <% } else { %>
-                                <% for( let i = 1; i <= totalPages; i++ ) { %>
-                                    <a href="/shop?page=<%= i %>" class="page-link"><%= i %></a>
-                                 <% } %>
-                           <% } %>
-                             
-                            
-                           
+                            <% if (sorted) { %>
+                                <% for( let i=1; i <=totalPages; i++ ) { %>
+                                    <a href="/shop?search=<%=payload%>&page=<%= i %>" class="page-link">
+                                        <%= i %>
+                                    </a>
+                                    <% } %>
+                                        <% } else if (normalSorted) { %>
+                                            <% for( let i=1; i < totalPages; i++ ) { %>
+                                                <a href="/shop?filter=<%=filter%>&page=<%= i %>" class="page-link">
+                                                    <%= i %>
+                                                </a>
+                                                <% } %>
+                                                    <% } else { %>
+                                                        <% for( let i=1; i <=totalPages; i++ ) { %>
+                                                            <a href="/shop?page=<%= i %>" class="page-link">
+                                                                <%= i %>
+                                                            </a>
+                                                            <% } %>
+                                                                <% } %>
+
+
+
                         </div>
-                        
+
 
                     </div>
                     <div class="col-lg-3 primary-sidebar sticky-sidebar">
@@ -511,7 +539,8 @@
                     <div class="col-lg-4 col-md-6">
                         <div class="widget-about font-md mb-md-5 mb-lg-0">
                             <div class="logo logo-width-1 wow fadeIn animated">
-                                <a href="/SnatchIt-Home"><img src="/public/user-assets/images/SnatchIt_logo.png" alt="logo"></a>
+                                <a href="/SnatchIt-Home"><img src="/public/user-assets/images/SnatchIt_logo.png"
+                                        alt="logo"></a>
                             </div>
                             <h5 class="mt-20 mb-10 fw-600 text-grey-4 wow fadeIn animated">Contact</h5>
                             <p class="wow fadeIn animated">
@@ -637,22 +666,27 @@
     <script src="public/user-assets/js/maind134.js?v=3.4"></script>
     <script src="public/user-assets/js/shopd134.js?v=3.4"></script>
 
-    
 
-   
+
+
 
     <script>
+        let searchQuery = '';
         // Function to fetch and display products based on search, filter, sort, and pagination
-        const fetchProducts = (event,page) => {
+        const fetchProducts = (event, page) => {
+            if (event) {
+                event.preventDefault(); // Prevent the default form submission behavior
+            }
 
+            searchQuery = $('#searchInput').val();
             // const searchQuery = document.getElementById('searchInput').value;
             const categoryFilter = $('#categoryFilter').val();
             const sortOption = $('#sortOptions').val();
-            const currentPage = page||1; // Initial page
+            const currentPage = page || 1; // Initial page
             const limitPerPage = 10; // Number of products per page
 
 
-            const url = `/shopFilter?category=${categoryFilter}&sort=${sortOption}&page=${currentPage}&limit=${limitPerPage}`;
+            const url = `/shopFilter?search=${searchQuery}&category=${categoryFilter}&sort=${sortOption}&page=${currentPage}&limit=${limitPerPage}`;
             console.log(url)
 
             $.ajax({
@@ -702,18 +736,16 @@
                                                        <div class="rating-result" title="90%">
                                                            <span>
                                                                <span>
-                                                                   80%
+                                                                   
                                                                </span>
                                                            </span>
                                                        </div>
                                                        <div class="product-price">
                                                            <span class="text-dark">
-                                                               ${product.offerPrice}
+                                                               ₹${product.productPrice}
 
                                                            </span>
-                                                           <span class="old-price">
-                                                               ${product.productPrice}
-                                                           </span>
+                                                           
                                                        </div>
                                                        <div class="product-action-1 show">
                                                            <a aria-label="Add To Cart" class="action-btn hover-up" href="shop-cart.html"><i class="fi-rs-shopping-bag-add"></i></a>
@@ -728,7 +760,7 @@
 
                     updatePaginationLinks(currentPage, data.totalPages);
                     updateFilterOptions(data.sorted);
-                   
+
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.error('Error fetching products:', errorThrown);
@@ -739,6 +771,11 @@
 
         $('#categoryFilter').on('change', fetchProducts);
         $('#sortOptions').on('change', fetchProducts);
+        $('#searchInput').on('keypress', function (event) {
+            if (event.key === 'Enter') {
+                fetchProducts();
+            }
+        });
 
 
     </script>
@@ -752,36 +789,36 @@
             for (let i = 1; i <= totalPages; i++) {
                 const pageLink = $(`<a href="#" class="page-link">${i}</a>`);
                 pageLink.on('click', function () {
-                    fetchProducts(0,i); // Fetch products for the selected page
+                    fetchProducts(0, i); // Fetch products for the selected page
                 });
                 $('#paginationLinks').append(pageLink);
             }
-        
+
         };
     </script>
 
     <script>
-        const updateFilterOptions=(sorted)=>{
+        const updateFilterOptions = (sorted) => {
             $("#sorter").empty();
             let option;
-            if(sorted=="Ascending"){
-                option=$(`
+            if (sorted == "Ascending") {
+                option = $(`
                 <select name="" id="sortOptions" class="form-select" style=" border-radius: 18px;">
                 <option value="Ascending" style="font-size: 16px;">Price: Low to High</option>
                 <option value="Descending" style="font-size: 16px;">Price: High to Low</option>
                 <option value="Alpha" style="font-size: 16px;">Aa-Zz</option>                     
                 </select>
         `);
-            }else if(sorted=="Descending"){
-                option=$(`
+            } else if (sorted == "Descending") {
+                option = $(`
                 <select name="" id="sortOptions" class="form-select" style=" border-radius: 18px;">
                 <option value="Descending" style="font-size: 16px;">Price: High to Low</option>
                 <option value="Ascending" style="font-size: 16px;">Price: Low to High</option>
                 <option value="Alpha" style="font-size: 16px;">Aa-Zz</option>                    
                 </select>
         `);
-            }else{
-                option=$(`
+            } else {
+                option = $(`
                 <select name="" id="sortOptions" class="form-select" style=" border-radius: 18px;">
                 <option value="Alpha" style="font-size: 16px;">Aa-Zz</option>  
                 <option value="Descending" style="font-size: 16px;">Price: High to Low</option>
@@ -789,74 +826,74 @@
                     
                 </select>
         `);
-            }         
-        $("#sorter").append(option);
-        $('#sortOptions').on('change', fetchProducts);
+            }
+            $("#sorter").append(option);
+            $('#sortOptions').on('change', fetchProducts);
 
-   
-    }
+
+        }
     </script>
 
     <script>
-        document.getElementById("normalSorter").addEventListener("change",()=>{
+        document.getElementById("normalSorter").addEventListener("change", () => {
             const normalFilter = $('#normalSorter').val();
-            window.location.href=`/user-shop?filter=${normalFilter}`
+            window.location.href = `/user-shop?filter=${normalFilter}`
         })
     </script>
 
-<script>
-    document.addEventListener('click', function (event) {
-      const suggestionList = document.getElementById('suggestionList');
-      const isClickInside = suggestionList.contains(event.target);
+    <script>
+        document.addEventListener('click', function (event) {
+            const suggestionList = document.getElementById('suggestionList');
+            const isClickInside = suggestionList.contains(event.target);
 
-      if (!isClickInside) {
-        suggestionList.innerHTML = ''; // Hide the suggestions by clearing the innerHTML
-      }
-    });
-
-    let searchElement = document.getElementById('searchInput');
-    searchElement.onkeyup = function () {
-      let searchWord = searchElement.value;
-      console.log("searchWord", searchWord);
-      if (searchWord != '') {
-        loadData(searchWord);
-      } else {
-        document.getElementById('suggestionList').innerHTML = ''
-      }
-
-    }
-
-    function loadData(query='') {
-    console.log(query);
-    $.ajax({
-        url: '/searchProduct',
-        type: 'POST',
-        data: { payload: query },
-        success: function(data) {
-            console.log(data);
-            let searchResult = data.searchResult;
-            console.log(searchResult);
-
-            let html = ''
-            console.log(data.searchResult.length);
-            if (data.searchResult.length > 0) {
-                for (let i = 0; i < data.searchResult.length; i++) {
-                    console.log("in loop", data.searchResult[i].productName);
-                    html += `<a href="/user-shop/${data.searchResult[i]._id}"><li style="display:flex;justify-content:space-evenly;text-align: center; border-bottom: 2px solid #acb1b5; width:80%% ;padding:10px"> ${data.searchResult[i].productName} </li></a>`;
-                }
-                $('#suggestionList').html(html); // Update suggestionList
+            if (!isClickInside) {
+                suggestionList.innerHTML = ''; // Hide the suggestions by clearing the innerHTML
             }
-            console.log("end");
-        },
-        error: function(xhr, status, error) {
-            console.error('Error:', error);
+        });
+
+        let searchElement = document.getElementById('searchInput');
+        searchElement.onkeyup = function () {
+            let searchWord = searchElement.value;
+            console.log("searchWord", searchWord);
+            if (searchWord != '') {
+                loadData(searchWord);
+            } else {
+                document.getElementById('suggestionList').innerHTML = ''
+            }
+
         }
-    });
-}
 
-  </script>
+        function loadData(query = '') {
+            console.log(query);
+            $.ajax({
+                url: '/searchProduct',
+                type: 'POST',
+                data: { payload: query },
+                success: function (data) {
+                    console.log(data);
+                    let searchResult = data.searchResult;
+                    console.log(searchResult);
 
-      
+                    let html = ''
+                    console.log(data.searchResult.length);
+                    if (data.searchResult.length > 0) {
+                        for (let i = 0; i < data.searchResult.length; i++) {
+                            console.log("in loop", data.searchResult[i].productName);
+                            html += `<a href="/user-productPage/${data.searchResult[i]._id}"><li style="display:flex;justify-content:space-evenly;text-align: center; border-bottom: 2px solid #acb1b5; width:80%% ;padding:10px"> ${data.searchResult[i].productName} </li></a>`;
+                        }
+                        $('#suggestionList').html(html); // Update suggestionList
+                    }
+                    console.log("end");
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+
+    </script>
+
+
 
 
 

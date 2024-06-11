@@ -17,6 +17,54 @@
     <link rel="shortcut icon" type="image/x-icon" href="/public/admin-assets/images/SnatchIt_logo-removebg-preview.png">
     <!-- Template CSS -->
     <link href="/public/admin-assets/css/main.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="/public/cropperjs/cropperjs/cropper.css">
+    <script src="/public/cropperjs/cropperjs/cropper.js"></script>
+    <style>
+        .OUTER-DIV{
+            width: 100% !important;
+        }
+        .preview-image{
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+    </style>
+    <style>
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding: 5rem;
+            left: 30rem;
+            top: 0;
+            width: 50%;
+            height: 80%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+        .modal-content {
+            object-fit: cover;
+            aspect-ratio: 1/1;
+            display: block;
+            width: 80% !important;
+        }
+        .close {
+            color: #fff;
+            position: absolute;
+            top: 10px;
+            right: 25px;
+            font-size: 35px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body>
@@ -86,6 +134,17 @@
             <br>
         </nav>
     </aside>
+    <div id="myModal" class="modal">
+        <span class="close">&times;</span>
+        <!-- <img class="modal-content" height="100%" id="img01"> -->
+        <div class="modal-content img-container">
+            <img id='image' src="" alt="">
+        </div>
+        <button id="btn-crop" type="button">Crop</button>
+        <div class="cropped-container">
+            <img id="output" src="" alt="">
+        </div>
+    </div>
     <main class="main-wrap">
         <header class="main-header navbar">
             <div class="col-search">
@@ -209,13 +268,171 @@
                         </div>
                         <div class="card-body">
                             <div class="input-upload">
-                                <label class="form-label">Image</label>
-                                <div id="previewContainer" class="row"></div>
+                                <label class="form-label"> image</label>
+                                
+                                
                                 <input id="imageUpload" class="form-control" type="file" name="images"  multiple>
                                 <div id="errorMessage" style="color: red; display: none;">Only images are allowed.</div>
-                                
-                            </div> 
-                        </div>
+                                <div id="preview-container" ></div>
+
+                                <input type="hidden" id="hiddenField1" name="hiddenField1" value="">
+                                <input type="hidden" id="hiddenField2" name="hiddenField2" value="">
+                                <input type="hidden" id="hiddenField3" name="hiddenField3" value="">
+                                <input type="hidden" id="hiddenField4" name="hiddenField4" value="">
+                
+
+
+                                    <script>
+                                        document.getElementById('imageUpload').addEventListener('change', handleFileSelect);
+                                        const hidden1 = document.getElementById('hiddenField1')
+                                        const hidden2 = document.getElementById('hiddenField2')
+                                        const hidden3 = document.getElementById('hiddenField3')
+                                        const hidden4 = document.getElementById('hiddenField4')
+
+                                        function handleFileSelect(event) {
+                                            var previewContainer = document.getElementById('preview-container');
+                                            previewContainer.innerHTML = ''; // Clear previous previews
+
+                                            var files = event.target.files;
+
+                                            for (var i = 0; i < files.length; i++) {
+                                                var file = files[i];
+                                                let ind =i
+                                                if (!file.type.startsWith('image/')) {
+                                                    continue; // Skip non-image files
+                                                }
+
+                                                var reader = new FileReader();
+
+                                                reader.onload = (function (currentFile) {
+                                                    return function (e) {
+                                                        var previewImage = document.createElement('img');
+                                                        previewImage.className = 'preview-image';
+                                                        // previewImage.id=`image${ind}`
+                                                        previewImage.src = e.target.result;
+                                                        previewImage.title = currentFile.name;
+                                                        previewImage.width = "300px"
+                                                        previewImage.height = "300px"
+
+                                                        const deleteButton = document.createElement('button');
+                                                        deleteButton.innerHTML = 'Delete';
+                                                        deleteButton.type = 'button';
+                                                        deleteButton.addEventListener('click', function () {
+                                                                
+                                                            const container = deleteButton.parentNode;
+                                                            container.parentNode.removeChild(container);
+                                                        
+                                                            // Remove the file from the selectedFiles array
+                                                            selectedFiles.splice(ind, 1);
+                                                        
+                                                            // Create a new FileList with the remaining files
+                                                            const remainingFileList = new DataTransfer();
+                                                            selectedFiles.forEach(file => {
+                                                                remainingFileList.items.add(file);
+                                                            });
+                                                        
+                                                            // Assign the new FileList to the file input field
+                                                            imageInput.files = remainingFileList.files;
+                                                        
+                                                            // Update the length property of the file input field
+                                                            imageInput.files.length = selectedFiles.length;
+                                                        });
+
+                                                        
+                                            
+                                                    
+                                                        var viewButton = document.createElement('button');
+                                                        viewButton.innerHTML = 'View';
+                                                        viewButton.id = `view${ind}`
+                                                        viewButton.type = 'button'
+                                                        viewButton.onclick = function() {
+                                                            var modal = document.getElementById('myModal');
+                                                            // var modalImg = document.getElementById('img01');
+                                                            modal.style.display = 'block';
+                                                            // modalImg.src = e.target.result;
+
+
+                                                            const image = document.getElementById(`image`);
+                                                            image.src = e.target.result
+                                                            const cropper = new Cropper(image, {
+                                                                aspectRatio: 1/1,
+                                                                viewMode:3,
+                                                              
+                                                            
+                                                            });
+
+                                                            document.querySelector('#btn-crop').addEventListener('click',async function(){
+                                                                var croppedImage = await cropper.getCroppedCanvas().toDataURL("image/png");
+                                                                let dimensions = cropper.getData()
+                                                                // console.log(ind);
+                                                                // console.log(dimensions);
+                                                                previewImage.src= croppedImage
+                                                                let x=dimensions.x
+                                                                let y=dimensions.y
+
+                                                                let height=dimensions.height
+
+                                                                let width=dimensions.width
+
+                                                                const imagedata="index= "+ind+" x= "+x+" y= "+y+" width= "+width+" height= "+height
+                                                                // console.log(imagedata);
+
+                                                                if(ind == 0){
+                                                                    hidden1.value = imagedata
+                                                                }
+                                                                if(ind == 1){
+                                                                    hidden2.value = imagedata
+                                                                }
+                                                                if(ind == 2){
+                                                                    hidden3.value = imagedata
+                                                                }
+                                                                if(ind == 3){
+                                                                    hidden4.value = imagedata
+                                                                }
+
+                                                            
+                                                                document.querySelector(".cropped-container").style.display = 'none';
+                                                                modal.style.display = 'none';
+                                                                cropper.destroy()
+                                                            })
+                                                        };
+
+                                                
+                                                    
+                                                    
+
+                                                        var container = document.createElement('div');
+                                                        container.className = 'OUTER-DIV'
+                                                        container.appendChild(previewImage);
+                                                        container.appendChild(viewButton);
+                                                        container.appendChild(deleteButton);
+                                                        previewContainer.appendChild(container);
+                                                    };
+                                                })(file);
+
+                                                reader.readAsDataURL(file);
+                                            }
+                                        }
+
+                                        // Close modal when clicking on the close button
+                                        document.getElementsByClassName('close')[0].onclick = function() {
+                                            document.getElementById('myModal').style.display = 'none';
+
+                                        };
+
+                                        // Close modal when clicking anywhere outside the modal
+                                        // window.onclick = function(event) {
+                                        //     var modal = document.getElementById('myModal');
+                                        //     if (event.target == modal) {
+                                        //         modal.style.display = 'none';
+                                        //     }
+                                        // };
+                                    </script>
+                                    
+
+                            </div>
+                            
+                        
                     </div>
                     <div class="card mb-4">
                         <div class="card-body">
@@ -264,7 +481,7 @@
             </div>
         </footer>
     </main>
-    <script>
+    <!-- <script>
         const fileInput = document.getElementById("fileInput");
         const previewContainer = document.getElementById("previewContainer");
 
@@ -331,7 +548,7 @@
             }
         });
 
-    </script>
+    </script> -->
 
 <script>
 

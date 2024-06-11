@@ -16,7 +16,7 @@
     }
   })
 
-  const sentOtp = async(req,res)=>{
+  const sentOtp = async(req,res,)=>{
     try{
       console.log("Entered into sentotp")
       const {name, email,phone, password} = req.body;
@@ -71,6 +71,60 @@
       res.status(500).json({ error: "Internal Server Error "});
     }
   };
+
+  const emailVerify = async (req,res)=>{
+    try{
+      const email  = req.body.email;
+      console.log("email verify",email);
+      const check = await user.findOne({email:email})
+      if(check){
+        await sentOtpForgotPword({ body: { email } }, res)
+        res.render("user/otp-verification", {forgotPassword:true})
+      }else{
+        res.redirect("/emailVerificationPage", { messages: { error: "Email not found" } });
+      }
+    }
+    catch(error){
+      console.error("Error during email verification:", error);
+      res.status(500).send("Server error");
+    }
+  }
+
+  const sentOtpForgotPword = async (req, res)=>{
+    try{
+      const {email} = req.body;
+      const otp = generateotp();
+      console.log("sentOtpForgotPword",otp);
+      const forgotUser = await user.findOne({email:email})
+      // const name = forgotUser.name;
+      // const phone= forgotUser.phone;
+      // const password = forgotUser.password;
+                req.session.storedOtp = otp;
+                console.log("This is the stored otp in session ", req.session.storedOtp)
+                const expiryTime = 60;
+                req.session.otpExpiry = Date.now() + expiryTime * 1000;
+
+                console.log("generate otp: "+ otp);
+
+                const mailOptions = {
+                  from: process.env.AUTH_EMAIL,
+                  to: email,
+                  subject: "Your OTP verification code",
+                  text: `Your OTP is ${otp}`
+                };
+            
+                transporter.sendMail(mailOptions, (error)=>{
+                  if(error){
+                    console.log(error);
+                    return res.status(500).json({ error: "Error sending OTP email"});
+                  } 
+                  console.log("otp sent to the user email");     
+                });
+
+    }catch(error){
+      console.error(error)
+    }
+  }
 
   const resendOtp = async (req,res)=>{
     try{
@@ -189,7 +243,9 @@
     sentOtp,
     resendOtp,
     verify,
-    doSignup
+    doSignup,
+    emailVerify,
+    sentOtpForgotPword
   }
 
   

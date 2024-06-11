@@ -26,7 +26,7 @@ const checkoutPage = async (req, res) => {
     if (cart.coupon != null) {
       const appliedCoupon = await couponModel.findOne({ code: cart.coupon });
       cartItems.couponAmount = appliedCoupon.discount;
-      
+
       let totalAmountOfEachProduct = [];
       for (i = 0; i < cartItems.products.length; i++) {
         let total = cartItems.products[i].quantity * parseInt(cartItems.products[i].price);
@@ -68,51 +68,60 @@ const checkoutPage = async (req, res) => {
 }
 
 const placeOrder = async (req, res) => {
-  
+
   const body = req.body;
   const userId = req.session.user;
-  console.log("this is order controller",body);
-  const cart = await cartModel.findOne({user:userId})
+  console.log("this is order controller", body);
+  const cart = await cartModel.findOne({ user: userId })
   let coupon = await couponModel.findOne({ code: body.couponCode })
-  if (cart) { 
-         console.log("inside cart before checking cod condition",body.totalAmount,body.paymentOption);
+  let userDetails = await user.findOne({ _id: userId })
+  if (cart) {
+    console.log("inside cart before checking cod condition", body.totalAmount, body.paymentOption);
     if (body.totalAmount > 1000 && body.paymentOption === "COD") {
-       console.log("checking high amount in cod");
-        return res.json({ message: "COD is not available for this price range", status: false });
-    } else if(coupon){
+      console.log("checking high amount in cod");
+      return res.json({ message: "COD is not available for this price range", status: false });
+    } else if (coupon) {
+
       
-      console.log("#####checking coupon",coupon);
       const result = await orderHelper.placeOrder(body, userId, coupon);
 
       if (result.status) {
         if (coupon) {
-            coupon.usedBy.push(userId);
-            await coupon.save();
+          coupon.usedBy.push(userId);
+          await coupon.save();
         }
         await cartHelper.clearAllCartItems(userId);
-       if(body.pay==="failed"){
-        return res.json({ status: true });
-       }
-        return res.json({ url: "/orderSuccess", status: true });
-      }
-    }else{
-      coupon=0;
-      const result = await orderHelper.placeOrder(body, userId, coupon);
-      console.log("inside ordercontroller's place order for payment failed using razorpay\nno coupon",result)
-      if (result.status) {
-        
-        if (coupon) {
-            coupon.usedBy.push(userId);
-            await coupon.save();
-        }
-        await cartHelper.clearAllCartItems(userId);
-        if(body.pay==="failed"){
+        if (body.pay === "failed") {
           return res.json({ status: true });
-         }
-        return res.json({ url: "/orderSuccess", status: true });
+        }
+        if (body.paymentOption === "Wallet") {
+          return res.json({ url: "/orderSuccess", message: "Order placed from wallet", status: true });
+        } else {
+          return res.json({ url: "/orderSuccess", status: true });
+        }
+      }
+    } else {
+      coupon = 0;
+      const result = await orderHelper.placeOrder(body, userId, coupon);
+      console.log("inside ordercontroller's place order for payment failed using razorpay\nno coupon", result)
+      if (result.status) {
+
+        if (coupon) {
+          coupon.usedBy.push(userId);
+          await coupon.save();
+        }
+        await cartHelper.clearAllCartItems(userId);
+        if (body.pay === "failed") {
+          return res.json({ status: true });
+        }
+        if (body.paymentOption === "Wallet") {
+          return res.json({ url: "/orderSuccess", message: "Order placed from wallet", status: true });
+        } else {
+          return res.json({ url: "/orderSuccess", status: true });
+        }
+      }
     }
-  } 
-}else {
+  } else {
     res.json({ message: result.result, status: false })
   }
 };
@@ -333,20 +342,20 @@ const retryPayment = async (req, res) => {
   try {
     console.log("inside retrypayment");
     const orderId = req.query.orderId;
-    console.log('orderId',orderId);
+    console.log('orderId', orderId);
     const orderDetails = await orderModel.findOne({ orderId: orderId });
     console.log(orderDetails);
 
     orderDetails.products.forEach((item) => {
       item.status = "pending";
     });
-   
-    await orderDetails.save();
-    
-    const totalAmount = orderDetails.totalAmount;
-    console.log('orderdetails',orderDetails);
 
-  
+    await orderDetails.save();
+
+    const totalAmount = orderDetails.totalAmount;
+    console.log('orderdetails', orderDetails);
+
+
     res.status(200).json({ orderId: orderDetails._id, totalAmount });
   } catch (error) {
     console.log(error);
@@ -359,7 +368,7 @@ const returnSingleOrder = async (req, res) => {
     const orderId = req.query.orderId;
     const singleOrderId = req.query.singleOrderId;
     const price = req.query.price;
-    const result = await orderHelper.returnSingleOrder(orderId, singleOrderId,price);
+    const result = await orderHelper.returnSingleOrder(orderId, singleOrderId, price);
     if (result) {
       res.json({ status: true });
     } else {

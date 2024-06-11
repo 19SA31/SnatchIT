@@ -1,6 +1,7 @@
 const offerHelper = require("../helper/offerHelper");
 const productHelper = require("../helper/productHelper");
 const categoryHelper = require("../helper/categoryHelper");
+const offerModel = require("../models/offer-model");
 
 
 
@@ -23,11 +24,21 @@ const categoryOfferLoad = async (req, res) => {
 
   const addCategoryOffer = async (req, res) => {
     try {
-      const offer = await offerHelper.createCategoryOffer(req.body);
-      if (offer) {
-        req.flash("message", "Offer Added");
+      console.log("###consoling",req.body);
+      const exisitingOffer = await offerModel.findOne(
+        {offerName: { $regex: new RegExp(req.body.offerName, "i") }})
+      console.log("###",exisitingOffer);
+      if(exisitingOffer){
+
+        req.flash("message", "Offer already exists");
         res.redirect("/admin-categoryOffer");
-      } 
+      }else{
+        const offer = await offerHelper.createCategoryOffer(req.body);
+        if (offer) {
+          req.flash("message", "Offer updated succesfully");
+          res.redirect("/admin-categoryOffer");
+        }
+      }
     } catch (error) {
       console.log(error)
     }

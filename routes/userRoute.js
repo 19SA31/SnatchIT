@@ -51,6 +51,8 @@ router.get("/newProducts",userMiddleware.isLogout,productController.fetchNew)
 
 router.get("/productWithSizeCartCheck",userMiddleware.isLogout,productController.productWithSizeCartCheck)
 
+router.get("/forgotPasswordEmail",userMiddleware.isLogin,userController.forgotPassword)
+
 
 
 
@@ -58,6 +60,7 @@ router.get("/productWithSizeCartCheck",userMiddleware.isLogout,productController
 
 
 router.post("/addToWishlist/:id", wishlistController.addToWishlist);
+router.post("/emailVerify",otpHelper.emailVerify)
 router.post("/register",otpHelper.sentOtp)
 router.post("/resendOTP",otpHelper.resendOtp)
 router.post("/otp-verification",userController.insertUserWithVerify)

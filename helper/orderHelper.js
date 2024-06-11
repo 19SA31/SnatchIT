@@ -8,7 +8,7 @@ const ObjectId = require("mongoose").Types.ObjectId;
 
 
 
-const placeOrder = async (body, userId,discount) => {
+const placeOrder = async (body, userId,coupon) => {
   try {
       
       const cart = await cartModel.findOne({ user: userId });
@@ -16,7 +16,7 @@ const placeOrder = async (body, userId,discount) => {
           { _id: userId, "address._id": body.addressId },
           { "address.$": 1, _id: 0 }
       );
-      console.log("1st inside placeorder, showind address",address);
+      
       const user = await userModel.findOne({ _id: userId });
       let products = [];
       let status = "pending";
@@ -31,7 +31,8 @@ const placeOrder = async (body, userId,discount) => {
           });
 
           const availableStockForSize = availableStock.productQuantity.find(item => item.size === product.size);
-
+          
+          let discountedAmt= Math.round(cart.totalAmount-(cart.totalAmount*coupon.discount/100));
 
       if (!availableStockForSize || availableStockForSize.quantity < product.quantity) {
               
@@ -39,30 +40,32 @@ const placeOrder = async (body, userId,discount) => {
           } else {
 
             if (body.paymentOption == "Wallet") {
+              
               if (cart.totalAmount > user.wallet.balance) {
                 console.log("This is cart.totalAmount", cart.totalAmount);
                 console.log("This is user.wallet.balance", user.wallet.balance);
                 return({ status: false, message: "Insufficient Balance" });
                 
               } else {
+                
                 const newDetail = {
                   type: "debit",
-                  amount: cart.totalAmount,
+                  amount: discountedAmt,
                   date: new Date(),
                   transactionId: Math.floor(100000 + Math.random() * 900000),
                 };
-    
+                console.log("wallet payment details recorded",newDetail);
                 // Updating user with new balance and new detail
                 const response = await userModel.findOneAndUpdate(
                   { _id: userId },
                   {
                     $set: {
-                      "wallet.balance": user.wallet.balance - cart.totalAmount,
+                      "wallet.balance": user.wallet.balance - discountedAmt,
                     },
                     $push: { "wallet.details": newDetail },
                   }
                   
-                );
+                );console.log("######",response)
               }
             } 
               
@@ -107,7 +110,7 @@ const placeOrder = async (body, userId,discount) => {
               },
               paymentMethod: body.paymentOption,
               totalAmount: cart.totalAmount,
-              couponAmount:discount
+              couponAmount:coupon.discount
           });
           console.log("cart and address creating for order    ",result)
           return { result: result, status: true };

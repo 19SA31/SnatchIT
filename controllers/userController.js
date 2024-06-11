@@ -26,6 +26,15 @@ const loginLoad = (req, res) => {
   }
 }
 
+const forgotPassword = (req, res) => {
+  try {
+    const message = req.flash("message");
+    res.render("user/forgotPasswordEmail",{ message: message })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const checkUser = async (req, res) => {
   console.log("Entered in to chekUser")
 
@@ -38,30 +47,30 @@ const checkUser = async (req, res) => {
       email: logemail
     });
     if (!loggeduser) {
-      res.render("user/login", {errmessage: "Wrong Email"});
+      res.render("user/login", { errmessage: "Wrong Email" });
     }
     else {
       bcrypt.compare(logpassword, loggeduser.password)
-      .then((passwordsMatch) => {
-      if (passwordsMatch) {
-          if (loggeduser.isActive) {
-            bcrypt.compare(logpassword, loggeduser.password).then((response) => {
-              req.session.user = loggeduser._id;
-              res.redirect("/SnatchIt-Home");
-              console.log(req.session.user);
-            })
-              .catch((error) => { console.log(error); })
+        .then((passwordsMatch) => {
+          if (passwordsMatch) {
+            if (loggeduser.isActive) {
+              bcrypt.compare(logpassword, loggeduser.password).then((response) => {
+                req.session.user = loggeduser._id;
+                res.redirect("/SnatchIt-Home");
+                console.log(req.session.user);
+              })
+                .catch((error) => { console.log(error); })
+            } else {
+              res.render("user/login", { blocked: "User has been Blocked!" });
+            }
           } else {
-            res.render("user/login", { blocked: "User has been Blocked!" });
+            res.render("user/login", { errmessage: "Wrong Password" });
           }
-        }else {
-          res.render("user/login", { errmessage: "Wrong Password" });
-        }
-      })
-      .catch((error) => {
-        console.error("Error comparing passwords:", error);
-        res.render("user/login", { errmessage: "An error occurred" });
-      });
+        })
+        .catch((error) => {
+          console.error("Error comparing passwords:", error);
+          res.render("user/login", { errmessage: "An error occurred" });
+        });
     }
   }
   catch (err) {
@@ -86,7 +95,7 @@ const loadOTP = (req, res) => {
   }
 }
 
-const  loadUserProduct = async (req, res) => {
+const loadUserProduct = async (req, res) => {
   const id = req.params.id;
   const userData = req.session.user;
 
@@ -97,19 +106,19 @@ const  loadUserProduct = async (req, res) => {
     .lean();
 
 
-  const result = await offerModel.find({'categoryOffer.category':product.productCategory})
+  const result = await offerModel.find({ 'categoryOffer.category': product.productCategory })
   const cartStatus = await cartHelper.isAProductInCart(userData, product._id);
   const wishlistStatus = await wishlistHelper.isInWishlist(
     userData,
     product._id
   );
-  
+
   product.wishlistStatus = wishlistStatus;
-  product.cartStatus = cartStatus; 
+  product.cartStatus = cartStatus;
   console.log(result);
-  if(result.length > 0 ){
+  if (result.length > 0) {
     product.categoryOffer = result[0].categoryOffer.discount;
-    
+
   } else {
     product.categoryOffer = 0;
   }
@@ -164,28 +173,31 @@ const insertUserWithVerify = async function (req, res) {
     if (sendedOtp === verifyOtp && Date.now() < req.session.otpExpiry) {
       console.log("otp entered before time expires");
       req.session.otpMatched = true;
-      console.log("request in insert user");
+      
+        console.log("request in insert user");
 
-      const UserData = req.session.insertData;
-      console.log(UserData)
-      const response = await otpHelper.doSignup(UserData, req.session.otpMatched);
-      console.log(response);
+        const UserData = req.session.insertData;
+        console.log(UserData)
+        const response = await otpHelper.doSignup(UserData, req.session.otpMatched);
+        console.log(response);
 
-      if (!response.status) {
-        const error = response.message;
-        req.flash("message", error);
-        return res.redirect("/register");
-      } else {
-        const message = response.message;
-        req.flash("message", message);
-        return res.redirect('/login');
-      }
+        if (!response.status) {
+          const error = response.message;
+          req.flash("message", error);
+          return res.redirect("/register");
+        } else {
+          const message = response.message;
+          req.flash("message", message);
+          return res.redirect('/login');
+        }
+      
     } else {
       console.log("failed otp verification");
       req.session.otpExpiry = false;
       req.flash("error", "Enter correct otp");
       return res.redirect('/otp-verification');
     }
+
   } catch (error) {
     console.error(error);
     return res.redirect("/register");
@@ -218,16 +230,16 @@ const isAuthenticated = (req, res, next) => {
   }
 };
 
-const loadAccount = async(req,res)=>{
+const loadAccount = async (req, res) => {
   try {
     const userId = req.session.user
 
-    const userData = await user.findOne({_id:userId})
+    const userData = await user.findOne({ _id: userId })
     const walletData = await userHelper.getWalletDetails(userId);
-        console.log("HHH",walletData);
-        for (const amount of walletData.wallet.details) {
-            amount.formattedDate = moment(amount.date).format("MMM Do, YYYY");
-          }
+    console.log("HHH", walletData);
+    for (const amount of walletData.wallet.details) {
+      amount.formattedDate = moment(amount.date).format("MMM Do, YYYY");
+    }
     const orderDetails = await orderHelper.getOrderDetails(userId);
     for (const order of orderDetails) {
       const dateString = order.orderedOn;
@@ -240,7 +252,7 @@ const loadAccount = async(req,res)=>{
       order.quantity = quantity;
       quantity = 0;
     }
-    res.render("user/user-account",{
+    res.render("user/user-account", {
       userData,
       orderDetails,
       walletData
@@ -293,7 +305,7 @@ const loadShop = async (req, res, next) => {
       let startIndex = (currentPage - 1) * itemsPerPage;
       let endIndex = startIndex + itemsPerPage;
       let totalPages = Math.ceil(offerPrice.length / 6);
-      console.log("total pages ",totalPages);
+      console.log("total pages ", totalPages);
       const currentProduct = offerPrice.slice(startIndex, endIndex);
 
       res.render("user/user-shop", {
@@ -319,22 +331,22 @@ const loadShop = async (req, res, next) => {
 
       const offerPrice = await offerHelper.findOffer(products);
       let sorted = false;
-      
+
       if (req.query.filter) {
         if (req.query.filter == "Ascending") {
           console.log("inside ascending");
-          
+
           offerPrice.sort(
             (a, b) => a.productPrice - b.productPrice
           );
-          normalSorted="Ascending"
-       
+          normalSorted = "Ascending"
+
         } else if (req.query.filter == "Descending") {
           offerPrice.sort(
             (a, b) => b.productPrice - a.productPrice
           );
-          normalSorted="Descending"
-      
+          normalSorted = "Descending"
+
         } else if (req.query.filter == "Alpha") {
           offerPrice.sort((a, b) => {
             const nameA = a.productName.toUpperCase();
@@ -347,22 +359,22 @@ const loadShop = async (req, res, next) => {
             }
             return 0;
           });
-          normalSorted="Alpha"
+          normalSorted = "Alpha"
         } else if (req.query.filter == "ReverseAlpha") {
           offerPrice
-          .sort((a, b) => {
+            .sort((a, b) => {
               const nameA = a.productName.toUpperCase();
               const nameB = b.productName.toUpperCase();
               if (nameA < nameB) {
-                  return 1; 
+                return 1;
               }
               if (nameA > nameB) {
-                  return -1;
+                return -1;
               }
               return 0;
-          });
+            });
           normalSorted = "ReverseAlpha";
-      }
+        }
       }
 
       let itemsPerPage = 6;
@@ -370,7 +382,7 @@ const loadShop = async (req, res, next) => {
       let startIndex = (currentPage - 1) * itemsPerPage;
       let endIndex = startIndex + itemsPerPage;
       let totalPages = Math.ceil(offerPrice.length / 6);
-      console.log("total pages ",totalPages);
+      console.log("total pages ", totalPages);
       const currentProduct = offerPrice.slice(startIndex, endIndex);
 
       res.render("user/user-shop", {
@@ -380,7 +392,7 @@ const loadShop = async (req, res, next) => {
         wishListCount,
         categories,
         normalSorted,
-        totalPages: totalPages,sorted,filter:req.query.filter
+        totalPages: totalPages, sorted, filter: req.query.filter
       });
     }
   } catch (error) {
@@ -394,8 +406,17 @@ const shopFilterLoad = async (req, res, next) => {
     console.log("SHOP FILTER reached here");
     let filteredProducts;
     const extractPrice = (price) => parseInt(price.replace(/[^\d]/g, ""));
-    const { search, category, sort, page, limit } = req.query;
-    if (category) {
+    const { search,category, sort, page, limit } = req.query;
+   
+    console.log("777search", search)
+    let products = await productHelper.getAllActiveProducts();
+    if (search) {
+      products = products.filter(product => 
+        product.productName.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+    console.log("filtering with cat",category);
+    if (category!=null) {
       console.log("if in shop filter");
       let userId = req.session.user;
       var categories = await categoryHelper.getAllcategory();
@@ -404,8 +425,6 @@ const shopFilterLoad = async (req, res, next) => {
 
       var wishListCount = await wishlistHelper.getWishListCount(userId);
 
-      var products = await productHelper.getAllActiveProducts();
-      
 
       let categorySortedProducts = await products.filter((product) => {
         return product.productCategory.toString().trim() == category.trim();
@@ -444,21 +463,21 @@ const shopFilterLoad = async (req, res, next) => {
         sorted = "Alpha";
       } else if (sort == "ReverseAlpha") {
         filteredProducts.sort((a, b) => {
-            const nameA = a.productName.toUpperCase();
-            const nameB = b.productName.toUpperCase();
-            if (nameA < nameB) {
-                return 1; 
-            }
-            if (nameA > nameB) {
-                return -1;
-            }
-            return 0;
+          const nameA = a.productName.toUpperCase();
+          const nameB = b.productName.toUpperCase();
+          if (nameA < nameB) {
+            return 1;
+          }
+          if (nameA > nameB) {
+            return -1;
+          }
+          return 0;
         });
         sorted = "ReverseAlpha";
+      }
+
     }
-    
-    }
-    
+
     let itemsPerPage = 6;
     let currentPage = parseInt(req.query.page) || 1;
     let startIndex = (currentPage - 1) * itemsPerPage;
@@ -473,49 +492,49 @@ const shopFilterLoad = async (req, res, next) => {
       wishListCount,
       categories,
       sorted,
-      
+
     });
   } catch (error) {
     next(error);
   }
 };
 
-const addAddress = async(req,res,next)=>{
+const addAddress = async (req, res, next) => {
   try {
-    const addressBody= [req.body];
+    const addressBody = [req.body];
     console.log("this is add address in controller");
     const userId = req.session.user;
-    const results = await userHelper.addAddressToUser(addressBody,userId);
+    const results = await userHelper.addAddressToUser(addressBody, userId);
     console.log(results);
-    if(results){
+    if (results) {
       console.log("heryyyy");
-      res.json({status:true})
+      res.json({ status: true })
     }
   } catch (error) {
     next(error);
   }
 }
 
-const updateUser =async(req,res,next)=>{
+const updateUser = async (req, res, next) => {
   try {
     const userId = req.session.user;
     console.log(userId);
     const userDetails = req.body;
-    const result = await userHelper.updateUserDetails( userId,userDetails );
+    const result = await userHelper.updateUserDetails(userId, userDetails);
     res.json(result)
   } catch (error) {
     console.log(error);
   }
 }
 
-const updatePassword = async(req,res,next)=>{
+const updatePassword = async (req, res, next) => {
   try {
     const userId = req.session.user;
     const passwordDetails = req.body
-    console.log("this is update password controller",userId);
-    const result = await userHelper.updateUserPassword(userId,passwordDetails);
+    console.log("this is update password controller", userId);
+    const result = await userHelper.updateUserPassword(userId, passwordDetails);
     res.json(result);
-  } catch (error){
+  } catch (error) {
     console.log(error);
   }
 }
@@ -530,9 +549,9 @@ const addressEditModal = async (req, res) => {
     const userData = await user.findById(userId);
     console.log(userId)
     if (userData) {
-      
+
       const addressData = userData.address.id(addressId);
-      
+
       if (addressData) {
         console.log(addressData);
         res.json({ addressData });
@@ -548,15 +567,15 @@ const addressEditModal = async (req, res) => {
   }
 };
 
-const editAddress = async (req,res,next)=>{
+const editAddress = async (req, res, next) => {
   try {
     console.log("entered into editAddress controller");
     const userId = req.session.user;
     console.log(userId);
     const addressId = req.params.id;
     const body = req.body;
-    const result = await userHelper.editAddressHelper(userId,addressId,body)
-    if(result){
+    const result = await userHelper.editAddressHelper(userId, addressId, body)
+    if (result) {
       console.log(result);
       res.json(result)
     }
@@ -565,13 +584,13 @@ const editAddress = async (req,res,next)=>{
   }
 }
 
-const deleteAddress = async(req,res,next)=>{
+const deleteAddress = async (req, res, next) => {
   try {
     console.log(("Entered into deleteAddress controller"));
     const userId = req.session.user;
     const addressId = req.params.id;
-    const result = await userHelper.deleteAddressHelper(userId,addressId);
-    if(result){
+    const result = await userHelper.deleteAddressHelper(userId, addressId);
+    if (result) {
       console.log(result);
       res.json(result);
     }
@@ -590,6 +609,7 @@ const deleteAddress = async(req,res,next)=>{
 
 module.exports = {
   loginLoad,
+  forgotPassword,
   loadRegister,
   loadOTP,
   loadUserProduct,
@@ -607,7 +627,7 @@ module.exports = {
   deleteAddress,
   loadShop,
   shopFilterLoad
-  
-  
+
+
 
 }

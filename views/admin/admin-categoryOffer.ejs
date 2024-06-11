@@ -507,8 +507,12 @@
           const message = document.getElementById("message");
           console.log(message)
           if (message.value != null) {
-            Swal.fire("Successfull", `Offer Updated`, "success").then(() => {
-            })
+            Toastify({
+                  text: document.getElementById("message").value,
+                  position: "center",
+                  duration: 3000, // Set the duration for the toast notification
+                  close: true // Allow the user to close the toast notification
+                }).showToast()
           }
         })
       </script>

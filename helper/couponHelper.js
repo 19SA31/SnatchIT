@@ -28,7 +28,8 @@ const findAllCoupons = () => {
         count: 1,
         charset: voucherCode.charset("alphabetic"),
       });
-  
+      
+      
       const coupon = new couponModel({
         couponName: couponData.couponName,
         code: couponCode[0],
