@@ -174,7 +174,7 @@
                     <div class="col-lg-6 col-md-6 mb-lg-0  pt-3">
                       
                     </div>
-                    <% if (productDetails.deliveryStatus) { %>
+                    <% if (productDetails[0].products.status!="payment pending" && productDetails[0].products.status!="cancelled") { %>
                       <div class="col-lg-6 col-md-6 mb-lg-0  pt-3">
                         <button class="btn btn- text-end" id="invoice">Download Invoice</button>
                       </div>
@@ -218,11 +218,16 @@
       
                           </td>
                           <td class="price" data-title="Price">
+                            <%
+                              const discountedPrice = Math.round(
+                                productDetails[i].orderedProduct.productPrice - 
+                                (productDetails[i].orderedProduct.productPrice * productDetails[i].orderedProduct.productDiscount / 100)
+                              );
+                            %>
                             ₹<span id="price-span<%= productDetails[i].products._id %>">
-                              <%= Math.round(productDetails[i].orderedProduct.productPrice - 
-                              (productDetails[i].orderedProduct.productPrice * productDetails[i].orderedProduct.productDiscount / 100)) %>
-
-                            </span></td>
+                              <%= discountedPrice %>
+                            </span>
+                          </td>
                           <td class="size" data-title="Size" id="size">
                             <%= productDetails[i].products.size %>
                           </td>
@@ -281,7 +286,7 @@
                             <% if (productDetails[i].products.status=="cancelled" ) { %>
                               <a href="#" class="text-muted">Cancelled</a>
                               <% } else if (productDetails[i].products.status=="delivered" ) { %>
-                                <a onclick="returnOrder('<%=productDetails[i]._id%>','<%=productDetails[i].products._id%>')"
+                                <a onclick="returnOrder('<%=productDetails[i]._id%>','<%=productDetails[i].products._id%>','<%= discountedPrice %>')"
                                   class="text-Primary">Return</a>
                                 <% } else if (productDetails[i].products.status=="return pending" ) { %>
                                   <a href="#" class="text-muted">Return Pending</a>
@@ -289,7 +294,7 @@
                                     <a href="#" class="text-muted">Returned</a>
                                     <% } else if (productDetails[i].products.status=="payment pending" ) { %>
                                       <a onclick="retryPayment('<%=productDetails[0].orderId%>')"
-                                        class="text-muted">Retry</a>
+                                        class="text-primary">Retry</a>
                                       <% } else { %>
                                         <a onclick="cancelOrder('<%=productDetails[i]._id%>','<%=productDetails[i].products._id%>')"
                                           class="text-danger">Cancel</a>
@@ -601,7 +606,7 @@
     </script>
 
 <script>
-  const returnOrder = (orderId, singleOrderId) => {
+  const returnOrder = (orderId, singleOrderId,discountedPrice) => {
     Swal.fire({
       title: 'Are you sure?',
       text: 'You will not be able to undo this',
@@ -614,7 +619,7 @@
       console.log(response);
       if (response.isConfirmed) {
         $.ajax({
-          url: `/returnSingleOrder?orderId=${orderId}&singleOrderId=${singleOrderId}`,
+          url: `/returnSingleOrder?orderId=${orderId}&singleOrderId=${singleOrderId}&discountedPrice=${discountedPrice}`,
           method: "PATCH",
         }).done(response => {
           Swal.fire("Successfull", `Order Returned`, "success").then(() => {

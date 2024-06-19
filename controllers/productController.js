@@ -9,8 +9,9 @@ const addToCart = async (req, res) => {
   
     const productId = req.params.id;
     const size = req.params.size;
-    console.log("Entered into addToCart",userId,size,productId)
-    const result = await cartHelper.addToCartHelper(userId, productId, size);
+    const maxDiscount = req.params.maxDiscount
+    console.log("Entered into addToCart",userId,size,productId,maxDiscount)
+    const result = await cartHelper.addToCartHelper(userId, productId, size,maxDiscount);
   
     if (result) {
       res.json({ status: true });

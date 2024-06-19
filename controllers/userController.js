@@ -29,7 +29,7 @@ const loginLoad = (req, res) => {
 const forgotPassword = (req, res) => {
   try {
     const message = req.flash("message");
-    res.render("user/forgotPasswordEmail",{ message: message })
+    res.render("user/forgotPasswordEmail",)
   } catch (error) {
     console.log(error)
   }
@@ -169,13 +169,17 @@ const insertUserWithVerify = async function (req, res) {
     console.log(sendedOtp);
     console.log(verifyOtp);
     console.log("start checking");
+    console.log("body",req.body);
 
     if (sendedOtp === verifyOtp && Date.now() < req.session.otpExpiry) {
       console.log("otp entered before time expires");
       req.session.otpMatched = true;
-      
-        console.log("request in insert user");
 
+      console.log("request in insert user");
+      if (req.session.forgotPassword) {
+        console.log("entered into password change redirect")
+        return res.redirect("/newPassword?message=OTP%20verified,%20please%20enter%20your%20new%20password")
+      } else {
         const UserData = req.session.insertData;
         console.log(UserData)
         const response = await otpHelper.doSignup(UserData, req.session.otpMatched);
@@ -190,7 +194,7 @@ const insertUserWithVerify = async function (req, res) {
           req.flash("message", message);
           return res.redirect('/login');
         }
-      
+      }
     } else {
       console.log("failed otp verification");
       req.session.otpExpiry = false;
@@ -236,6 +240,7 @@ const loadAccount = async (req, res) => {
 
     const userData = await user.findOne({ _id: userId })
     const walletData = await userHelper.getWalletDetails(userId);
+    walletData.wallet.details.sort((a, b) => new Date(b.date) - new Date(a.date));
     console.log("HHH", walletData);
     for (const amount of walletData.wallet.details) {
       amount.formattedDate = moment(amount.date).format("MMM Do, YYYY");
@@ -406,17 +411,17 @@ const shopFilterLoad = async (req, res, next) => {
     console.log("SHOP FILTER reached here");
     let filteredProducts;
     const extractPrice = (price) => parseInt(price.replace(/[^\d]/g, ""));
-    const { search,category, sort, page, limit } = req.query;
-   
+    const { search, category, sort, page, limit } = req.query;
+
     console.log("777search", search)
     let products = await productHelper.getAllActiveProducts();
     if (search) {
-      products = products.filter(product => 
+      products = products.filter(product =>
         product.productName.toLowerCase().includes(search.toLowerCase())
       );
     }
-    console.log("filtering with cat",category);
-    if (category!=null) {
+    console.log("filtering with cat", category);
+    if (category != null) {
       console.log("if in shop filter");
       let userId = req.session.user;
       var categories = await categoryHelper.getAllcategory();
@@ -599,6 +604,37 @@ const deleteAddress = async (req, res, next) => {
   }
 }
 
+const getNewPassword = function (req, res, next) {
+  try {
+    console.log("entered into getNewPassword");
+    if (req.query.message) {
+      const message = req.query.message;
+      res.render("user/newPassword", { message: message });
+
+    } else {
+      const message = req.flash("message");
+      res.render("user/otp-verification", { message: "Invalid OTP" });
+
+    }
+
+
+  }
+  catch (error) {
+    next(error)
+  }
+};
+
+const confirmPassword = async (req, res) => {
+  const email = req.session.email;
+  const password = req.body.password1;
+  userHelper.setNewPassword(email, password).then((response) => {
+    delete req.session.email;
+
+    req.flash("message", "Password reset successfully");
+
+    res.redirect("/login");
+  });
+};
 
 
 
@@ -626,7 +662,9 @@ module.exports = {
   editAddress,
   deleteAddress,
   loadShop,
-  shopFilterLoad
+  shopFilterLoad,
+  getNewPassword,
+  confirmPassword
 
 
 

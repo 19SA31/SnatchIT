@@ -52,6 +52,7 @@ router.get("/newProducts",userMiddleware.isLogout,productController.fetchNew)
 router.get("/productWithSizeCartCheck",userMiddleware.isLogout,productController.productWithSizeCartCheck)
 
 router.get("/forgotPasswordEmail",userMiddleware.isLogin,userController.forgotPassword)
+router.get("/newPassword",userController.getNewPassword)
 
 
 
@@ -65,7 +66,7 @@ router.post("/register",otpHelper.sentOtp)
 router.post("/resendOTP",otpHelper.resendOtp)
 router.post("/otp-verification",userController.insertUserWithVerify)
 router.post("/login",userController.checkUser);
-router.post("/addToCart/:id/:size", productController.addToCart);
+router.post("/addToCart/:id/:size/:maxDiscount", productController.addToCart);
 router.post("/placeOrder",orderController.placeOrder)
 router.post("/searchProduct", productController.searchProduct);
 router.post("/applyCoupon", couponController.applyCoupon);
@@ -73,6 +74,8 @@ router.post("/createOrder", orderController.createOrder);
 router.post('/paymentSuccess', orderController.paymentSuccess);
 router.post('/removeCoupon', couponController.removeCoupon);
 router.post("/createRazorpayOrder", orderController.retryPayment);
+router.post('/newPassword',userController.confirmPassword)
+
 router.patch("/returnSingleOrder", orderController.returnSingleOrder);
 
 

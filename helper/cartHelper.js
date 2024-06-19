@@ -16,11 +16,11 @@ const getAllCartItems = (userId) => {
   });
 };
 
-const addToCartHelper = (userId, productId, size) => {
+const addToCartHelper = (userId, productId, size,maxDiscount) => {
     return new Promise(async (resolve, reject) => {
       const product = await productModel.findOne({ _id: productId });
       const discountedPrice = Math.round(
-        product.productPrice -(product.productPrice * product.productDiscount) / 100
+        product.productPrice -(product.productPrice * maxDiscount) / 100
       );
       
       const existingCartItem = await cartModel.findOne({
@@ -99,7 +99,7 @@ const addToCartHelper = (userId, productId, size) => {
     });
   };
 
-  const totalSubtotal = (userId, cartItems) => {
+  const totalSubtotal = (userId, cartItems,maximumDiscounts) => {
 
     return new Promise(async (resolve, reject) => {
       let cart = await cartModel.findOne({ user: userId });

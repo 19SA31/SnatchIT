@@ -13,6 +13,8 @@ const getCartPage = async(req,res)=>{
         const cartItems= await cartHelper.getAllCartItems(userData)
         const productDiscounts = [];
         const categoryDiscounts = [];
+        const productPrices = [];
+        console.log("inside get cart\n catritems",cartItems);
 
         if(cartItems){
             if(cartItems.products.length){
@@ -20,35 +22,43 @@ const getCartPage = async(req,res)=>{
             let totalAmountOfEachProduct = [];
             for (i = 0; i < cartItems.products.length; i++) {
               const productId = cartItems.products[i].productId;
-
+              
               // Get productDiscount for the current product
               const product = await productModel.findById(productId);
               const productDiscount = product ? product.productDiscount : 0;
+              
               productDiscounts.push(productDiscount);
+              
 
-              const productCategory = product ? product.productCategory : null;
+              
 
               // Get categoryDiscount for the current product category
-              const category = await offerModel.findOne({ category: productCategory });
-              const categoryDiscount = category ? category.discount : 0;
+              const category = await offerModel.findOne({ 'categoryOffer.category': product.productCategory });
+              console.log("category:",category)
+              const categoryDiscount = category ? category.categoryOffer.discount : 0;
               categoryDiscounts.push(categoryDiscount);
+              
 
+              productPrices.push(product.productPrice);
 
               let total = cartItems.products[i].quantity * parseInt(cartItems.products[i].price);
               totalAmountOfEachProduct.push(total); 
             }
+            console.log("productDiscounts",productDiscounts);
+            console.log("categoryDiscounts",categoryDiscounts);
             const maximumDiscounts = [];
             for (let i = 0; i < productDiscounts.length; i++) {
                 const maximumDiscount = Math.max(productDiscounts[i], categoryDiscounts[i]);
                 maximumDiscounts.push(maximumDiscount);
             }
 
-            let totalandSubTotal = await cartHelper.totalSubtotal(userData, cartItems);
+            let totalandSubTotal = await cartHelper.totalSubtotal(userData, cartItems,maximumDiscounts);
               res.render('user/user-cart',
               { cartItems: cartItems ,
               totalAmount: totalandSubTotal,
               totalAmountOfEachProduct,
               maximumDiscounts,
+              productPrices,
               status : true
               
               });

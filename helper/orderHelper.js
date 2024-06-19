@@ -10,7 +10,8 @@ const ObjectId = require("mongoose").Types.ObjectId;
 
 const placeOrder = async (body, userId,coupon) => {
   try {
-      
+      console.log("inside ordedrhelper's place order");
+      console.log("coupon",coupon)
       const cart = await cartModel.findOne({ user: userId });
       const address = await userModel.findOne(
           { _id: userId, "address._id": body.addressId },
@@ -32,7 +33,7 @@ const placeOrder = async (body, userId,coupon) => {
 
           const availableStockForSize = availableStock.productQuantity.find(item => item.size === product.size);
           
-          let discountedAmt= Math.round(cart.totalAmount-(cart.totalAmount*coupon.discount/100));
+          let discountedAmt= Math.round(cart.totalAmount-(cart.totalAmount*coupon/100));
 
       if (!availableStockForSize || availableStockForSize.quantity < product.quantity) {
               
@@ -40,11 +41,11 @@ const placeOrder = async (body, userId,coupon) => {
           } else {
 
             if (body.paymentOption == "Wallet") {
-              
+              console.log("inside wallet payment option");
               if (cart.totalAmount > user.wallet.balance) {
                 console.log("This is cart.totalAmount", cart.totalAmount);
                 console.log("This is user.wallet.balance", user.wallet.balance);
-                return({ status: false, message: "Insufficient Balance" });
+                return{ result: "Insufficient Balance", status: false };
                 
               } else {
                 
@@ -409,7 +410,7 @@ const placeOrder = async (body, userId,coupon) => {
         let amountToReturn;
         response.products.forEach(product=>{
           if(product._id==singleOrderId){
-            amountToReturn = product.productPrice
+            amountToReturn = price
           }
         })
         console.log("order id is",orderId)

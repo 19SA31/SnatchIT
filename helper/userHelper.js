@@ -131,12 +131,31 @@ const getWalletDetails = async (userId) => {
   });
 };
 
+const setNewPassword = async(email,password) => {
+  return new Promise(async(resolve,reject)=>{
+
+      const result = await userModel.findOne({email:email});
+
+      if(result){
+          const hashedPassword = await bcrypt.hash(password, 10);
+
+          result.password=hashedPassword;
+          await result.save();
+          resolve(result);
+
+      }
+
+  }
+      
+)};
+
 module.exports={
     addAddressToUser,
     updateUserDetails,
     updateUserPassword,
     editAddressHelper,
     deleteAddressHelper,
-    getWalletDetails
+    getWalletDetails,
+    setNewPassword
 
 }

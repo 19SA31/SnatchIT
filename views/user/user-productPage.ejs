@@ -194,7 +194,7 @@
         <section class="mt-50 mb-50">
           <div class="container">
             <div class="row">
-              <div class="col-lg-12">
+              <div class="col-lg-10">
                 <div class="product-detail accordion-detail">
                   <div class="row mb-50">
                     <div class="col-md-6 col-sm-12 col-xs-12">
@@ -238,23 +238,27 @@
                           </div>
                         </div>
                         <div class="clearfix product-price-cover">
-                          <div class="product-price primary-color float-left">
-                            <ins><span class="text-brand">
-                                ₹<%= Math.round(product.productPrice - (product.productPrice * product.productDiscount / 100)) %>
-                              </span></ins>
-                            <ins><span class="old-price font-md ml-15">
-                                ₹<%= product.productPrice %>
-                              </span></ins>
-                            <span class="save-price  font-md color3 ml-15">
-                                
-                                    <% if (product.productDiscount < product.categoryOffer) { %>
-                                        <%= product.categoryOffer %>  % Off for category
-                                    <% } else { %>
-                                        <%= product.productDiscount %> % Off for product
-                                    <% } %>
-
-                                
-                            </span>
+                            <div class="product-price primary-color float-left">
+                                <%
+                                  // Calculate the maximum discount between product and category offers
+                                  const maxDiscount= Math.max(product.productDiscount, product.categoryOffer);
+                                  // Calculate the discounted price using the maximum discount
+                                  const discountedPrice = Math.round(product.productPrice - (product.productPrice * maxDiscount / 100));
+                                %>
+                                <ins><span class="text-brand">
+                                  ₹<%= discountedPrice %>
+                                </span></ins>
+                                <ins><span class="old-price font-md ml-15">
+                                  ₹<%= product.productPrice %>
+                                </span></ins>
+                                <span class="save-price font-md color3 ml-15">
+                                  <% if (product.productDiscount < product.categoryOffer) { %>
+                                    <%= product.categoryOffer %> % Off for category
+                                  <% } else { %>
+                                    <%= product.productDiscount %> % Off for product
+                                  <% } %>
+                                </span>
+                              </div>
                           </div>
                         </div>
                         <div class="bt-1 border-color-1 mt-15 mb-15"></div>
@@ -303,7 +307,7 @@
   
                         <% } else { %>
                               <button type="submit" id="addToCartButton" class="button button-add-to-cart" style="background-color: #2B1754;"
-                                onclick="addToCart('<%=product._id%>')">Add to cart</button>
+                                onclick="addToCart('<%=product._id%>','<%= maxDiscount %>')">Add to cart</button>
                         <% } %><span>
                         <% if (product.wishlistStatus) { %>
                             <a aria-label="Remove from wishlist" class="action-btn hover-up"
@@ -639,7 +643,7 @@
   
 
 <script>
-    const addToCart = (productId) => {
+    const addToCart = (productId,maxDiscount) => {
       let size = "";
       let quantity = 0;
       if (document.getElementById("S").classList.contains("active")) {
@@ -657,7 +661,7 @@
       }
       if (quantity > 0) {
         $.ajax({
-          url: `/addToCart/${productId}/${size}`,
+          url: `/addToCart/${productId}/${size}/${maxDiscount}`,
           method: "POST",
           success: function (response) {
             if (response.status) {

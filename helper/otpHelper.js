@@ -77,11 +77,14 @@
       const email  = req.body.email;
       console.log("email verify",email);
       const check = await user.findOne({email:email})
-      if(check){
-        await sentOtpForgotPword({ body: { email } }, res)
-        res.render("user/otp-verification", {forgotPassword:true})
-      }else{
-        res.redirect("/emailVerificationPage", { messages: { error: "Email not found" } });
+      console.log("Emailverify",check)
+      if (check) {
+        req.session.email= email
+        req.session.forgotPassword =true
+        await sentOtpForgotPword(req,res);
+        res.redirect("/otp-verification");
+      } else {
+        res.render("user/forgotPasswordEmail", {message:"email not found"});
       }
     }
     catch(error){
@@ -92,15 +95,13 @@
 
   const sentOtpForgotPword = async (req, res)=>{
     try{
-      const {email} = req.body;
+      const email = req.session.email;
       const otp = generateotp();
       console.log("sentOtpForgotPword",otp);
       const forgotUser = await user.findOne({email:email})
-      // const name = forgotUser.name;
-      // const phone= forgotUser.phone;
-      // const password = forgotUser.password;
-                req.session.storedOtp = otp;
-                console.log("This is the stored otp in session ", req.session.storedOtp)
+      
+                req.session.otp = otp;
+                console.log("This is the stored otp in session ", req.session.otp)
                 const expiryTime = 60;
                 req.session.otpExpiry = Date.now() + expiryTime * 1000;
 
@@ -118,7 +119,7 @@
                     console.log(error);
                     return res.status(500).json({ error: "Error sending OTP email"});
                   } 
-                  console.log("otp sent to the user email");     
+                  console.log("otp sent to the user email from sentOtpForgotPword");     
                 });
 
     }catch(error){

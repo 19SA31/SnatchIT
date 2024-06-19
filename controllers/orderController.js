@@ -80,10 +80,11 @@ const placeOrder = async (req, res) => {
     if (body.totalAmount > 1000 && body.paymentOption === "COD") {
       console.log("checking high amount in cod");
       return res.json({ message: "COD is not available for this price range", status: false });
-    } else if (coupon) {
+    } 
+    if (coupon) {
 
       
-      const result = await orderHelper.placeOrder(body, userId, coupon);
+      const result = await orderHelper.placeOrder(body, userId, coupon.discount);
 
       if (result.status) {
         if (coupon) {
@@ -101,9 +102,9 @@ const placeOrder = async (req, res) => {
         }
       }
     } else {
-      coupon = 0;
+      coupon=0;
       const result = await orderHelper.placeOrder(body, userId, coupon);
-      console.log("inside ordercontroller's place order for payment failed using razorpay\nno coupon", result)
+      console.log("no coupon case \n placeorder result:", result)
       if (result.status) {
 
         if (coupon) {
@@ -367,7 +368,7 @@ const returnSingleOrder = async (req, res) => {
   try {
     const orderId = req.query.orderId;
     const singleOrderId = req.query.singleOrderId;
-    const price = req.query.price;
+    const price = req.query.discountedPrice;
     const result = await orderHelper.returnSingleOrder(orderId, singleOrderId, price);
     if (result) {
       res.json({ status: true });

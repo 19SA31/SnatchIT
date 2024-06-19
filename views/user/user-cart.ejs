@@ -294,7 +294,7 @@
                                                     </td>
                                                     <td class="price" data-title="Price"
                                                         id="price-span<%= cartItems.products[i]._id %>">
-                                                        <span>₹ <%= cartItems.products[i].price %></span>
+                                                        <span>₹ <%= productPrices[i] %></span>
                                                     </td>
                                                     <td class="size" data-title="Size" id="size">
                                                         <%= cartItems.products[i].size %>
@@ -320,7 +320,7 @@
                                                     </td>
                                                     <td class="text-right" data-title="Cart">
                                                         <span id="individualTotal<%= cartItems.products[i]._id %>">₹
-                                                            <%=Math.round(totalAmountOfEachProduct[i]-(totalAmountOfEachProduct[i]*maximumDiscounts[i]/100))%></span>
+                                                            <%=totalAmountOfEachProduct[i]%></span>
                                                     </td>
                                                     <td class="action" data-title="Remove">
                                                         <a onclick="removeItemFromCart('<%= cartItems.products[i]._id %>')"
