@@ -218,14 +218,10 @@
       
                           </td>
                           <td class="price" data-title="Price">
-                            <%
-                              const discountedPrice = Math.round(
-                                productDetails[i].orderedProduct.productPrice - 
-                                (productDetails[i].orderedProduct.productPrice * productDetails[i].orderedProduct.productDiscount / 100)
-                              );
-                            %>
+          
                             ₹<span id="price-span<%= productDetails[i].products._id %>">
-                              <%= discountedPrice %>
+                              <%= productDetails[i].products.productPrice %>
+                              <% discountedPrice = productDetails[i].products.productPrice * productDetails[i].products.quantity %>
                             </span>
                           </td>
                           <td class="size" data-title="Size" id="size">
@@ -296,7 +292,7 @@
                                       <a onclick="retryPayment('<%=productDetails[0].orderId%>')"
                                         class="text-primary">Retry</a>
                                       <% } else { %>
-                                        <a onclick="cancelOrder('<%=productDetails[i]._id%>','<%=productDetails[i].products._id%>')"
+                                        <a onclick="cancelOrder('<%=productDetails[i]._id%>','<%=productDetails[i].products._id%>','<%= discountedPrice %>')"
                                           class="text-danger">Cancel</a>
     
                                         <% } %>
@@ -571,8 +567,8 @@
     <script src="https://cdn.jsdelivr.net/npm/easyinvoice/dist/easyinvoice.min.js"></script>
 
     <script>
-      const cancelOrder = (orderId, singleOrderId) => {
-        const prices=parseInt(document.getElementById("price-span"+singleOrderId).textContent);
+      const cancelOrder = (orderId, singleOrderId,prices) => {
+        
         
         console.log(prices)
         Swal.fire({

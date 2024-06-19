@@ -137,7 +137,8 @@ const orderDetails = async (req, res) => {
     const productDetails = await orderHelper.getOrderDetailsOfEachProduct(
       orderId
     );
-    console.log(productDetails);
+    console.log("product",productDetails);
+
 
 
 
