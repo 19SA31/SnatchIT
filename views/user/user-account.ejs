@@ -231,6 +231,7 @@
                                                                 <th>Order</th>
                                                                 <th>Date</th>
                                                                 <th>Status</th>
+                                                                <th>Coupon</th>
                                                                 <th>Total</th>
                                                             </tr>
                                                         </thead>
@@ -247,7 +248,9 @@
                                                                         <%= element.formattedTotal %> for <%=
                                                                                 element.quantity %> item
                                                                     </td>
-
+                                                                    <td>
+                                                                        <%= element.couponAmount %>
+                                                                    </td>
                                                                     <td>
                                                                         <a href="/orderDetails/<%=element._id%>"
                                                                             class="btn-small d-block text-primary">View</a>

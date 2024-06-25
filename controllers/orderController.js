@@ -141,13 +141,15 @@ const orderDetails = async (req, res) => {
     console.log("product",productDetails);
 
 
-
+    const dateString = orderDetails.orderedOn;
+    const formattedDate = moment(dateString).format("MMMM Do, YYYY");
 
     if (orderDetails && productDetails) {
       res.render("user/orderDetails", {
         userData,
         orderDetails,
-        productDetails
+        productDetails,
+        formattedDate
       });
     }
   } catch (error) {
