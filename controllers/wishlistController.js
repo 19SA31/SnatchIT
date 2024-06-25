@@ -43,7 +43,7 @@ const wishListLoad = async (req, res) => {
   const addToWishlist = async (req, res) => {
     const userId = req.session.user;
     const productId = req.params.id;
-  
+    
     const result = await wishlistHelper.addToWishlist(userId, productId);
     if (result) {
       res.json({ status: true });

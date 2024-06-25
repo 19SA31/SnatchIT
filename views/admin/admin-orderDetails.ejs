@@ -167,6 +167,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <% sum=0 %>
                                         <% productDetails.forEach(element=> { %>
                                             <tr>
                                                 <td class="text-center">
@@ -191,6 +192,7 @@
                                                 <td class="text-center">
                                                     ₹<span id="<%= element.products._id %>">
                                                         <%= element.products.quantity*element.products.formattedProductPrice%>
+                                                        <% sum+= element.products.quantity*element.products.formattedProductPrice%>
                                                     </span>
     
                                                 </td>
@@ -251,7 +253,11 @@
                                                             <span class="badge rounded-pill alert-success text-center">
                                                                 returned
                                                             </span>
-                                                            <% } else { %>
+                                                            <% } else if (element.products.status=="return cancelled" ) { %>
+                                                                <span class="badge rounded-pill alert-danger text-center">
+                                                                    return cancelled
+                                                                </span>
+                                                                <% }else { %>
                                                                 <div class="text-center">
                                                                     <select class="form-select d-inline-block" name="status"
                                                                         id="select<%= element.products._id %>">
@@ -265,6 +271,7 @@
                                                                         </option>
                                                                         <option value="return pending">Return Pending
                                                                         </option>
+                                                                        <option value="return cancelled">Return cancelled</option>
     
                                                                     </select>
     
@@ -273,8 +280,11 @@
     
                                                 </td>
                                                 <td>
+                                                    <% if (element.products.status!="return cancelled" ) { %>
                                                     <a class="btn btn-primary" id="changeStatus"
                                                         onclick="changeStatus('<%= productDetails[0]._id %>','<%= element.products._id%>')">Save</a>
+                                                    <% } %>
+                                                    
                                                 </td>
                                             </tr>
                                             <% }) %>
@@ -295,7 +305,7 @@
                                                         <dl class="dlist">
                                                             <dt>Total:</dt>
                                                             <dd> <b class="h5">
-                                                                    <%= productDetails[0].formattedTotal %>
+                                                                    <%= sum %>
                                                                 </b> </dd>
                                                         </dl>
     
@@ -310,7 +320,12 @@
                                                                 <dt class="h5">Grand Total:</dt>
                                                                 <dd>
                                                                     <b class="h5 text-danger">
-                                                                        &#8377; <%= Math.round(productDetails[0].formattedTotal-(productDetails[0].formattedTotal*productDetails[0].couponAmount/100)) %>
+                                                                        <% if (productDetails[0].couponAmount>0) { %>
+                                                                            &#8377; <%= Math.floor(sum-(sum*productDetails[0].couponAmount/100)) %>
+                                                                            
+                                                                        <% } else { %>
+                                                                            &#8377; <%= productDetails[0].formattedTotal %>
+                                                                        <% } %>
                                                                     </b>
                                                                 </dd>
                                                             </dl>

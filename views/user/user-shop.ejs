@@ -55,7 +55,7 @@
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
                                         <a class="dropdown-item" href="/user-account"><i
                                                 class="material-icons md-settings"></i>Account </a>
-                                        <a class="dropdown-item" href="#"><i
+                                        <a class="dropdown-item" href="/user-account?tab=wallet-detail"><i
                                                 class="material-icons md-account_balance_wallet"></i>Wallet</a>
                                         <a class="dropdown-item" href="#"><i
                                                 class="material-icons md-receipt"></i>Billing</a>
@@ -671,7 +671,7 @@
 
 
     <script>
-        let searchQuery = '';
+
         // Function to fetch and display products based on search, filter, sort, and pagination
         const fetchProducts = (event, page) => {
             if (event) {
@@ -693,7 +693,7 @@
                 url: url,
                 method: 'GET',
                 success: function (data) {
-                    console.log(data)
+                    console.log("shopfilter ",data.products)
                     const products = data.products;
                     const pageInfo = data.pageInfo;
                     console.log(products);
@@ -781,6 +781,34 @@
     </script>
 
     <script>
+        $(document).ready(function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchParam = urlParams.get('search');
+            if (searchParam) {
+                $('#searchInput').val(searchParam);
+            }
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchParam = urlParams.get('search');
+            const sortParam = urlParams.get('sort');
+
+            if (searchParam) {
+                $('#searchInput').val(searchParam);
+            }
+
+            if (sortParam) {
+                $('#sortOptions').val(sortParam);
+            }
+        });
+    </script>
+
+
+
+    <script>
         const updatePaginationLinks = (currentPage, totalPages) => {
             // Clear previous pagination links
             $('#paginationLinks').empty();
@@ -797,47 +825,59 @@
         };
     </script>
 
-    <script>
-        const updateFilterOptions = (sorted) => {
-            $("#sorter").empty();
-            let option;
-            if (sorted == "Ascending") {
-                option = $(`
-                <select name="" id="sortOptions" class="form-select" style=" border-radius: 18px;">
+<script>
+    const updateFilterOptions = (sorted) => {
+        $("#sorter").empty();
+        let option;
+        if (sorted == "Ascending") {
+            option = $(`
+            <select name="" id="sortOptions" class="form-select" style="border-radius: 18px;">
                 <option value="Ascending" style="font-size: 16px;">Price: Low to High</option>
                 <option value="Descending" style="font-size: 16px;">Price: High to Low</option>
-                <option value="Alpha" style="font-size: 16px;">Aa-Zz</option>                     
-                </select>
-        `);
-            } else if (sorted == "Descending") {
-                option = $(`
-                <select name="" id="sortOptions" class="form-select" style=" border-radius: 18px;">
+                <option value="Alpha" style="font-size: 16px;">Aa-Zz</option>   
+                <option value="ReverseAlpha" style="font-size: 16px;">Zz-Aa</option>                 
+            </select>
+            `);
+        } else if (sorted == "Descending") {
+            option = $(`
+            <select name="" id="sortOptions" class="form-select" style="border-radius: 18px;">
                 <option value="Descending" style="font-size: 16px;">Price: High to Low</option>
                 <option value="Ascending" style="font-size: 16px;">Price: Low to High</option>
-                <option value="Alpha" style="font-size: 16px;">Aa-Zz</option>                    
-                </select>
-        `);
-            } else {
-                option = $(`
-                <select name="" id="sortOptions" class="form-select" style=" border-radius: 18px;">
+                <option value="Alpha" style="font-size: 16px;">Aa-Zz</option>   
+                <option value="ReverseAlpha" style="font-size: 16px;">Zz-Aa</option>                 
+            </select>
+            `);
+        } else if (sorted == "Alpha") {
+            option = $(`
+            <select name="" id="sortOptions" class="form-select" style="border-radius: 18px;">
                 <option value="Alpha" style="font-size: 16px;">Aa-Zz</option>  
                 <option value="Descending" style="font-size: 16px;">Price: High to Low</option>
                 <option value="Ascending" style="font-size: 16px;">Price: Low to High</option>
-                    
-                </select>
-        `);
-            }
-            $("#sorter").append(option);
-            $('#sortOptions').on('change', fetchProducts);
-
-
+                <option value="ReverseAlpha" style="font-size: 16px;">Zz-Aa</option>                    
+            </select>
+            `);
+        } else {
+            option = $(`
+            <select name="" id="sortOptions" class="form-select" style="border-radius: 18px;">
+                <option value="ReverseAlpha" style="font-size: 16px;">Zz-Aa</option>
+                <option value="Alpha" style="font-size: 16px;">Aa-Zz</option>  
+                <option value="Descending" style="font-size: 16px;">Price: High to Low</option>
+                <option value="Ascending" style="font-size: 16px;">Price: Low to High</option>                    
+            </select>
+            `);
         }
-    </script>
+        $("#sorter").append(option);
+        $('#sortOptions').on('change', fetchProducts);
+    }
+</script>
+
 
     <script>
         document.getElementById("normalSorter").addEventListener("change", () => {
             const normalFilter = $('#normalSorter').val();
-            window.location.href = `/user-shop?filter=${normalFilter}`
+            searchQuery = $('#searchInput').val();
+            console.log("searchQuery", searchQuery);
+            window.location.href = `/user-shop?search=${searchQuery}&filter=${normalFilter}`
         })
     </script>
 
@@ -892,6 +932,8 @@
         }
 
     </script>
+
+    
 
 
 

@@ -49,7 +49,7 @@ router.post("/salesReport", orderController.loadSalesReportDateSort);
 router.post("/showChart",adminController.showChart)
 
 
-router.delete("/deleteCoupon/:id", couponController.deleteCoupon);
+
 
 
 
@@ -60,7 +60,7 @@ router.put("/addCategory",adminController.addCategory);
 
 
 
-
+router.patch("/deleteCoupon/:id/:message", couponController.deleteCoupon);
 router.patch("/editcategory",categoryHelper.editedSave);
 router.patch("/blockUnblockUser/:id",adminController.userBlockUnblock);
 router.patch("/listUnlist",adminController.listUnlist);

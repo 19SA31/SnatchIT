@@ -59,7 +59,7 @@ const addCoupon = async (req, res) => {
 
   const deleteCoupon = async (req, res) => {
     try {
-      const result = await couponHelper.deleteSelectedCoupon(req.params.id);
+      const result = await couponHelper.deleteSelectedCoupon(req.params.id,req.params.message);
       res.json({ message: "Coupon deleted" });
     } catch (error) {
       console.log(error);
@@ -85,7 +85,7 @@ const addCoupon = async (req, res) => {
           couponName: req.body.couponName1 
       });
       console.log("###checkin",existingCoupon);
-      if(existingCoupon){
+      if( existingCoupon && req.body.couponDiscount1== existingCoupon.discount){
         req.flash("message", "Coupon already exists");
         res.redirect('/admin-coupon');
       }else{

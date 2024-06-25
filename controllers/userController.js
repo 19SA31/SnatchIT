@@ -106,7 +106,13 @@ const loadUserProduct = async (req, res) => {
     .lean();
 
 
-  const result = await offerModel.find({ 'categoryOffer.category': product.productCategory })
+    const result = await offerModel.find({
+      'categoryOffer.category': product.productCategory,
+      status: true
+    });
+
+    
+    
   const cartStatus = await cartHelper.isAProductInCart(userData, product._id);
   const wishlistStatus = await wishlistHelper.isInWishlist(
     userData,
@@ -117,8 +123,13 @@ const loadUserProduct = async (req, res) => {
   product.cartStatus = cartStatus;
   console.log(result);
   if (result.length > 0) {
-    product.categoryOffer = result[0].categoryOffer.discount;
-
+    let  maxDiscount = 0
+    for (let i = 0; i < result.length; i++) {
+      if (result[i].categoryOffer.discount > maxDiscount) {
+        maxDiscount = result[i].categoryOffer.discount;
+      }
+    }
+    product.categoryOffer = maxDiscount;
   } else {
     product.categoryOffer = 0;
   }
@@ -409,20 +420,22 @@ const loadShop = async (req, res, next) => {
 const shopFilterLoad = async (req, res, next) => {
   try {
     console.log("SHOP FILTER reached here");
+
     let filteredProducts;
     const extractPrice = (price) => parseInt(price.replace(/[^\d]/g, ""));
     const { search, category, sort, page, limit } = req.query;
 
-    console.log("777search", search)
+    console.log("search", search)
     let products = await productHelper.getAllActiveProducts();
+    
     if (search) {
       products = products.filter(product =>
-        product.productName.toLowerCase().includes(search.toLowerCase())
+        product.productName.toLowerCase().startsWith(search.toLowerCase())
       );
     }
-    console.log("filtering with cat", category);
-    if (category != null) {
-      console.log("if in shop filter");
+    console.log("searched products", products);
+    if (category!=null) {
+      console.log("in shop filter");
       let userId = req.session.user;
       var categories = await categoryHelper.getAllcategory();
 
@@ -437,9 +450,10 @@ const shopFilterLoad = async (req, res, next) => {
 
       filteredProducts = await offerHelper.findOffer(categorySortedProducts);
       var sorted = false;
+      console.log("categoryfilteredProducts",filteredProducts);
     }
-    console.log(filteredProducts);
-    if (sort) {
+    
+    if (sort!=null) {
       console.log(sort);
       console.log("if in shop filter----sort");
       if (sort == "Ascending") {
@@ -480,7 +494,7 @@ const shopFilterLoad = async (req, res, next) => {
         });
         sorted = "ReverseAlpha";
       }
-
+      console.log("filtered products after sort",filteredProducts);
     }
 
     let itemsPerPage = 6;

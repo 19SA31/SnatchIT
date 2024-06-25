@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="public/user-assets/css/maind134.css?v=3.4">
     <link rel="stylesheet" type="text/css"
         href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.css">
-    
+
 </head>
 
 <body>
@@ -410,19 +410,21 @@
                                                 <tr>
                                                     <th>SubTotal</th>
                                                     <td class="product-subtotal" colspan="2" class="text-dark">
-                                                    
-                                                            ₹<span>
-                                                                <%=totalandSubTotal%>
-                                                            </span>
+
+                                                        ₹<span>
+                                                            <%=totalandSubTotal%>
+                                                        </span>
 
 
                                                     </td>
                                                 </tr>
-                                                <tr >
-                                                    <th style="display: none;" >coupon code</th>
+                                                <tr>
+                                                    <th style="display: none;">coupon code</th>
                                                     <td style="display: none;" id="couponCodeTable">
                                                         <% if (cartItems.couponAmount>0) { %>
-                                                            <span> <%=cartItems.coupon %> </span>
+                                                            <span>
+                                                                <%=cartItems.coupon %>
+                                                            </span>
                                                             <% } %>
                                                     </td>
                                                 </tr>
@@ -432,9 +434,9 @@
                                                         <% if (cartItems.couponAmount>0) { %>
                                                             <span> -<%=cartItems.couponAmount %>%</span>
                                                             <span><button class="btn-small right"
-                                                                onclick="removeCoupon('<%=cartItems.coupon %>','<%=userData._id %>')"
-                                                                style="background-color: #ff0000; color: white;">
-                                                                Remove</button>
+                                                                    onclick="removeCoupon('<%=cartItems.coupon %>','<%=userData._id %>')"
+                                                                    style="background-color: #ff0000; color: white;">
+                                                                    Remove</button>
                                                             </span>
 
                                                             <% } else { %>
@@ -447,12 +449,13 @@
                                                     <th>Total</th>
                                                     <td colspan="2" class="product-subtotal">₹<span
                                                             class="font-xl text-dark fw-900" id="totalAmount">
-                                                            <% if (cartItems.couponAmount >0) { %>
-                                                                <%= Math.round(totalandSubTotal - (totalandSubTotal * cartItems.couponAmount / 100)) %>
+                                                            <% if (cartItems.couponAmount>0) { %>
+                                                                <%= Math.round(totalandSubTotal - (totalandSubTotal *
+                                                                    cartItems.couponAmount / 100)) %>
 
-                                                            <% } else {%>
-                                                                <%= totalandSubTotal %>
-                                                            <% } %>
+                                                                    <% } else {%>
+                                                                        <%= totalandSubTotal %>
+                                                                            <% } %>
                                                         </span></td>
                                                 </tr>
                                     </tbody>
@@ -725,7 +728,7 @@
                 let code = document.getElementById("couponCodeTable").textContent.trim();
                 const totalAmount = document.getElementById("totalAmount").innerText.trim();
                 console.log(totalAmount);
-                
+
                 const data = {
                     addressId: address,
                     paymentOption: payment,
@@ -733,7 +736,7 @@
                     totalAmount: totalAmount
                 }
 
-                 
+
 
                 if (payment === "COD") {
                     $.ajax({
@@ -757,7 +760,7 @@
                             }
                         }
                     })
-                }else if (payment === "Wallet"){
+                } else if (payment === "Wallet") {
                     $.ajax({
                         url: "/placeOrder",
                         method: "POST",
@@ -779,7 +782,7 @@
                             }
                         }
                     })
-                } 
+                }
                 else if (payment === "RazorPay") {
                     console.log("razorpay selected");
 
@@ -791,7 +794,7 @@
                         success: function (data) {
                             const parseAmount = parseInt(totalAmount);
                             console.log(data);
-                            if(data.status){
+                            if (data.status) {
                                 var options = {
                                     "key": "rzp_test_hb6zaZS4NZIqmD",
                                     "amount": 100000,
@@ -821,10 +824,10 @@
                                 var rzp = new Razorpay(options);
                                 rzp.open();
                                 rzp.on("payment.failed", function (response) {
-                                    console.log('Payment failed:', response,address, payment);
+                                    console.log('Payment failed:', response, address, payment);
                                     handleFailure(response.error.description, address, payment);
                                 });
-                            }else{
+                            } else {
                                 Toastify({
                                     text: data.result,
                                     duration: 3000,
@@ -849,11 +852,11 @@
                     }
 
                     function createOrderWithStatusPending(address, paymentMethod) {
-                        
+
                         $.ajax({
                             url: '/placeOrder',
                             type: 'POST',
-                            
+
                             data: {
                                 addressId: address,
                                 paymentOption: paymentMethod,
@@ -893,6 +896,8 @@
                                         data: {
                                             addressId: address,
                                             paymentOption: payment,
+                                            couponCode: code,
+                                            totalAmount: totalAmount
                                         },
                                         success: function (data) {
                                             console.log(data);
@@ -1124,41 +1129,41 @@
         })
     </script>
 
-<script>
-    function removeCoupon(Coupon, userId) {
-      let coupon = Coupon;
-      $.ajax({
-        url: `/removeCoupon?coupon=${coupon}&userId=${userId}`,
-        type: 'POST',
-        success: function(response) {
-          console.log(response);
-          Toastify({
-            text: "Coupon removed successfully!",
-            duration: 3000,
-            gravity: "top",
-            position: "center",
-            backgroundColor: "green",
-          }).showToast();
-  
-        //   $('#couponAmountText').text('No Coupons Applied');
-  
-          setTimeout(() => {
-            location.reload();
-          }, 1000);
-        },
-        error: function(xhr, status, error) {
-          console.error('Error removing coupon:', error);
-          Toastify({
-            text: "Error removing coupon",
-            duration: 3000,
-            gravity: "top",
-            position: "center",
-            backgroundColor: "red",
-          }).showToast();
+    <script>
+        function removeCoupon(Coupon, userId) {
+            let coupon = Coupon;
+            $.ajax({
+                url: `/removeCoupon?coupon=${coupon}&userId=${userId}`,
+                type: 'POST',
+                success: function (response) {
+                    console.log(response);
+                    Toastify({
+                        text: "Coupon removed successfully!",
+                        duration: 3000,
+                        gravity: "top",
+                        position: "center",
+                        backgroundColor: "green",
+                    }).showToast();
+
+                    //   $('#couponAmountText').text('No Coupons Applied');
+
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error removing coupon:', error);
+                    Toastify({
+                        text: "Error removing coupon",
+                        duration: 3000,
+                        gravity: "top",
+                        position: "center",
+                        backgroundColor: "red",
+                    }).showToast();
+                }
+            });
         }
-      });
-    }
-  </script>
+    </script>
 </body>
 
 

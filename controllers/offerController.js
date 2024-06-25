@@ -73,7 +73,7 @@ const categoryEditOffer = async (req, res) => {
   try {
     const offer = req.body.offerName1
     const checkDuplicate = await offerModel.findOne({ offerName: offer })
-    if (checkDuplicate) {
+    if ( checkDuplicate && checkDuplicate.categoryOffer.discount == req.body.offerDiscount1) {
       req.flash("message", "Offer name already exists");
       res.redirect("/admin-categoryOffer");
     } else {

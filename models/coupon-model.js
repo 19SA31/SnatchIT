@@ -33,6 +33,10 @@ const couponModel = new mongoose.Schema(
       enum: ["Active", "Expired"],
       default: "Active",
     },
+    isListed:{
+      type:Boolean,
+      required:true
+    }
   },
 
   {

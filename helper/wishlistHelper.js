@@ -70,6 +70,7 @@ const getAllWishlistProducts = async (userId) => {
         {
           upsert: true,
         }
+
       );
   
       resolve(wishlist);

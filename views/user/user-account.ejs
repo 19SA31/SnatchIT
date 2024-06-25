@@ -61,10 +61,10 @@
                         class="main-menu main-menu-grow main-menu-padding-1 main-menu-lh-1 main-menu-mrg-1 hm3-menu-padding d-none d-lg-block hover-boder">
                         <nav>
                             <ul>
-                                <li><a class="active" href="index.html">Home </a>
+                                <li><a class="active" href="/SnatchIt-Homel">Home </a>
 
                                 </li>
-                                <li><a href="shop-grid-right.html">Shop </a>
+                                <li><a href="/user-shop">Shop </a>
                                 </li>
 
                             </ul>
@@ -729,6 +729,21 @@
     <!-- Template  JS -->
     <script src="public/user-assets/js/maind134.js?v=3.4"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.js"></script>
+
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const tab = urlParams.get('tab');
+            if (tab) {
+                let newTab = new bootstrap.Tab(document.querySelector(`#${tab}-tab`));
+                if (newTab) {
+                    newTab.show();
+                }
+            }
+        });
+    </script>
 
     <script>
         $(document).ready(function () {

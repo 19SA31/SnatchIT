@@ -315,7 +315,7 @@
                                 style="color: red; font-size: x-large;"></i></a>
                             <% } else { %>
                               <a aria-label="Add To Wishlist" class="action-btn hover-up"
-                                onclick="addTowishlist('<%=product._id%>')"><i class="fi-rs-heart" style="font-size: x-large;"></i></a>
+                                onclick="addTowishlist('<%=product._id%>','<%=maxDiscount%>')"><i class="fi-rs-heart" style="font-size: x-large;"></i></a>
                               <% } %>
                             </span>
                       </div>
@@ -644,6 +644,7 @@
 
 <script>
     const addToCart = (productId,maxDiscount) => {
+      console.log("maxDiscount",maxDiscount);
       let size = "";
       let quantity = 0;
       if (document.getElementById("S").classList.contains("active")) {
@@ -716,7 +717,7 @@
     };
   </script>
 
-<script>
+<!-- <script>
 
     function isProductWithThisSize(productId, sizeClicked) {
     $.ajax({
@@ -748,13 +749,13 @@
         }
     });
 }
-</script>
+</script> -->
 
 <script>
     const addTowishlist = (productId) => {
       console.log(productId);
       $.ajax({
-        url: `/addToWishlist/` + productId,
+        url: `/addToWishlist/` + productId ,
         method: "POST",
         success: function (response) {
           if (response.status) {

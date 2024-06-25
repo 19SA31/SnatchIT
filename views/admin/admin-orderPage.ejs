@@ -169,6 +169,7 @@
                             <th scope="col">USER NAME</th>
                             <th scope="col">DATE</th>
                             <th scope="col">AMOUNT</th>
+                            <th scope="col">COUPON</th>
                             <th scope="col">PAYMENT TYPE</th>
                             <th scope="col">VIEW DETAILS </th>
                           </tr>
@@ -186,7 +187,10 @@
                                 <%= allOrders[i].formattedDate %>
                               </td>
                               <td width="7%">
-                                ₹ <%= Math.round(allOrders[i].totalAmount-(allOrders[i].totalAmount*allOrders[i].couponAmount/100)) %>
+                                ₹ <%=allOrders[i].totalAmount %>
+                              </td>
+                              <td width="7%">
+                                <%=allOrders[i].couponAmount %>%
                               </td>
                               <td width="7%">
                                 <%= allOrders[i].paymentMethod %>

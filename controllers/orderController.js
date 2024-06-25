@@ -75,6 +75,7 @@ const placeOrder = async (req, res) => {
   const cart = await cartModel.findOne({ user: userId })
   let coupon = await couponModel.findOne({ code: body.couponCode })
   let userDetails = await user.findOne({ _id: userId })
+  console.log("$$$$$ n$$",coupon,userDetails);
   if (cart) {
     console.log("inside cart before checking cod condition", body.totalAmount, body.paymentOption);
     if (body.totalAmount > 1000 && body.paymentOption === "COD") {
